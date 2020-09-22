@@ -4,9 +4,9 @@ TrueLayer, BarclayCard &amp; Monzo integration to maintain a pot within Monzo eq
 ## Inspiriation
 As a young person, I'm told repeateadly by elders that the wisest thing I should focus on right now is getting an excellent credit score, so that when (if ever!) I'm in the market to buy a house, the banks will provide me a real good loan 🏦
 
-A key component in building your score is ensuring that you *do not miss a payment*.
+A key component in building your score is ensuring that you **do not miss a payment**.
 
-Now, clearly, to do this, you must have the money to pay off your statement. Yet the purpose of a credit card is to pay with money that you don't yet have. _hmmmm_ 🤔
+Now, clearly, to do this, you must have the money to pay off your statement. Yet the purpose of a credit card is to pay with money that you don't yet have. *hmmmm* 🤔
 
 My ideal scenario is if I could treat my credit card like my debit card, then I would never over-spend, and will have the moeny to pay off my bill each month and build that score!
 
