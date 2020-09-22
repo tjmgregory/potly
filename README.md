@@ -1,5 +1,5 @@
 # Credit Companion
-TrueLayer, BarclayCard &amp; Monzo integration to maintain a pot within Monzo equal to your current credit card balance.
+TrueLayer, Barclaycard &amp; Monzo integration to maintain a pot within Monzo equal to your current credit card balance.
 
 ## Inspiriation
 As a young person, I'm told repeateadly by elders that the wisest thing I should focus on right now is getting an excellent credit score, so that when (if ever!) I'm in the market to buy a house, the banks will provide me a real good loan 🏦
