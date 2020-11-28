@@ -61,11 +61,11 @@ functions:
       - http:
           path: hello
           method: get
-  world:
-    handler: bin/world
+  signup:
+    handler: bin/signup
     events:
       - http:
-          path: world
+          path: signup 
           method: get
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
