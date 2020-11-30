@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"theodo.red/creditcompanion/packages/logging"
 )
 
 // Response is of type APIGatewayProxyResponse since we're leveraging the
@@ -25,6 +26,9 @@ func Handler(ctx context.Context) (Response, error) {
 		return Response{StatusCode: 404}, err
 	}
 	json.HTMLEscape(&buf, body)
+
+	logger := new(logging.Logger)
+	logger.LogDebug("I logged a thing.")
 
 	resp := Response{
 		StatusCode:      200,
