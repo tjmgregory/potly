@@ -16,9 +16,10 @@ So spawns this tool - designed to maintain a pot within your Monzo account (with
 RFCs documenting the design of the system can be found [here](https://drive.google.com/drive/folders/1F2I1wrt-ktIohBFUH62Ygdfm_BEbKWOf?usp=sharing).
 
 ## Tools
-- Google Cloud Platform https://cloud.google.com/
-- Firebase functions https://firebase.google.com/products/functions
-- Firestore https://firebase.google.com/products/firestore
+- AWS (Amazon Web Services) http://aws.amazon.com/
+- AWS Lambda http://aws.amazon.com/
+- Amazon DynamoDB http://aws.amazon.com/
+- Go https://golang.org
 - TrueLayer Data API https://truelayer.com/data-api/
 - Monzo API https://docs.monzo.com/
-- TypeScript https://www.typescriptlang.org/
+
