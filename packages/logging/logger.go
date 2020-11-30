@@ -46,6 +46,10 @@ func (l *Logger) log(level LogLevel, messages ...interface{}) {
 	fmt.Println("-----------------------------------------")
 }
 
+func LogTheo(msg string) {
+	fmt.Println(msg)
+}
+
 // LogDebug is a publicly exposed info log that passes the message along correctly
 func (l *Logger) LogDebug(messages ...interface{}) {
 	l.log(DEBUG, messages...)
