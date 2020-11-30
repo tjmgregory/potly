@@ -2,7 +2,6 @@ package logging
 
 import (
 	"fmt"
-	"time"
 )
 
 // LogLevel is an enum-like type that we can use to designate the log level
@@ -20,7 +19,6 @@ type Logger struct{}
 
 // log is a private function that manages the internal logic about what and how to log data depending on the log level
 func (l *Logger) log(level LogLevel, messages ...interface{}) {
-	now := time.Now()
 	var logType string
 	switch level {
 	case DEBUG:
@@ -37,17 +35,9 @@ func (l *Logger) log(level LogLevel, messages ...interface{}) {
 		break
 
 	}
-	// format the output in a somewhat friendly way
-	fmt.Println("-----------------------------------------")
-	fmt.Printf("%s - %s\n", logType, now)
 	for _, message := range messages {
-		fmt.Printf("%+v\n", message)
+		fmt.Printf("%s %s\n", logType, message)
 	}
-	fmt.Println("-----------------------------------------")
-}
-
-func LogTheo(msg string) {
-	fmt.Println(msg)
 }
 
 // LogDebug is a publicly exposed info log that passes the message along correctly
