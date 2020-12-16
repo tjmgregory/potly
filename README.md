@@ -1,7 +1,9 @@
 # Credit Companion
+
 TrueLayer, Barclaycard &amp; Monzo integration to maintain a pot within Monzo equal to your current credit card balance.
 
 ## Inspiriation
+
 As a young person, I'm told repeateadly by elders that the wisest thing I should focus on right now is getting an excellent credit score, so that when (if ever!) I'm in the market to buy a house, the banks will provide me a real good loan 🏦
 
 A key component in building your score is ensuring that you **do not miss a payment**.
@@ -13,9 +15,11 @@ My ideal scenario is if I could treat my credit card like my debit card, then I 
 So spawns this tool - designed to maintain a pot within your Monzo account (with scope to expand to other banks/money holders) that holds the current statement balance of your credit card(s).
 
 ## Designs
+
 RFCs documenting the design of the system can be found [here](https://drive.google.com/drive/folders/1F2I1wrt-ktIohBFUH62Ygdfm_BEbKWOf?usp=sharing).
 
 ## Tools
+
 - AWS (Amazon Web Services) http://aws.amazon.com/
 - AWS Lambda http://aws.amazon.com/
 - Amazon DynamoDB http://aws.amazon.com/
@@ -23,3 +27,6 @@ RFCs documenting the design of the system can be found [here](https://drive.goog
 - TrueLayer Data API https://truelayer.com/data-api/
 - Monzo API https://docs.monzo.com/
 
+## Setup
+
+`./run.sh build`
