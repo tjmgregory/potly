@@ -2,11 +2,12 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"theodo.red/creditcompanion/functions/login/models"
+	"theodo.red/creditcompanion/functions/login/routes"
 	"theodo.red/creditcompanion/packages/logging"
 )
 
@@ -14,30 +15,34 @@ import (
 // AWS Lambda Proxy Request functionality (default behavior)
 //
 // https://serverless.com/framework/docs/providers/aws/events/apigateway/#lambda-proxy-integration
-type Response events.APIGatewayProxyResponse
 
 // Handler is our lambda handler invoked by the `lambda.Start` function call
-func Handler(ctx context.Context) (Response, error) {
+func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var buf bytes.Buffer
 	body, err := json.Marshal(map[string]string{
 		"message": "A test response",
 	})
 	if err != nil {
-		return Response{StatusCode: 404}, err
+		return events.APIGatewayProxyResponse{StatusCode: 404}, err
 	}
 	json.HTMLEscape(&buf, body)
 
 	logger := new(logging.Logger)
 	logger.LogDebug("I logged a thing.")
 
-	resp := Response{
-		StatusCode:      200,
-		IsBase64Encoded: false,
-		Body:            buf.String(),
-		Headers: map[string]string{
-			"Content-Type":           "application/json",
-			"X-MyCompany-Func-Reply": "hello-handler",
+	router := models.RouterMap{
+		"/login": models.RouterVerbMap{
+			"GET": routes.LoginGet,
 		},
+	}
+
+	response := router["/login"][req.HTTPMethod]()
+
+	resp := events.APIGatewayProxyResponse{
+		StatusCode:      response.StatusCode,
+		IsBase64Encoded: response.IsBase64Encoded,
+		Body:            response.Body,
+		Headers:         response.Headers,
 	}
 
 	return resp, nil
