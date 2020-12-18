@@ -6,11 +6,11 @@ CURR_DUR=$(pwd)
 build() {
 	for function_path in $PROJECT_DIR/functions/* ; do
         if [ -d "$function_path" ]; then
-            echo $function_path
+            echo "Building from $function_path"
             function_name=`echo $function_path | sed 's/^.*functions\///g'`
-            echo $function_name
             cd $function_path
             GO111MODULE=on GOOS=linux go build -ldflags='-s -w' -o $PROJECT_DIR/bin/$function_name main.go
+            echo "Built: $function_name"
         fi
     done
 

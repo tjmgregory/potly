@@ -1,9 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"theodo.red/creditcompanion/functions/login/models"
@@ -18,15 +15,6 @@ import (
 
 // Handler is our lambda handler invoked by the `lambda.Start` function call
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var buf bytes.Buffer
-	body, err := json.Marshal(map[string]string{
-		"message": "A test response",
-	})
-	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: 404}, err
-	}
-	json.HTMLEscape(&buf, body)
-
 	logger := new(logging.Logger)
 	logger.LogDebug("I logged a thing.")
 
@@ -36,7 +24,7 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 		},
 	}
 
-	response := router["/login"][req.HTTPMethod]()
+	response := router[req.Resource][req.HTTPMethod]()
 
 	resp := events.APIGatewayProxyResponse{
 		StatusCode:      response.StatusCode,
