@@ -17,4 +17,24 @@ build() {
     cd $CURR_DUR
 }
 
+test() {
+	for function_path in $PROJECT_DIR/functions/* ; do
+        if [ -d "$function_path" ]; then
+            echo "Testing in $function_path"
+            cd $function_path
+            go test ./...
+        fi
+    done
+
+	for package_path in $PROJECT_DIR/packages/* ; do
+        if [ -d "$package_path" ]; then
+            echo "Testing in $package_path"
+            cd $package_path
+            go test ./...
+        fi
+    done
+
+    cd $CURR_DUR
+}
+
 "$@"

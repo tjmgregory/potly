@@ -4,7 +4,8 @@
   "description": "TrueLayer, Barclaycard &amp; Monzo integration to maintain a pot within Monzo equal to your current credit card balance.",
   "scripts": {
     "build": "./run.sh build",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "test": "./run.sh test"
   },
   "devDependencies": {
     "serverless": "2.15.0"
