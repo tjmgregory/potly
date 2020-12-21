@@ -2,5 +2,12 @@
   "name": "credit-companion",
   "version": "1.0.0",
   "description": "TrueLayer, Barclaycard &amp; Monzo integration to maintain a pot within Monzo equal to your current credit card balance.",
-  "devDependencies": {"serverless": "2.15.0"}
+  "scripts": {
+    "build": "./run.sh build",
+    "deploy": "sls deploy",
+    "test": "./run.sh test"
+  },
+  "devDependencies": {
+    "serverless": "2.15.0"
   }
+}
