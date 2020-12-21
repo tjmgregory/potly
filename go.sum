@@ -1,6 +1,0 @@
-github.com/aws/aws-lambda-go v1.6.0 h1:T+u/g79zPKw1oJM7xYhvpq7i4Sjc0iVsXZUaqRVVSOg=
-github.com/aws/aws-lambda-go v1.6.0/go.mod h1:zUsUQhAUjYzR8AuduJPCfhBuKWUaDbQiPOG+ouzmE1A=
-github.com/fnproject/fdk-go v0.0.3 h1:CkUsIH0QmWDb/vDU3lGoP+Fl0VIfk2/xi1v82Qk5vCs=
-github.com/fnproject/fdk-go v0.0.3/go.mod h1:9m+nEyku9SqJAVJQsfZOZBQzFkCs+jvmbZJhvgDX4ts=
-github.com/tencentyun/scf-go-lib v0.0.0-20200624065115-ba679e2ec9c9 h1:JdeXp/XPi7lBmpQNSUxElMAvwppMlFSiamTtXYRFuUc=
-github.com/tencentyun/scf-go-lib v0.0.0-20200624065115-ba679e2ec9c9/go.mod h1:K3DbqPpP2WE/9MWokWWzgFZcbgtMb9Wd5CYk9AAbEN8=
