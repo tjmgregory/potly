@@ -29,4 +29,14 @@ RFCs documenting the design of the system can be found [here](https://drive.goog
 
 ## Setup
 
-`./run.sh build`
+To build the binaries for deployment, run the following:
+
+```
+yarn build
+```
+
+To deploy your built binaries to AWS, run the following:
+
+```
+yarn deploy
+```

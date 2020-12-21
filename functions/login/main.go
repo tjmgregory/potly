@@ -1,8 +1,7 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
+	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -11,24 +10,9 @@ import (
 	"theodo.red/creditcompanion/packages/logging"
 )
 
-// Response is of type APIGatewayProxyResponse since we're leveraging the
-// AWS Lambda Proxy Request functionality (default behavior)
-//
-// https://serverless.com/framework/docs/providers/aws/events/apigateway/#lambda-proxy-integration
-
-// Handler is our lambda handler invoked by the `lambda.Start` function call
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var buf bytes.Buffer
-	body, err := json.Marshal(map[string]string{
-		"message": "A test response",
-	})
-	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: 404}, err
-	}
-	json.HTMLEscape(&buf, body)
-
 	logger := new(logging.Logger)
-	logger.LogDebug("I logged a thing.")
+	logger.LogDebug(fmt.Sprintf("%s %s", req.HTTPMethod, req.Resource))
 
 	router := models.RouterMap{
 		"/login": models.RouterVerbMap{
@@ -36,7 +20,8 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 		},
 	}
 
-	response := router["/login"][req.HTTPMethod]()
+	response := router[req.Resource][req.HTTPMethod]()
+	logger.LogDebug(fmt.Sprintf("Sending response %v", response))
 
 	resp := events.APIGatewayProxyResponse{
 		StatusCode:      response.StatusCode,
