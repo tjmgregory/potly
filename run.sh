@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Go modules can only be locally linked using absolute paths.
+# Thus we must peform and build/test steps within each directory iteratively. 
+
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 CURR_DUR=$(pwd)
 
@@ -17,24 +20,27 @@ build() {
     cd $CURR_DUR
 }
 
-test() {
-	for function_path in $PROJECT_DIR/functions/* ; do
-        if [ -d "$function_path" ]; then
-            echo "Testing in $function_path"
-            cd $function_path
-            go test ./...
-        fi
-    done
+declare -a DIRS_WITH_TESTS=("functions" "packages")
 
-	for package_path in $PROJECT_DIR/packages/* ; do
-        if [ -d "$package_path" ]; then
-            echo "Testing in $package_path"
-            cd $package_path
-            go test ./...
-        fi
+test() {
+    failures=0
+    
+    for dir_with_tests in $DIRS_WITH_TESTS; do
+	    for path in $PROJECT_DIR/$dir_with_tests/* ; do
+            if [ -d "$path" ]; then
+                echo "Testing in $path"
+                cd $path
+                go test ./...
+                ((failures+=$?))
+            fi
+        done
     done
 
     cd $CURR_DUR
+
+    if [ $failures -ne 0 ]; then
+        exit 1
+    fi
 }
 
 "$@"
