@@ -23,30 +23,45 @@ func (m *DynamoDbMock) GetItem(input *dynamodb.GetItemInput) (*dynamodb.GetItemO
 func TestGetsAToken(t *testing.T) {
 	dynamoDBMock := new(DynamoDbMock)
 
-	mockString := "asdfasdf"
+	// The unmarshaller will search for exact matches first when mapping the AttributeValue input
+	// to a struct, and then it will search case-insensitvely.
+	// https://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/dynamodbattribute/#Unmarshal
+	mockTokenValue := "tokenValue123"
+	mockTokenOwner := "owner123"
+	mockTokenId := "tokenId123"
+	mockTokenExpiresAfter := "2020-01-18T12:00:00.000Z"
 	mockResponse := &dynamodb.GetItemOutput{
 		Item: map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: &mockTokenId,
+			},
+			"owner": {
+				S: &mockTokenOwner,
+			},
 			"token": {
-				S: &mockString,
+				S: &mockTokenValue,
+			},
+			"expiresAfter": {
+				S: &mockTokenExpiresAfter,
 			},
 		},
 	}
 
-	idInput := "some-id"
+	tokenId := "tokenId"
 	dynamoDBMock.On("GetItem", &dynamodb.GetItemInput{
 		TableName: aws.String("tokens"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {
-				S: &idInput,
+				S: &tokenId,
 			},
 		}}).Return(mockResponse, nil)
 
 	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
 
-	result, err := tokenRepo.Get("some-id")
+	result, err := tokenRepo.Get(tokenId)
 	require.NoError(t, err)
 
-	assert.Equal(t, models.Token{Token: "asdfasdf"}, result)
+	assert.Equal(t, models.Token{Id: mockTokenId, Owner: mockTokenOwner, Token: mockTokenValue, ExpiresAfter: mockTokenExpiresAfter}, *result)
 }
 
 // Should mock as little as possible as long as its not slow to startup/teardown

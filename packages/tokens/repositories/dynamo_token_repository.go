@@ -19,8 +19,8 @@ type DynamoDbInterface interface {
 	GetItem(*dynamodb.GetItemInput) (*dynamodb.GetItemOutput, error)
 }
 
-func (r *DynamoTokenRepository) Get(id string) (models.Token, error) {
-	var token models.Token
+func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
+	token := &models.Token{}
 
 	result, err := r.db.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(r.tableName),
