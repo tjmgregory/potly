@@ -1,12 +1,10 @@
 package repositories
 
 import (
-	"errors"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/monzo/terrors"
+	"github.com/juju/errors"
 	"theodo.red/creditcompanion/packages/tokens/models"
 )
 
@@ -31,23 +29,16 @@ func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
 		}})
 	if err != nil {
 		// Don't log errors til you handle them
-		return token, terrors.Wrap(err, map[string]string{
-			"itemId": id,
-		})
+		return nil, errors.Annotate(err, "Call to retrieve item from db failed.")
 	}
 
-	// type safe type conversion
-	// terr,ok := err.(terrors.Error)
-
 	if result.Item == nil {
-		msg := "Token " + id + " could not be found."
-		return token, errors.New(msg)
+		return nil, errors.New("Token " + id + " could not be found.")
 	}
 
 	err = dynamodbattribute.UnmarshalMap(result.Item, &token)
-	if err != nil {
-		// Panic is bad, like sys.exit
-		// panic(fmt.Sprintf("Failed to unmarshall record, %v", err))
+	if (models.Token{}) == *token {
+		return nil, errors.New("Failed to unmarshal token " + id)
 	}
 
 	return token, nil
