@@ -20,24 +20,24 @@ type DynamoDbInterface interface {
 func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
 	token := &models.Token{}
 
-	result, err := r.db.GetItem(&dynamodb.GetItemInput{
+	result, getErr := r.db.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(r.tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {
 				S: &id,
 			},
 		}})
-	if err != nil {
+	if getErr != nil {
 		// Don't log errors til you handle them
-		return nil, errors.Annotate(err, "Call to retrieve item from db failed.")
+		return nil, errors.Annotate(getErr, "Call to retrieve item from db failed.")
 	}
 
 	if result.Item == nil {
 		return nil, errors.New("Token " + id + " could not be found.")
 	}
 
-	err = dynamodbattribute.UnmarshalMap(result.Item, &token)
-	if (models.Token{}) == *token {
+	unmarshalErr := dynamodbattribute.UnmarshalMap(result.Item, &token)
+	if unmarshalErr != nil || (models.Token{}) == *token {
 		return nil, errors.New("Failed to unmarshal token " + id)
 	}
 
