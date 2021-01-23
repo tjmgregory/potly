@@ -11,7 +11,7 @@ import (
 )
 
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	logger := new(logging.Logger)
+	logger := new(logging.ConsoleLogger)
 	logger.LogDebug(fmt.Sprintf("%s %s", req.HTTPMethod, req.Resource))
 
 	router := models.RouterMap{

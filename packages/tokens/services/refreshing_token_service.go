@@ -9,7 +9,7 @@ import (
 type RefreshingTokenService struct {
 	tokenRefreshService          TokenRefreshService
 	tokenRepository              models.TokenRepository
-	tokenRefreshThresholdSeconds int64
+	tokenRefreshThresholdSeconds int
 	clock                        teatime.Clock
 	logger                       logging.Logger
 }
@@ -21,16 +21,20 @@ func (r *RefreshingTokenService) GetTokenById(id string) (*models.Token, error) 
 	}
 
 	if r.tokenIsCloseToOrHasExpired(token) {
-		token, refreshErr := r.tokenRefreshService.RefreshToken(token)
+		refreshedToken, refreshErr := r.tokenRefreshService.RefreshToken(token)
 		if refreshErr != nil {
 			if r.tokenIsActive(token) {
 				r.logger.LogDebug("Token is near to expiry yet refresh failed. Continuing anyway, the request may fail.", token.Id)
 			} else {
 				return nil, refreshErr
 			}
+		} else {
+			setErr := r.tokenRepository.Set(token.Id, refreshedToken)
+			if setErr != nil {
+				return refreshedToken, setErr
+			}
+			token = refreshedToken
 		}
-
-		r.tokenRepository.Set(token.Id, token)
 	}
 
 	return token, nil
@@ -45,5 +49,5 @@ func (r *RefreshingTokenService) tokenIsCloseToOrHasExpired(token *models.Token)
 		return true
 	}
 
-	return (token.ExpiresAfterTime().Unix() - r.clock.Now().Unix()) < r.tokenRefreshThresholdSeconds
+	return (token.ExpiresAfterTime().Unix() - r.clock.Now().Unix()) < int64(r.tokenRefreshThresholdSeconds)
 }

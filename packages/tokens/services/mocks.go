@@ -17,3 +17,7 @@ func (m *TokenRefreshServiceMock) RefreshToken(input *models.Token) (*models.Tok
 	}
 	return returnValue, args.Error(1)
 }
+
+func testTokenRefreshServiceMockInterfaceInheritance() TokenRefreshService {
+	return new(TokenRefreshServiceMock)
+}

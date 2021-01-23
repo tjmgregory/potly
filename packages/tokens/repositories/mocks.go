@@ -19,12 +19,16 @@ func (m *DynamoDbMock) GetItem(input *dynamodb.GetItemInput) (*dynamodb.GetItemO
 	return returnValue, args.Error(1)
 }
 
+func testDynamoDbMockImplementsInterface() DynamoDbInterface {
+	return new(DynamoDbMock)
+}
+
 type TokenRepositoryMock struct {
 	mock.Mock
 }
 
-func (m *TokenRepositoryMock) Get(input string) (*models.Token, error) {
-	args := m.Called(input)
+func (m *TokenRepositoryMock) Get(id string) (*models.Token, error) {
+	args := m.Called(id)
 	returnValue, ok := args.Get(0).(*models.Token)
 	if !ok {
 		return nil, args.Error(1)
@@ -32,7 +36,11 @@ func (m *TokenRepositoryMock) Get(input string) (*models.Token, error) {
 	return returnValue, args.Error(1)
 }
 
-func (m *TokenRepositoryMock) Set(input string, token *models.Token) error {
-	args := m.Called(input)
+func (m *TokenRepositoryMock) Set(id string, token *models.Token) error {
+	args := m.Called(id, token)
 	return args.Error(0)
+}
+
+func testTokenRepositoryMockImplementsInterface() models.TokenRepository {
+	return new(TokenRepositoryMock)
 }
