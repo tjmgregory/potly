@@ -6,18 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"theodo.red/creditcompanion/packages/teatime"
 	"theodo.red/creditcompanion/packages/tokens/models"
 	"theodo.red/creditcompanion/packages/tokens/repositories"
 )
-
-type ClockMock struct {
-	mock.Mock
-}
-
-func (m *ClockMock) Now() time.Time {
-	args := m.Called()
-	return args.Get(0).(time.Time)
-}
 
 func TestReturnsTheRepoTokenIfItIsNotExpiringSoon(t *testing.T) {
 	// Given the token id
@@ -42,7 +34,7 @@ func TestReturnsTheRepoTokenIfItIsNotExpiringSoon(t *testing.T) {
 	if _err != nil {
 
 	}
-	clockMock := new(ClockMock)
+	clockMock := new(teatime.ClockMock)
 	clockMock.On("Now", mock.Anything).Return(timeNow)
 
 	// And given we create the service
@@ -60,5 +52,3 @@ func TestReturnsTheRepoTokenIfItIsNotExpiringSoon(t *testing.T) {
 	// It's the same token
 	assert.Equal(t, &mockToken, result)
 }
-
-// TODO: Add more tests
