@@ -31,6 +31,7 @@ func (r *RefreshingTokenService) GetTokenById(id string) (*models.Token, error) 
 		} else {
 			setErr := r.tokenRepository.Set(token.Id, refreshedToken)
 			if setErr != nil {
+				// TODO: Turns out returning a value and an error is bad practice. Consider changing in the future.
 				return refreshedToken, setErr
 			}
 			token = refreshedToken
