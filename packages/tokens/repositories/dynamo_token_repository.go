@@ -44,6 +44,11 @@ func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
 	return token, nil
 }
 
+func (r *DynamoTokenRepository) Set(id string, token *models.Token) error {
+	// TODO: Implement this.
+	return nil
+}
+
 func NewDynamoTokenRepository(db DynamoDbInterface) *DynamoTokenRepository {
 	repo := new(DynamoTokenRepository)
 	repo.db = db

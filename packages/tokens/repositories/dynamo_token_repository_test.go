@@ -12,19 +12,6 @@ import (
 	"theodo.red/creditcompanion/packages/tokens/models"
 )
 
-type DynamoDbMock struct {
-	mock.Mock
-}
-
-func (m *DynamoDbMock) GetItem(input *dynamodb.GetItemInput) (*dynamodb.GetItemOutput, error) {
-	args := m.Called(input)
-	returnValue, ok := args.Get(0).(*dynamodb.GetItemOutput)
-	if !ok {
-		return nil, args.Error(1)
-	}
-	return returnValue, args.Error(1)
-}
-
 func TestGetsAToken(t *testing.T) {
 	// Given a mock dynamodb
 	dynamoDBMock := new(DynamoDbMock)
