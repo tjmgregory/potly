@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-// LogLevel is an enum-like type that we can use to designate the log level
 type LogLevel int
 
 const (
@@ -14,10 +13,8 @@ const (
 	ERROR
 )
 
-// ConsoleLogger is a base struct that could eventually maintain connections to something like bugsnag or logging tools
 type ConsoleLogger struct{}
 
-// log is a private function that manages the internal logic about what and how to log data depending on the log level
 func (l *ConsoleLogger) log(level LogLevel, messages ...interface{}) {
 	var logType string
 	switch level {
@@ -54,4 +51,8 @@ func (l *ConsoleLogger) LogWarning(messages ...interface{}) {
 
 func (l *ConsoleLogger) LogError(messages ...interface{}) {
 	l.log(ERROR, messages...)
+}
+
+func NewConsoleLogger() Logger {
+	return new(ConsoleLogger)
 }

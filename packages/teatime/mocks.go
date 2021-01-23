@@ -14,3 +14,7 @@ func (m *ClockMock) Now() time.Time {
 	args := m.Called()
 	return args.Get(0).(time.Time)
 }
+
+func testClockImplementsInterface() Clock {
+	return new(ClockMock)
+}

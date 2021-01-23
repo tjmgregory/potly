@@ -11,5 +11,6 @@ type TokenRefreshService interface {
 type DummyTokenRefreshService struct{}
 
 func (*DummyTokenRefreshService) RefreshToken(token *models.Token) (*models.Token, error) {
+	// TODO: This function.
 	return token, nil
 }

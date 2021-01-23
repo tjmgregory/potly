@@ -1,8 +1,7 @@
 package logging
 
 func ExampleLogDebug() {
-	var logger Logger
-	logger = new(ConsoleLogger)
+	logger := new(ConsoleLogger)
 	logger.LogDebug("Test log")
 	// Output: [DEBUG] Test log
 }

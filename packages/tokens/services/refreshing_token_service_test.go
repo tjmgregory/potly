@@ -19,13 +19,13 @@ func TestReturnsTheRepoTokenIfItIsNotExpiringSoon(t *testing.T) {
 
 	// And given the token repo returns a token
 	mockTokenRepo := new(repositories.TokenRepositoryMock)
-	mockToken := models.Token{
+	mockToken := &models.Token{
 		Id:           tokenId,
 		Owner:        "owner-123",
 		Token:        "token-value-123",
 		ExpiresAfter: "2020-01-23T12:00:00.000Z",
 	}
-	mockTokenRepo.On("Get", tokenId).Return(&mockToken, nil)
+	mockTokenRepo.On("Get", tokenId).Return(mockToken, nil)
 
 	// And given the time difference thresold is 100 seconds
 	tokenRefreshThresholdSeconds := 100
@@ -51,7 +51,7 @@ func TestReturnsTheRepoTokenIfItIsNotExpiringSoon(t *testing.T) {
 	assert.Nil(t, err)
 
 	// It's the same token
-	assert.Equal(t, &mockToken, result)
+	assert.Equal(t, mockToken, result)
 }
 
 func TestRefreshesTheTokenIfItHasExpired(t *testing.T) {
