@@ -21,10 +21,9 @@ type MarshallingRepository interface {
 
 func (r *MarshallingDynamoRepository) Get(id string, dest interface{}) error {
 	if reflect.TypeOf(dest).Kind() != reflect.Ptr {
-		return errors.New("Token " + id + " could not be found.")
+		return errors.New("Bad destination pointer passed to marshalling repository.")
 	}
-
-	preMarshalReplica := reflect.New(reflect.ValueOf(dest).Elem().Type())
+	preMarshalReplica := reflect.ValueOf(dest).Elem().Interface()
 
 	result, getErr := r.db.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(r.tableName),
@@ -35,17 +34,17 @@ func (r *MarshallingDynamoRepository) Get(id string, dest interface{}) error {
 		}})
 	if getErr != nil {
 		// Don't log errors til you handle them
-		return errors.Annotate(getErr, "Call to retrieve item from db failed.")
+		return errors.Annotate(getErr, "Call to retrieve "+id+" from db failed.")
 	}
 
 	if result.Item == nil {
-		return errors.New("Token " + id + " could not be found.")
+		return errors.New("Item with id " + id + " could not be found.")
 	}
 
 	unmarshalErr := dynamodbattribute.UnmarshalMap(result.Item, dest)
-	postMarshalReplica := reflect.New(reflect.ValueOf(dest).Elem().Type())
+	postMarshalReplica := reflect.ValueOf(dest).Elem().Interface()
 	if unmarshalErr != nil || preMarshalReplica == postMarshalReplica {
-		return errors.New("Failed to unmarshal " + id)
+		return errors.New("Failed to unmarshal " + id + ".")
 	}
 
 	return nil
