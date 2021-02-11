@@ -5,16 +5,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/juju/errors"
+	tdynamo "theodo.red/creditcompanion/packages/aws"
 	"theodo.red/creditcompanion/packages/tokens/models"
 )
 
 type DynamoTokenRepository struct {
-	db        DynamoDbInterface
+	db        tdynamo.DynamoDbInterface
 	tableName string
-}
-
-type DynamoDbInterface interface {
-	GetItem(*dynamodb.GetItemInput) (*dynamodb.GetItemOutput, error)
 }
 
 func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
@@ -49,7 +46,7 @@ func (r *DynamoTokenRepository) Set(id string, token *models.Token) error {
 	return nil
 }
 
-func NewDynamoTokenRepository(db DynamoDbInterface) *DynamoTokenRepository {
+func NewDynamoTokenRepository(db tdynamo.DynamoDbInterface) *DynamoTokenRepository {
 	repo := new(DynamoTokenRepository)
 	repo.db = db
 	repo.tableName = "tokens"
