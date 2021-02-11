@@ -9,12 +9,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	t_dynamo "theodo.red/creditcompanion/packages/aws/dynamodb"
 	"theodo.red/creditcompanion/packages/tokens/models"
 )
 
 func TestGetsAToken(t *testing.T) {
 	// Given a mock dynamodb
-	dynamoDBMock := new(DynamoDbMock)
+	dynamoDBMock := new(t_dynamo.DynamoDbMock)
 
 	// And given a mock db response
 
@@ -63,7 +64,7 @@ func TestGetsAToken(t *testing.T) {
 
 func TestAnnotatesDbRequestCallError(t *testing.T) {
 	// Given the db returns an error when getting the token
-	dynamoDBMock := new(DynamoDbMock)
+	dynamoDBMock := new(t_dynamo.DynamoDbMock)
 
 	mockError := errors.New("Mock error.")
 	dynamoDBMock.On("GetItem", mock.Anything).Return(nil, mockError)
@@ -82,7 +83,7 @@ func TestAnnotatesDbRequestCallError(t *testing.T) {
 
 func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
 	// Given the db returns a nil item
-	dynamoDBMock := new(DynamoDbMock)
+	dynamoDBMock := new(t_dynamo.DynamoDbMock)
 
 	dynamoDBMock.On("GetItem", mock.Anything).Return(&dynamodb.GetItemOutput{Item: nil}, nil)
 
@@ -100,7 +101,7 @@ func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
 
 func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
 	// Given the db returns unexpected data
-	dynamoDBMock := new(DynamoDbMock)
+	dynamoDBMock := new(t_dynamo.DynamoDbMock)
 
 	mockResultValue := "Mock result value"
 	mockResponse := &dynamodb.GetItemOutput{

@@ -5,7 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/juju/errors"
-	tdynamo "theodo.red/creditcompanion/packages/aws"
+	tdynamo "theodo.red/creditcompanion/packages/aws/dynamodb"
 	"theodo.red/creditcompanion/packages/tokens/models"
 )
 
