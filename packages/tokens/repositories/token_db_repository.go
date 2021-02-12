@@ -14,7 +14,7 @@ type TokenDBRepository struct {
 
 func (r *TokenDBRepository) Get(id string) (*models.Token, error) {
 	token := new(models.Token)
-	err := r.repo.Get(id, token)
+	err := r.repo.GetByUniqueField("Id", id, token)
 	if err != nil {
 		return nil, errors.Annotate(err, "Call to repo failed.")
 	}

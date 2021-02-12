@@ -50,7 +50,7 @@ func TestGetsAToken(t *testing.T) {
 	}
 
 	dynamoDBMock.On("GetItem", &dynamodb.GetItemInput{
-		TableName: aws.String("tokens"),
+		TableName: aws.String("test-table"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {
 				S: &mockTokenId,
@@ -58,11 +58,11 @@ func TestGetsAToken(t *testing.T) {
 		}}).Return(mockResponse, nil)
 
 	// And given the repository
-	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
+	dbRepo := NewMarshallingDynamoRepository(dynamoDBMock, "test-table")
 
 	// When we get the token from the repo
 	result := &testStruct{}
-	err := tokenRepo.Get(mockTokenId, result)
+	err := dbRepo.GetByUniqueField("Id", mockTokenId, result)
 
 	// We receive the mapped struct back.
 	require.NoError(t, err)
@@ -76,12 +76,12 @@ func TestAnnotatesDbRequestCallError(t *testing.T) {
 	mockError := errors.New("Mock error.")
 	dynamoDBMock.On("GetItem", mock.Anything).Return(nil, mockError)
 
-	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
+	dbRepo := NewMarshallingDynamoRepository(dynamoDBMock, "test-table")
 
 	// When we get a token
 	tokenId := "tokenId"
 	result := &testStruct{}
-	err := tokenRepo.Get(tokenId, result)
+	err := dbRepo.GetByUniqueField("Id", tokenId, result)
 
 	// We receive no result and the error is annotated
 	assert.Equal(t, mockError, errors.Cause(err))
@@ -94,12 +94,12 @@ func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
 
 	dynamoDBMock.On("GetItem", mock.Anything).Return(&dynamodb.GetItemOutput{Item: nil}, nil)
 
-	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
+	dbRepo := NewMarshallingDynamoRepository(dynamoDBMock, "test-table")
 
 	// When we get a token
 	tokenId := "tokenId"
 	result := &testStruct{}
-	err := tokenRepo.Get(tokenId, result)
+	err := dbRepo.GetByUniqueField("Id", tokenId, result)
 
 	// We receive no result and the error is annotated
 	assert.Error(t, err)
@@ -120,11 +120,11 @@ func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
 	}
 	dynamoDBMock.On("GetItem", mock.Anything).Return(mockResponse, nil)
 
-	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
+	dbRepo := NewMarshallingDynamoRepository(dynamoDBMock, "test-table")
 
 	// When we get a token
 	result := &testStruct{}
-	err := tokenRepo.Get("tokenId", result)
+	err := dbRepo.GetByUniqueField("Id", "tokenId", result)
 
 	// We receive no result and the error is annotated
 	assert.Contains(t, err.Error(), "Failed to unmarshal tokenId")

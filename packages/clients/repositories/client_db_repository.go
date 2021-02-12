@@ -14,7 +14,7 @@ type ClientDBRepository struct {
 
 func (r *ClientDBRepository) Get(id string) (*models.Client, error) {
 	client := new(models.Client)
-	err := r.repo.Get(id, client)
+	err := r.repo.GetByUniqueField("Id", id, client)
 	if err != nil {
 		return nil, errors.Annotate(err, "Call to repo failed.")
 	}
@@ -22,8 +22,12 @@ func (r *ClientDBRepository) Get(id string) (*models.Client, error) {
 }
 
 func (r *ClientDBRepository) GetByEmail(email string) (*models.Client, error) {
-	// TODO
-	return nil, nil
+	client := new(models.Client)
+	err := r.repo.GetByUniqueField("Email", email, client)
+	if err != nil {
+		return nil, errors.Annotate(err, "Call to repo failed.")
+	}
+	return client, nil
 }
 
 func NewDynamoClientRepository(db tdynamo.DynamoDbInterface) models.ClientRepository {
