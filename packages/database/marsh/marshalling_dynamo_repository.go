@@ -1,4 +1,4 @@
-package dynamodb
+package marsh
 
 import (
 	"reflect"
@@ -7,16 +7,13 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/juju/errors"
+	"theodo.red/creditcompanion/packages/database"
+	"theodo.red/creditcompanion/packages/database/tdynamo"
 )
 
 type MarshallingDynamoRepository struct {
-	db        DynamoDbInterface
+	db        tdynamo.DynamoDbInterface
 	tableName string
-}
-
-type DynamoRepository interface {
-	Get(id string, dest interface{}) error
-	// Set(id string, source *interface{}) error
 }
 
 func (r *MarshallingDynamoRepository) Get(id string, dest interface{}) error {
@@ -50,12 +47,7 @@ func (r *MarshallingDynamoRepository) Get(id string, dest interface{}) error {
 	return nil
 }
 
-// func (r *MarshallingDynamoRepository) Set(id string, token *models.Token) error {
-//     // TODO: Implement this.
-//     return nil
-// }
-
-func NewMarshallingDynamoRepository(db DynamoDbInterface, tableName string) DynamoRepository {
+func NewMarshallingDynamoRepository(db tdynamo.DynamoDbInterface, tableName string) database.Repository {
 	repo := new(MarshallingDynamoRepository)
 	repo.db = db
 	repo.tableName = tableName

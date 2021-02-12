@@ -1,4 +1,4 @@
-module theodo.red/creditcompanion/packages/aws
+module theodo.red/creditcompanion/packages/database
 
 go 1.15
 

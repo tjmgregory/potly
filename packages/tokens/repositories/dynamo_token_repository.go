@@ -2,7 +2,9 @@ package repositories
 
 import (
 	"github.com/juju/errors"
-	"theodo.red/creditcompanion/packages/aws/dynamodb"
+	"theodo.red/creditcompanion/packages/database"
+	"theodo.red/creditcompanion/packages/database/marsh"
+	"theodo.red/creditcompanion/packages/database/tdynamo"
 	"theodo.red/creditcompanion/packages/tokens/models"
 )
 
@@ -11,7 +13,7 @@ type TokenRepository interface {
 }
 
 type DynamoTokenRepository struct {
-	repo dynamodb.DynamoRepository
+	repo database.Repository
 }
 
 func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
@@ -23,9 +25,9 @@ func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
 	return token, nil
 }
 
-func NewTokenRepository(db dynamodb.DynamoDbInterface) TokenRepository {
+func NewTokenRepository(db tdynamo.DynamoDbInterface) TokenRepository {
 	repo := new(DynamoTokenRepository)
-	marshallingRepo := dynamodb.NewMarshallingDynamoRepository(db, "tokens")
+	marshallingRepo := marsh.NewMarshallingDynamoRepository(db, "tokens")
 	repo.repo = marshallingRepo
 
 	return repo
