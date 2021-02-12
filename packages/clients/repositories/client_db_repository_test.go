@@ -34,3 +34,30 @@ func TestGetCallsTheRepoCorrectly(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, *mockResponse, *result)
 }
+
+// TODO: Add a test for Get and GetByEmail just checking it propogates the error.
+
+func TestGetByEmailCallsTheRepoCorrectly(t *testing.T) {
+	// Given a mock repo
+	repoMock := new(database.RepositoryMock)
+
+	// And given a mock reponse from the repo
+	mockResponse := new(models.Client)
+	mockResponse.Id = "id-123"
+	mockResponse.Email = "test@email.com"
+	mockResponse.CreatedAt = "some-timestamp"
+
+	repoMock.On("GetByUniqueField", "Email", "test@email.com", mock.Anything).Return(nil, mockResponse)
+
+	// And we have built the repo
+	repo := &ClientDBRepository{
+		repo: repoMock,
+	}
+
+	// When we call the function
+	result, err := repo.GetByEmail("test@email.com")
+
+	// We receive the struct back
+	require.NoError(t, err)
+	assert.Equal(t, *mockResponse, *result)
+}
