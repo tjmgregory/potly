@@ -1,5 +1,10 @@
 package repositories
 
+/**
+These tests are heavily dependent on the implementation of the marshalling db repo, and once confidence in the database module is proven,
+these should be stripped down to testing upon a database.RepositoryMock, not upon a database.tdynamo.DynamoDbMock
+*/
+
 import (
 	"testing"
 
@@ -78,7 +83,7 @@ func TestAnnotatesDbRequestCallError(t *testing.T) {
 	// We receive no result and the error is annotated
 	assert.Nil(t, result)
 	assert.Equal(t, mockError, errors.Cause(err))
-	assert.Contains(t, err.Error(), "Call to retrieve")
+	assert.Contains(t, err.Error(), "Call to marshalling repo failed.")
 }
 
 func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
@@ -96,7 +101,7 @@ func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
 	// We receive no result and the error is annotated
 	assert.Nil(t, result)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Token tokenId")
+	assert.Contains(t, err.Error(), "Call to marshalling repo failed.")
 }
 
 func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
@@ -120,7 +125,7 @@ func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
 
 	// We receive no result and the error is annotated
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "Failed to unmarshal token tokenId")
+	assert.Contains(t, err.Error(), "Call to marshalling repo failed.")
 }
 
 // Should mock as little as possible as long as its not slow to startup/teardown
