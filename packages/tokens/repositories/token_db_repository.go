@@ -8,15 +8,11 @@ import (
 	"theodo.red/creditcompanion/packages/tokens/models"
 )
 
-type TokenRepository interface {
-	Get(id string) (*models.Token, error)
-}
-
-type DynamoTokenRepository struct {
+type DBTokenRepository struct {
 	repo database.Repository
 }
 
-func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
+func (r *DBTokenRepository) Get(id string) (*models.Token, error) {
 	token := new(models.Token)
 	err := r.repo.Get(id, token)
 	if err != nil {
@@ -25,8 +21,13 @@ func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
 	return token, nil
 }
 
-func NewTokenRepository(db tdynamo.DynamoDbInterface) TokenRepository {
-	repo := new(DynamoTokenRepository)
+func (r *DBTokenRepository) Set(id string, token *models.Token) error {
+	// TODO
+	return nil
+}
+
+func NewDynamoTokenRepository(db tdynamo.DynamoDbInterface) models.TokenRepository {
+	repo := new(DBTokenRepository)
 	marshallingRepo := marsh.NewMarshallingDynamoRepository(db, "tokens")
 	repo.repo = marshallingRepo
 
