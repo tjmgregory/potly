@@ -1,4 +1,4 @@
-package repositories
+package marsh
 
 import (
 	"testing"
@@ -9,12 +9,19 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"theodo.red/creditcompanion/packages/tokens/models"
+	"theodo.red/creditcompanion/packages/database/tdynamo"
 )
+
+type testStruct struct {
+	Id           string
+	Owner        string
+	Token        string
+	ExpiresAfter string
+}
 
 func TestGetsAToken(t *testing.T) {
 	// Given a mock dynamodb
-	dynamoDBMock := new(DynamoDbMock)
+	dynamoDBMock := new(tdynamo.DynamoDbMock)
 
 	// And given a mock db response
 
@@ -51,56 +58,57 @@ func TestGetsAToken(t *testing.T) {
 		}}).Return(mockResponse, nil)
 
 	// And given the repository
-	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
+	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
 
 	// When we get the token from the repo
-	result, err := tokenRepo.Get(mockTokenId)
+	result := &testStruct{}
+	err := tokenRepo.Get(mockTokenId, result)
 
 	// We receive the mapped struct back.
 	require.NoError(t, err)
-	assert.Equal(t, models.Token{Id: mockTokenId, Owner: mockTokenOwner, Token: mockTokenValue, ExpiresAfter: mockTokenExpiresAfter}, *result)
+	assert.Equal(t, testStruct{Id: mockTokenId, Owner: mockTokenOwner, Token: mockTokenValue, ExpiresAfter: mockTokenExpiresAfter}, *result)
 }
 
 func TestAnnotatesDbRequestCallError(t *testing.T) {
 	// Given the db returns an error when getting the token
-	dynamoDBMock := new(DynamoDbMock)
+	dynamoDBMock := new(tdynamo.DynamoDbMock)
 
 	mockError := errors.New("Mock error.")
 	dynamoDBMock.On("GetItem", mock.Anything).Return(nil, mockError)
 
-	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
+	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
 
 	// When we get a token
 	tokenId := "tokenId"
-	result, err := tokenRepo.Get(tokenId)
+	result := &testStruct{}
+	err := tokenRepo.Get(tokenId, result)
 
 	// We receive no result and the error is annotated
-	assert.Nil(t, result)
 	assert.Equal(t, mockError, errors.Cause(err))
 	assert.Contains(t, err.Error(), "Call to retrieve")
 }
 
 func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
 	// Given the db returns a nil item
-	dynamoDBMock := new(DynamoDbMock)
+	dynamoDBMock := new(tdynamo.DynamoDbMock)
 
 	dynamoDBMock.On("GetItem", mock.Anything).Return(&dynamodb.GetItemOutput{Item: nil}, nil)
 
-	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
+	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
 
 	// When we get a token
 	tokenId := "tokenId"
-	result, err := tokenRepo.Get(tokenId)
+	result := &testStruct{}
+	err := tokenRepo.Get(tokenId, result)
 
 	// We receive no result and the error is annotated
-	assert.Nil(t, result)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Token tokenId")
+	assert.Contains(t, err.Error(), "Item with id tokenId could not be found.")
 }
 
 func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
 	// Given the db returns unexpected data
-	dynamoDBMock := new(DynamoDbMock)
+	dynamoDBMock := new(tdynamo.DynamoDbMock)
 
 	mockResultValue := "Mock result value"
 	mockResponse := &dynamodb.GetItemOutput{
@@ -112,14 +120,12 @@ func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
 	}
 	dynamoDBMock.On("GetItem", mock.Anything).Return(mockResponse, nil)
 
-	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
+	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
 
 	// When we get a token
-	result, err := tokenRepo.Get("tokenId")
+	result := &testStruct{}
+	err := tokenRepo.Get("tokenId", result)
 
 	// We receive no result and the error is annotated
-	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "Failed to unmarshal token tokenId")
+	assert.Contains(t, err.Error(), "Failed to unmarshal tokenId")
 }
-
-// Should mock as little as possible as long as its not slow to startup/teardown
