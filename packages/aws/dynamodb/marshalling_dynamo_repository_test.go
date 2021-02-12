@@ -18,13 +18,6 @@ type testStruct struct {
 	ExpiresAfter string
 }
 
-func newTestRepository(db DynamoDbInterface) MarshallingRepository {
-	repo := new(MarshallingDynamoRepository)
-	repo.db = db
-	repo.tableName = "test_table"
-	return repo
-}
-
 func TestGetsAToken(t *testing.T) {
 	// Given a mock dynamodb
 	dynamoDBMock := new(DynamoDbMock)
@@ -64,7 +57,7 @@ func TestGetsAToken(t *testing.T) {
 		}}).Return(mockResponse, nil)
 
 	// And given the repository
-	tokenRepo := NewDynamoRepository(dynamoDBMock)
+	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
 
 	// When we get the token from the repo
 	result := &testStruct{}
@@ -82,7 +75,7 @@ func TestAnnotatesDbRequestCallError(t *testing.T) {
 	mockError := errors.New("Mock error.")
 	dynamoDBMock.On("GetItem", mock.Anything).Return(nil, mockError)
 
-	tokenRepo := newTestRepository(dynamoDBMock)
+	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
 
 	// When we get a token
 	tokenId := "tokenId"
@@ -100,7 +93,7 @@ func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
 
 	dynamoDBMock.On("GetItem", mock.Anything).Return(&dynamodb.GetItemOutput{Item: nil}, nil)
 
-	tokenRepo := newTestRepository(dynamoDBMock)
+	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
 
 	// When we get a token
 	tokenId := "tokenId"
@@ -126,7 +119,7 @@ func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
 	}
 	dynamoDBMock.On("GetItem", mock.Anything).Return(mockResponse, nil)
 
-	tokenRepo := newTestRepository(dynamoDBMock)
+	tokenRepo := NewMarshallingDynamoRepository(dynamoDBMock, "tokens")
 
 	// When we get a token
 	result := &testStruct{}

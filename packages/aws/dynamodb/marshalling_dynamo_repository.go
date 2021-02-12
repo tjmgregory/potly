@@ -14,7 +14,7 @@ type MarshallingDynamoRepository struct {
 	tableName string
 }
 
-type MarshallingRepository interface {
+type DynamoRepository interface {
 	Get(id string, dest interface{}) error
 	// Set(id string, source *interface{}) error
 }
@@ -55,9 +55,9 @@ func (r *MarshallingDynamoRepository) Get(id string, dest interface{}) error {
 //     return nil
 // }
 
-func NewDynamoRepository(db DynamoDbInterface) MarshallingRepository {
+func NewMarshallingDynamoRepository(db DynamoDbInterface, tableName string) DynamoRepository {
 	repo := new(MarshallingDynamoRepository)
 	repo.db = db
-	repo.tableName = "tokens"
+	repo.tableName = tableName
 	return repo
 }
