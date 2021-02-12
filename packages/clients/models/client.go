@@ -1,7 +1,7 @@
-package clients
+package models
 
 type Client struct {
-	id        string
-	email     string
-	createdAt string
+	Id        string
+	Email     string
+	CreatedAt string
 }

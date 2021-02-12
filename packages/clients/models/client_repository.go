@@ -1,6 +1,6 @@
-package clients
+package models
 
 type ClientRepository interface {
-	add(client Client)
-	getByEmail(email string) Client
+	Get(id string) (*Client, error)
+	GetByEmail(email string) (*Client, error)
 }

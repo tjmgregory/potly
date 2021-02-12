@@ -83,7 +83,7 @@ func TestAnnotatesDbRequestCallError(t *testing.T) {
 	// We receive no result and the error is annotated
 	assert.Nil(t, result)
 	assert.Equal(t, mockError, errors.Cause(err))
-	assert.Contains(t, err.Error(), "Call to marshalling repo failed.")
+	assert.Contains(t, err.Error(), "Call to repo failed.")
 }
 
 func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
@@ -101,7 +101,7 @@ func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
 	// We receive no result and the error is annotated
 	assert.Nil(t, result)
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Call to marshalling repo failed.")
+	assert.Contains(t, err.Error(), "Call to repo failed.")
 }
 
 func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
@@ -125,7 +125,7 @@ func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
 
 	// We receive no result and the error is annotated
 	assert.Nil(t, result)
-	assert.Contains(t, err.Error(), "Call to marshalling repo failed.")
+	assert.Contains(t, err.Error(), "Call to repo failed.")
 }
 
 // Should mock as little as possible as long as its not slow to startup/teardown
