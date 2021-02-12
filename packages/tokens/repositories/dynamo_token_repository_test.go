@@ -52,7 +52,7 @@ func TestGetsAToken(t *testing.T) {
 		}}).Return(mockResponse, nil)
 
 	// And given the repository
-	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
+	tokenRepo := NewTokenRepository(dynamoDBMock)
 
 	// When we get the token from the repo
 	result, err := tokenRepo.Get(mockTokenId)
@@ -69,7 +69,7 @@ func TestAnnotatesDbRequestCallError(t *testing.T) {
 	mockError := errors.New("Mock error.")
 	dynamoDBMock.On("GetItem", mock.Anything).Return(nil, mockError)
 
-	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
+	tokenRepo := NewTokenRepository(dynamoDBMock)
 
 	// When we get a token
 	tokenId := "tokenId"
@@ -87,7 +87,7 @@ func TestReturnsAnErrorIfTheItemCannotBeFound(t *testing.T) {
 
 	dynamoDBMock.On("GetItem", mock.Anything).Return(&dynamodb.GetItemOutput{Item: nil}, nil)
 
-	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
+	tokenRepo := NewTokenRepository(dynamoDBMock)
 
 	// When we get a token
 	tokenId := "tokenId"
@@ -113,7 +113,7 @@ func TestReturnsAnErrorIfUnmarshallingReturnsNullValueToken(t *testing.T) {
 	}
 	dynamoDBMock.On("GetItem", mock.Anything).Return(mockResponse, nil)
 
-	tokenRepo := NewDynamoTokenRepository(dynamoDBMock)
+	tokenRepo := NewTokenRepository(dynamoDBMock)
 
 	// When we get a token
 	result, err := tokenRepo.Get("tokenId")

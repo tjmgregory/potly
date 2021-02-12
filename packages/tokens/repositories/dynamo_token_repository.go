@@ -25,7 +25,7 @@ func (r *DynamoTokenRepository) Get(id string) (*models.Token, error) {
 
 func NewTokenRepository(db dynamodb.DynamoDbInterface) TokenRepository {
 	repo := new(DynamoTokenRepository)
-	marshallingRepo := dynamodb.NewMarshallingDynamoRepository(db, "token")
+	marshallingRepo := dynamodb.NewMarshallingDynamoRepository(db, "tokens")
 	repo.repo = marshallingRepo
 
 	return repo
