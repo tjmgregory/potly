@@ -6,8 +6,10 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"theodo.red/creditcompanion/packages/clients/repositories"
 	"theodo.red/creditcompanion/packages/logging"
 )
 
@@ -41,6 +43,9 @@ type CreditTransaction struct {
 }
 
 func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
+	sess := session.Must(session.NewSession())
+	dynamo := dynamodb.New(sess)
+	clientRepo := repositories.NewDynamoClientRepository(dynamo)
 	logger := logging.NewConsoleLogger()
 
 	for _, record := range e.Records {
@@ -57,6 +62,18 @@ func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 		}
 
 		logger.LogDebug("Received transaction", transaction)
+
+		for clientId := range transaction.LinkedClients {
+			logger.LogDebug("Searching for client", clientId)
+
+			client, clientErr := clientRepo.Get(clientId)
+			if clientErr != nil {
+				logger.LogError("Failed to retrieve client", clientId, clientErr)
+				continue
+			}
+
+			logger.LogDebug("Retrieved client", client)
+		}
 	}
 }
 

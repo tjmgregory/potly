@@ -14,7 +14,7 @@ type ClientDBRepository struct {
 
 func (r *ClientDBRepository) Get(id string) (*models.Client, error) {
 	client := new(models.Client)
-	err := r.repo.GetByUniqueField("Id", id, client)
+	err := r.repo.GetByUniqueField("id", id, client)
 	if err != nil {
 		return nil, errors.Annotate(err, "Call to repo failed.")
 	}
@@ -23,7 +23,7 @@ func (r *ClientDBRepository) Get(id string) (*models.Client, error) {
 
 func (r *ClientDBRepository) GetByEmail(email string) (*models.Client, error) {
 	client := new(models.Client)
-	err := r.repo.GetByUniqueField("Email", email, client)
+	err := r.repo.GetByUniqueField("email", email, client)
 	if err != nil {
 		return nil, errors.Annotate(err, "Call to repo failed.")
 	}

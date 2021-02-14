@@ -5,7 +5,7 @@
     "scripts": {
         "build": "./run.sh build",
         "deploy": "sls deploy",
-        "release": "yarn build && yarn deploy",
+        "rollout": "yarn build && yarn deploy",
         "test": "./run.sh test"
     },
     "devDependencies": {

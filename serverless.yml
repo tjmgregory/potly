@@ -23,28 +23,18 @@ frameworkVersion: '2'
 provider:
   name: aws
   runtime: go1.x
-
-# you can overwrite defaults here
-#  stage: dev
+  stage: dev
   region: eu-west-1
   apiGateway:
     shouldStartNameWithService: true
-
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:Query
+        - dynamodb:Scan
+      Resource:
+        Fn::GetAtt: [clientsDynamoTable, Arn]
 
 # you can define service wide environment variables here
 #  environment:
