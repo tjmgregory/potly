@@ -3,6 +3,7 @@ package repositories
 import (
 	"testing"
 
+	"github.com/juju/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -35,7 +36,27 @@ func TestGetCallsTheRepoCorrectly(t *testing.T) {
 	assert.Equal(t, *mockResponse, *result)
 }
 
-// TODO: Add a test for Get and GetByEmail just checking it propogates the error.
+func TestGetPropogatesTheRepoError(t *testing.T) {
+	// Given a mock repo
+	repoMock := new(database.RepositoryMock)
+
+	// And given the repo returns an error
+	mockErr := errors.New("test-string")
+	repoMock.On("GetByUniqueField", "Id", "id-123", mock.Anything).Return(mockErr, nil)
+
+	// And we have built the repo
+	repo := &ClientDBRepository{
+		repo: repoMock,
+	}
+
+	// When we call the function
+	result, resultErr := repo.Get("id-123")
+
+	// We receive the struct back
+	assert.Nil(t, result)
+	assert.Equal(t, mockErr, errors.Cause(resultErr))
+	assert.Contains(t, resultErr.Error(), "Call to repo failed.")
+}
 
 func TestGetByEmailCallsTheRepoCorrectly(t *testing.T) {
 	// Given a mock repo
@@ -60,4 +81,26 @@ func TestGetByEmailCallsTheRepoCorrectly(t *testing.T) {
 	// We receive the struct back
 	require.NoError(t, err)
 	assert.Equal(t, *mockResponse, *result)
+}
+
+func TestGetByEmailPropogatesTheRepoError(t *testing.T) {
+	// Given a mock repo
+	repoMock := new(database.RepositoryMock)
+
+	// And given the repo returns an error
+	mockErr := errors.New("test-string")
+	repoMock.On("GetByUniqueField", "Email", "test@email.com", mock.Anything).Return(mockErr, nil)
+
+	// And we have built the repo
+	repo := &ClientDBRepository{
+		repo: repoMock,
+	}
+
+	// When we call the function
+	result, resultErr := repo.GetByEmail("test@email.com")
+
+	// We receive the struct back
+	assert.Nil(t, result)
+	assert.Equal(t, mockErr, errors.Cause(resultErr))
+	assert.Contains(t, resultErr.Error(), "Call to repo failed.")
 }
