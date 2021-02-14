@@ -78,8 +78,14 @@ func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 }
 
 // UnmarshalStreamImage converts events.DynamoDBAttributeValue to struct
+/**
+This is required due to an unfortunate discrepancy between the AWS events package and the
+AWS dynamo package.
+There is a signature mismatch in what we receive and what we require, despite them being the same under the hood:
+events: map[string]DynamoDBAttributeValue
+marshalling: map[string]*dynamodb.AttributeValue
+*/
 func UnmarshalStreamImage(attribute map[string]events.DynamoDBAttributeValue, out interface{}) error {
-
 	dbAttrMap := make(map[string]*dynamodb.AttributeValue)
 
 	for k, v := range attribute {
@@ -96,7 +102,6 @@ func UnmarshalStreamImage(attribute map[string]events.DynamoDBAttributeValue, ou
 	}
 
 	return dynamodbattribute.UnmarshalMap(dbAttrMap, out)
-
 }
 
 func main() {
