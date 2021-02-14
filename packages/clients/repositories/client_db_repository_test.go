@@ -21,7 +21,7 @@ func TestGetCallsTheRepoCorrectly(t *testing.T) {
 	mockResponse.Email = "test@email.com"
 	mockResponse.CreatedAt = "some-timestamp"
 
-	repoMock.On("GetByUniqueField", "Id", "id-123", mock.Anything).Return(nil, mockResponse)
+	repoMock.On("GetByUniqueField", "id", "id-123", mock.Anything).Return(nil, mockResponse)
 
 	// And we have built the repo
 	repo := &ClientDBRepository{
@@ -42,7 +42,7 @@ func TestGetPropogatesTheRepoError(t *testing.T) {
 
 	// And given the repo returns an error
 	mockErr := errors.New("test-string")
-	repoMock.On("GetByUniqueField", "Id", "id-123", mock.Anything).Return(mockErr, nil)
+	repoMock.On("GetByUniqueField", "id", "id-123", mock.Anything).Return(mockErr, nil)
 
 	// And we have built the repo
 	repo := &ClientDBRepository{
@@ -68,7 +68,7 @@ func TestGetByEmailCallsTheRepoCorrectly(t *testing.T) {
 	mockResponse.Email = "test@email.com"
 	mockResponse.CreatedAt = "some-timestamp"
 
-	repoMock.On("GetByUniqueField", "Email", "test@email.com", mock.Anything).Return(nil, mockResponse)
+	repoMock.On("GetByUniqueField", "email", "test@email.com", mock.Anything).Return(nil, mockResponse)
 
 	// And we have built the repo
 	repo := &ClientDBRepository{
@@ -89,7 +89,7 @@ func TestGetByEmailPropogatesTheRepoError(t *testing.T) {
 
 	// And given the repo returns an error
 	mockErr := errors.New("test-string")
-	repoMock.On("GetByUniqueField", "Email", "test@email.com", mock.Anything).Return(mockErr, nil)
+	repoMock.On("GetByUniqueField", "email", "test@email.com", mock.Anything).Return(mockErr, nil)
 
 	// And we have built the repo
 	repo := &ClientDBRepository{
