@@ -75,10 +75,25 @@ functions:
       - stream:
           type: dynamodb
           arn:
-            Fn::GetAtt: [clientsDynamoTable, StreamArn]
+            Fn::GetAtt: [creditTransactionsDynamoTable, StreamArn]
 
 resources: # CloudFormation template syntax from here on.
   Resources:
+    creditTransactionsDynamoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: creditTransactions
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
     clientsDynamoTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -92,5 +107,3 @@ resources: # CloudFormation template syntax from here on.
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_IMAGE
