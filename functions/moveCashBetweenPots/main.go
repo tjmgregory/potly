@@ -10,37 +10,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"theodo.red/creditcompanion/packages/clients/repositories"
+	"theodo.red/creditcompanion/packages/credtrack/credmod"
 	"theodo.red/creditcompanion/packages/logging"
 )
-
-type Currency string
-
-const (
-	GBP Currency = "GBP"
-)
-
-type TransactionType string
-
-const (
-	CREDIT TransactionType = "CREDIT"
-	DEBIT                  = "DEBIT"
-)
-
-type MonetaryAmount struct {
-	Value    float32  `dynamodbav:value`
-	Currency Currency `dynamodbav:currency`
-}
-
-type CreditTransaction struct {
-	Id              string             `dynamodbav:id`
-	CreditSource    string             `dynamodbav:creditSource`
-	CreatedAt       string             `dynamodbav:createdAt`
-	LinkedClients   map[string]float32 `dynamodbav:linkedClients`
-	Total           MonetaryAmount     `dynamodbav:total`
-	TransactionType TransactionType    `dynamodbav:transactionType`
-	Description     string             `dynamodbav:description`
-	TransactedAt    string             `dynamodbav:transactedAt`
-}
 
 func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 	sess := session.Must(session.NewSession())
@@ -54,7 +26,7 @@ func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 			continue
 		}
 
-		var transaction CreditTransaction
+		var transaction credmod.CreditTransaction
 		marshalErr := UnmarshalStreamImage(record.Change.NewImage, &transaction)
 		if marshalErr != nil {
 			logger.LogError("Failed to unmarshal transaction", marshalErr, record.Change.NewImage)
