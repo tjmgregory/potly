@@ -1,4 +1,4 @@
-package repositories
+package clirepo
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"theodo.red/creditcompanion/packages/clients/models"
+	"theodo.red/creditcompanion/packages/clients"
 	"theodo.red/creditcompanion/packages/database"
 )
 
@@ -16,7 +16,7 @@ func TestGetCallsTheRepoCorrectly(t *testing.T) {
 	repoMock := new(database.RepositoryMock)
 
 	// And given a mock reponse from the repo
-	mockResponse := new(models.Client)
+	mockResponse := new(clients.Client)
 	mockResponse.Id = "id-123"
 	mockResponse.Email = "test@email.com"
 	mockResponse.CreatedAt = "some-timestamp"
@@ -63,7 +63,7 @@ func TestGetByEmailCallsTheRepoCorrectly(t *testing.T) {
 	repoMock := new(database.RepositoryMock)
 
 	// And given a mock reponse from the repo
-	mockResponse := new(models.Client)
+	mockResponse := new(clients.Client)
 	mockResponse.Id = "id-123"
 	mockResponse.Email = "test@email.com"
 	mockResponse.CreatedAt = "some-timestamp"

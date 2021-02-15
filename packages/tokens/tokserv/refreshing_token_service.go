@@ -1,20 +1,21 @@
-package services
+package tokserv
 
 import (
 	"theodo.red/creditcompanion/packages/logging"
 	"theodo.red/creditcompanion/packages/teatime"
-	"theodo.red/creditcompanion/packages/tokens/models"
+	"theodo.red/creditcompanion/packages/tokens"
+	"theodo.red/creditcompanion/packages/tokens/tokrepo"
 )
 
 type RefreshingTokenService struct {
 	tokenRefreshService          TokenRefreshService
-	tokenRepository              models.TokenRepository
+	tokenRepository              tokrepo.TokenRepository
 	tokenRefreshThresholdSeconds int
 	clock                        teatime.Clock
 	logger                       logging.Logger
 }
 
-func (r *RefreshingTokenService) GetTokenById(id string) (*models.Token, error) {
+func (r *RefreshingTokenService) GetTokenById(id string) (*tokens.Token, error) {
 	token, err := r.tokenRepository.Get(id)
 	if err != nil {
 		return nil, err
@@ -41,11 +42,11 @@ func (r *RefreshingTokenService) GetTokenById(id string) (*models.Token, error) 
 	return token, nil
 }
 
-func (r *RefreshingTokenService) tokenIsActive(token *models.Token) bool {
+func (r *RefreshingTokenService) tokenIsActive(token *tokens.Token) bool {
 	return r.clock.Now().Before(token.ExpiresAfterTime())
 }
 
-func (r *RefreshingTokenService) tokenIsCloseToOrHasExpired(token *models.Token) bool {
+func (r *RefreshingTokenService) tokenIsCloseToOrHasExpired(token *tokens.Token) bool {
 	if !r.tokenIsActive(token) {
 		return true
 	}

@@ -9,15 +9,15 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"theodo.red/creditcompanion/packages/clients/repositories"
-	"theodo.red/creditcompanion/packages/credtrack/credmod"
+	"theodo.red/creditcompanion/packages/clients/clirepo"
+	"theodo.red/creditcompanion/packages/credtrack"
 	"theodo.red/creditcompanion/packages/logging"
 )
 
 func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 	sess := session.Must(session.NewSession())
 	dynamo := dynamodb.New(sess)
-	clientRepo := repositories.NewDynamoClientRepository(dynamo)
+	clientRepo := clirepo.NewDynamoClientRepository(dynamo)
 	logger := logging.NewConsoleLogger()
 
 	for _, record := range e.Records {
@@ -26,7 +26,7 @@ func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 			continue
 		}
 
-		var transaction credmod.CreditTransaction
+		var transaction credtrack.CreditTransaction
 		marshalErr := UnmarshalStreamImage(record.Change.NewImage, &transaction)
 		if marshalErr != nil {
 			logger.LogError("Failed to unmarshal transaction", marshalErr, record.Change.NewImage)
