@@ -1,4 +1,4 @@
-package repositories
+package tokrepo
 
 /**
 These tests are heavily dependent on the implementation of the marshalling db repo, and once confidence in the database module is proven,
@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"theodo.red/creditcompanion/packages/database/tdynamo"
-	"theodo.red/creditcompanion/packages/tokens/models"
+	"theodo.red/creditcompanion/packages/tokens"
 )
 
 func TestGetsAToken(t *testing.T) {
@@ -64,7 +64,7 @@ func TestGetsAToken(t *testing.T) {
 
 	// We receive the mapped struct back.
 	require.NoError(t, err)
-	assert.Equal(t, models.Token{Id: mockTokenId, Owner: mockTokenOwner, Token: mockTokenValue, ExpiresAfter: mockTokenExpiresAfter}, *result)
+	assert.Equal(t, tokens.Token{Id: mockTokenId, Owner: mockTokenOwner, Token: mockTokenValue, ExpiresAfter: mockTokenExpiresAfter}, *result)
 }
 
 func TestAnnotatesDbRequestCallError(t *testing.T) {

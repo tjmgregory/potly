@@ -1,4 +1,22 @@
-package credmod
+package credtrack
+
+type Currency string
+
+const (
+	GBP Currency = "GBP"
+)
+
+type MonetaryAmount struct {
+	Value    float32  `dynamodbav:value`
+	Currency Currency `dynamodbav:currency`
+}
+
+type TransactionType string
+
+const (
+	CREDIT TransactionType = "CREDIT"
+	DEBIT                  = "DEBIT"
+)
 
 type CreditTransaction struct {
 	Id              string             `dynamodbav:id`

@@ -1,4 +1,4 @@
-package services
+package tokserv
 
 import (
 	"testing"
@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/mock"
 	"theodo.red/creditcompanion/packages/logging"
 	"theodo.red/creditcompanion/packages/teatime"
-	"theodo.red/creditcompanion/packages/tokens/models"
-	"theodo.red/creditcompanion/packages/tokens/repositories"
+	"theodo.red/creditcompanion/packages/tokens"
+	"theodo.red/creditcompanion/packages/tokens/tokrepo"
 )
 
 func TestReturnsTheRepoTokenIfItIsNotExpiringSoon(t *testing.T) {
@@ -18,8 +18,8 @@ func TestReturnsTheRepoTokenIfItIsNotExpiringSoon(t *testing.T) {
 	tokenId := "token123"
 
 	// And given the token repo returns a token
-	mockTokenRepo := new(repositories.TokenRepositoryMock)
-	mockToken := &models.Token{
+	mockTokenRepo := new(tokrepo.TokenRepositoryMock)
+	mockToken := &tokens.Token{
 		Id:           tokenId,
 		Owner:        "owner-123",
 		Token:        "token-value-123",
@@ -59,8 +59,8 @@ func TestRefreshesTheTokenIfItHasExpired(t *testing.T) {
 	tokenId := "token123"
 
 	// And given the token repo returns a token
-	tokenRepoMock := new(repositories.TokenRepositoryMock)
-	mockToken := &models.Token{
+	tokenRepoMock := new(tokrepo.TokenRepositoryMock)
+	mockToken := &tokens.Token{
 		Id:           tokenId,
 		Owner:        "owner-123",
 		Token:        "token-value-123",
@@ -81,7 +81,7 @@ func TestRefreshesTheTokenIfItHasExpired(t *testing.T) {
 
 	// And given the refresh service succeeds
 	tokenRefreshServiceMock := new(TokenRefreshServiceMock)
-	refreshedToken := &models.Token{
+	refreshedToken := &tokens.Token{
 		Id:           tokenId,
 		Owner:        "owner-123",
 		Token:        "token-value-456",
@@ -115,8 +115,8 @@ func TestRefreshesTheTokenWhenCloseToExpiringAndStillReturnsTokenIfRefreshingFai
 	tokenId := "token123"
 
 	// And given the token repo returns a token
-	mockTokenRepo := new(repositories.TokenRepositoryMock)
-	mockToken := &models.Token{
+	mockTokenRepo := new(tokrepo.TokenRepositoryMock)
+	mockToken := &tokens.Token{
 		Id:           tokenId,
 		Owner:        "owner-123",
 		Token:        "token-value-123",
