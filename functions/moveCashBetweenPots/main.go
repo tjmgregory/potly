@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"sync"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -14,14 +13,6 @@ import (
 	"theodo.red/creditcompanion/packages/credtrack"
 	"theodo.red/creditcompanion/packages/logging"
 )
-
-func ProcessTransaction(logger logging.Logger, clientRepo clirepo.ClientRepository, transaction credtrack.CreditTransaction) {
-	var waitGroup sync.WaitGroup
-
-	for clientId := transaction.LinkedClients {
-
-	}
-}
 
 func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 	sess := session.Must(session.NewSession())
@@ -43,6 +34,8 @@ func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 		}
 
 		logger.LogDebug("Received transaction", transaction)
+
+		// TODO: Switch to using the transaction_processor
 
 		for clientId := range transaction.LinkedClients {
 			logger.LogDebug("Searching for client", clientId)
