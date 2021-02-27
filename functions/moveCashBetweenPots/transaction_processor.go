@@ -61,11 +61,15 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.Wait
 		transfersWG.Add(1)
 		p.processTransferForPot(&transfersWG, potId, clientId, *potTransferValue)
 	}
+	return nil
 }
 
 func (p *ParallelTransactionProcessor) processTransferForPot(wg *sync.WaitGroup, potId string, requestorId string, amount money.MonetaryAmount) error {
 	defer wg.Done()
-	return p.potTransferService.TransferCash(potId, requestorId, money.TransactionDirection.CREDIT, amount)
+	if err := p.potTransferService.TransferCash(potId, requestorId, money.CREDIT, amount); err != nil {
+		return errors.Annotatef(err, "Failed to process transfer for pot %v, amount: %v, requestorId: %v", potId, amount, requestorId)
+	}
+	return nil
 }
 
 func NewParallelTransactionProcessor(db tdynamo.DynamoDbInterface) TransactionProcessor {

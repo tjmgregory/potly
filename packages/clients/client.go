@@ -4,5 +4,5 @@ type Client struct {
 	Id        string
 	Email     string
 	CreatedAt string
-	Pots      [string]float32
+	Pots      map[string]float32
 }
