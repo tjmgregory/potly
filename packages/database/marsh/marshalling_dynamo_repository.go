@@ -17,7 +17,7 @@ type MarshallingDynamoRepository struct {
 }
 
 func (r *MarshallingDynamoRepository) Get(id string, dest interface{}) error {
-	return r.GetByUniqueField("Id", id, dest)
+	return r.GetByUniqueField("id", id, dest)
 }
 
 func (r *MarshallingDynamoRepository) GetByUniqueField(fieldName string, fieldValue string, dest interface{}) error {

@@ -17,7 +17,7 @@ type PotDBRepository struct {
 
 func (p *PotDBRepository) Get(id string) (*Pot, error) {
 	pot := new(Pot)
-	if err := p.repo.GetByUniqueField("id", id, pot); err != nil {
+	if err := p.repo.Get(id, pot); err != nil {
 		return nil, errors.Annotatef(err, "Call to repo failed. Pot id: %v", id)
 	}
 	return pot, nil

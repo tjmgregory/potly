@@ -14,7 +14,7 @@ type ClientDBRepository struct {
 
 func (r *ClientDBRepository) Get(id string) (*clients.Client, error) {
 	client := new(clients.Client)
-	err := r.repo.GetByUniqueField("id", id, client)
+	err := r.repo.Get(id, client)
 	if err != nil {
 		return nil, errors.Annotate(err, "Call to repo failed.")
 	}
