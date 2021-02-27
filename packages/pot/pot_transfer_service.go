@@ -1,29 +1,28 @@
 package pot
 
 import (
+	"./trancutor"
 	"github.com/juju/errors"
 
+	"theodo.red/creditcompanion/packages/database/tdynamo"
 	"theodo.red/creditcompanion/packages/money"
-	"theodo.red/creditcompanion/packages/tokens"
 	"theodo.red/creditcompanion/packages/tokens/tokserv"
 )
 
 type PotTransferService interface {
-	TransferCash(potId string, requestorId string, direction money.TransactionDirection, amount money.MonetaryAmount) error
+	TransferCash(potId string, requestorId string, direction money.TransactionDirection, amount money.MonetaryAmount, idempotencyKey string) error
 }
 
 type BasePotTransferService struct {
-	potRepo   PotRepository
-	tokenRepo tokserv.TokenService
+	potRepo      PotRepository
+	tokenService tokserv.TokenService
 }
 
-type PotTransferExecutor func(accessToken tokens.Token, direction money.TransactionDirection, amount money.MonetaryAmount) error
-
-var potTransferMap = map[PotProvider]PotTransferExecutor{
-	MONZO: MonzoPotTransferExecutor,
+var potTransferMap = map[PotProvider]trancutor.PotTransferExecutor{
+	MONZO: trancutor.MonzoPotTransferExecutor,
 }
 
-func (p *BasePotTransferService) TransferCash(potId string, requestorId string, direction money.TransactionDirection, amount money.MonetaryAmount) error {
+func (p *BasePotTransferService) TransferCash(potId string, requestorId string, direction money.TransactionDirection, amount money.MonetaryAmount, idempotencyKey string) error {
 	pot, err := p.potRepo.Get(potId)
 	if err != nil {
 		return errors.Annotatef(err, "Failed to find pot %v", potId)
@@ -33,14 +32,18 @@ func (p *BasePotTransferService) TransferCash(potId string, requestorId string, 
 		return errors.Errorf("Requestor %v who did not create pot %v attempted perform operations upon it.", requestorId, potId)
 	}
 
-	token, err := p.tokenRepo.GetTokenById(pot.accessTokenId)
+	token, err := p.tokenService.GetTokenById(pot.accessTokenId)
 	if err != nil {
 		return errors.Annotatef(err, "Failed to find token %v for pot %v", pot.accessTokenId, potId)
 	}
 
-	return potTransferMap[pot.potProvider](*token, direction, amount)
+	return potTransferMap[pot.potProvider](*token, direction, amount, idempotencyKey)
 }
 
-func MonzoPotTransferExecutor(accessToken tokens.Token, direction money.TransactionDirection, amount money.MonetaryAmount) error {
-	return nil
+func NewPotTransferService(db tdynamo.DynamoDbInterface) PotTransferService {
+	service := new(BasePotTransferService)
+	service.potRepo = NewDynamoPotRepository(db)
+	service.tokenService = tokserv.NewRefreshingTokenService(db)
+
+	return service
 }

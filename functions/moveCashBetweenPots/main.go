@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"theodo.red/creditcompanion/packages/clients/clirepo"
 	"theodo.red/creditcompanion/packages/credtrack"
 	"theodo.red/creditcompanion/packages/logging"
 )
@@ -17,7 +16,7 @@ import (
 func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 	sess := session.Must(session.NewSession())
 	dynamo := dynamodb.New(sess)
-	clientRepo := clirepo.NewDynamoClientRepository(dynamo)
+	processor := NewParallelTransactionProcessor(dynamo)
 	logger := logging.NewConsoleLogger()
 
 	for _, record := range e.Records {
@@ -34,20 +33,7 @@ func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 		}
 
 		logger.LogDebug("Received transaction", transaction)
-
-		// TODO: Switch to using the transaction_processor
-
-		for clientId := range transaction.LinkedClients {
-			logger.LogDebug("Searching for client", clientId)
-
-			client, clientErr := clientRepo.Get(clientId)
-			if clientErr != nil {
-				logger.LogError("Failed to retrieve client", clientId, clientErr)
-				continue
-			}
-
-			logger.LogDebug("Retrieved client", client)
-		}
+		processor.Process(transaction)
 	}
 }
 
