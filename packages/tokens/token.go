@@ -7,10 +7,10 @@ import (
 )
 
 type Token struct {
-	Id           string
-	Owner        string
-	Token        string
-	ExpiresAfter string
+	Id           string `dynamodbav:id`
+	Owner        string `dynamodbav:owner`
+	Token        string `dynamodbav:token`
+	ExpiresAfter string `dynamodbav:expiresAfter`
 }
 
 func (t *Token) ExpiresAfterTime() time.Time {
