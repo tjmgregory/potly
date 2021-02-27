@@ -1,11 +1,11 @@
 package pot
 
 import (
-	"./trancutor"
 	"github.com/juju/errors"
 
 	"theodo.red/creditcompanion/packages/database/tdynamo"
 	"theodo.red/creditcompanion/packages/money"
+	"theodo.red/creditcompanion/packages/pot/trancutor"
 	"theodo.red/creditcompanion/packages/tokens/tokserv"
 )
 

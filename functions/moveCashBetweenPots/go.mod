@@ -26,6 +26,7 @@ require (
 	theodo.red/creditcompanion/packages/credtrack v1.0.0
 	theodo.red/creditcompanion/packages/database v1.0.0
 	theodo.red/creditcompanion/packages/logging v1.0.0
+	theodo.red/creditcompanion/packages/money v1.0.0
 	theodo.red/creditcompanion/packages/pot v1.0.0
 	theodo.red/creditcompanion/packages/tokens v1.0.0
 )
