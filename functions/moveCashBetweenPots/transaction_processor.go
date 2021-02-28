@@ -58,10 +58,13 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.Wait
 			return errors.Annotatef(err, "Failed to calculate pot split for transfer. potId: %v potPercentage: %v total transfer value: %v", potId, potPercentage, transferValue)
 		}
 
-		transfersWG.Add(1)
 		idempotencyKey := clientId + potId + transaction.Id
-		p.processTransferForPot(&transfersWG, potId, clientId, *potTransferValue, idempotencyKey)
+
+		transfersWG.Add(1)
+		go p.processTransferForPot(&transfersWG, potId, clientId, *potTransferValue, idempotencyKey)
 	}
+	transfersWG.Wait()
+
 	return nil
 }
 
