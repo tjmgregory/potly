@@ -12,10 +12,24 @@ type RepositoryMock struct {
 
 /**
 When using this, one can provide an arguement after the expected error return type. This value
+will be cloned into arg2's (a pointer) destination.
+*/
+func (r *RepositoryMock) Get(arg1 string, arg2 interface{}) error {
+	args := r.Called(arg1, arg2)
+	// Hack to pass in the mocked response type if present
+	if args.Get(1) != nil {
+		cloneValue(args.Get(1), arg2)
+	}
+	return args.Error(0)
+}
+
+/**
+When using this, one can provide an arguement after the expected error return type. This value
 will be cloned into arg3's (a pointer) destination.
 */
 func (r *RepositoryMock) GetByUniqueField(arg1 string, arg2 string, arg3 interface{}) error {
 	args := r.Called(arg1, arg2, arg3)
+	// Hack to pass in the mocked response type if present
 	if args.Get(1) != nil {
 		cloneValue(args.Get(1), arg3)
 	}
