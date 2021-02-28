@@ -33,3 +33,11 @@ func (m MonetaryAmount) Mult(n MonetaryAmount) (*MonetaryAmount, error) {
 
 	return newValue, nil
 }
+
+func (m MonetaryAmount) MultFloat(n float32) (*MonetaryAmount, error) {
+	newValue := new(MonetaryAmount)
+	newValue.Currency = m.Currency
+	newValue.Value = m.Value * n
+
+	return newValue, nil
+}

@@ -26,9 +26,9 @@ type ParallelTransactionProcessor struct {
 func (p *ParallelTransactionProcessor) Process(transaction credtrack.CreditTransaction) error {
 	var waitGroup sync.WaitGroup
 
-	for clientId, percentage := range transaction.LinkedClients {
+	for clientId, proportion := range transaction.LinkedClients {
 		waitGroup.Add(1)
-		go p.processTransactionForClient(&waitGroup, transaction, clientId, percentage)
+		go p.processTransactionForClient(&waitGroup, transaction, clientId, proportion)
 	}
 
 	waitGroup.Wait()
@@ -38,13 +38,13 @@ func (p *ParallelTransactionProcessor) Process(transaction credtrack.CreditTrans
 	return nil
 }
 
-func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.WaitGroup, transaction credtrack.CreditTransaction, clientId string, percentage float32) error {
+func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.WaitGroup, transaction credtrack.CreditTransaction, clientId string, proportion float32) error {
 	defer wg.Done()
-	log.Printf("processTransactionForClient transaction: %v, clientId: %v, percentage: %v", transaction, clientId, percentage)
+	log.Printf("processTransactionForClient transaction: %v, clientId: %v, proportion: %v", transaction, clientId, proportion)
 
-	transferValue, err := transaction.Total.Mult(money.MonetaryAmount{Value: percentage, Currency: transaction.Total.Currency})
+	transferValue, err := transaction.Total.MultFloat(proportion)
 	if err != nil {
-		return errors.Annotatef(err, "Failed to calculate transfer value. transaction total: %v, percentage: %v", transaction.Total, percentage)
+		return errors.Annotatef(err, "Failed to calculate transfer value. transaction total: %v, proportion: %v", transaction.Total, proportion)
 	}
 	log.Printf("Calculated value to transfer: %v", transferValue)
 
@@ -55,15 +55,15 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.Wait
 	log.Printf("Retrieved client for transfer: %v", client)
 
 	var transfersWG sync.WaitGroup
-	for potId, potPercentage := range client.Pots {
-		potTransferValue, err := transferValue.Mult(money.MonetaryAmount{Value: potPercentage, Currency: transferValue.Currency})
+	for potId, potProportion := range client.Pots {
+		potTransferValue, err := transferValue.MultFloat(potProportion)
 		if err != nil {
 			// TODO: Group errors so some paths can run instead of failing all of em.
-			return errors.Annotatef(err, "Failed to calculate pot split for transfer. potId: %v potPercentage: %v total transfer value: %v", potId, potPercentage, transferValue)
+			return errors.Annotatef(err, "Failed to calculate pot split for transfer. potId: %v potProportion: %v total transfer value: %v", potId, potProportion, transferValue)
 		}
 
 		idempotencyKey := clientId + potId + transaction.Id
-		log.Printf("Idempotency key")
+		log.Printf("Idempotency key: %v", idempotencyKey)
 
 		transfersWG.Add(1)
 		go p.processTransferForPot(&transfersWG, potId, clientId, *potTransferValue, idempotencyKey)
