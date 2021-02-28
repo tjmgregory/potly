@@ -1,6 +1,8 @@
 package pot
 
 import (
+	"log"
+
 	"github.com/juju/errors"
 
 	"theodo.red/creditcompanion/packages/database/tdynamo"
@@ -23,6 +25,7 @@ var potTransferMap = map[PotProvider]trancutor.PotTransferExecutor{
 }
 
 func (p *BasePotTransferService) TransferCash(potId string, requestorId string, direction money.TransactionDirection, amount money.MonetaryAmount, idempotencyKey string) error {
+	log.Printf("TransferCash potId: %v, requestorId: %v, direction: %v, amount: %v, idempotencyKey: %v", potId, requestorId, direction, amount, idempotencyKey)
 	pot, err := p.potRepo.Get(potId)
 	if err != nil {
 		return errors.Annotatef(err, "Failed to find pot %v", potId)

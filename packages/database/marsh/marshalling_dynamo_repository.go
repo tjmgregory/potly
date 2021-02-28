@@ -44,7 +44,7 @@ func (r *MarshallingDynamoRepository) GetByUniqueField(fieldName string, fieldVa
 
 	unmarshalErr := dynamodbattribute.UnmarshalMap(result.Item, dest)
 	postMarshalReplica := reflect.ValueOf(dest).Elem().Interface()
-	if unmarshalErr != nil || preMarshalReplica == postMarshalReplica {
+	if unmarshalErr != nil || reflect.DeepEqual(preMarshalReplica, postMarshalReplica) {
 		return errors.New("Failed to unmarshal " + fieldValue + ".")
 	}
 

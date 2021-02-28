@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"sync"
 
 	"github.com/juju/errors"
@@ -39,16 +40,19 @@ func (p *ParallelTransactionProcessor) Process(transaction credtrack.CreditTrans
 
 func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.WaitGroup, transaction credtrack.CreditTransaction, clientId string, percentage float32) error {
 	defer wg.Done()
+	log.Printf("processTransactionForClient transaction: %v, clientId: %v, percentage: %v", transaction, clientId, percentage)
 
 	transferValue, err := transaction.Total.Mult(money.MonetaryAmount{Value: percentage, Currency: transaction.Total.Currency})
 	if err != nil {
 		return errors.Annotatef(err, "Failed to calculate transfer value. transaction total: %v, percentage: %v", transaction.Total, percentage)
 	}
+	log.Printf("Calculated value to transfer: %v", transferValue)
 
 	client, err := p.clientRepo.Get(clientId)
 	if err != nil {
 		return errors.Annotatef(err, "Failed to get client %v for transaction %v", clientId, transaction.Id)
 	}
+	log.Printf("Retrieved client for transfer: %v", client)
 
 	var transfersWG sync.WaitGroup
 	for potId, potPercentage := range client.Pots {
@@ -59,6 +63,7 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.Wait
 		}
 
 		idempotencyKey := clientId + potId + transaction.Id
+		log.Printf("Idempotency key")
 
 		transfersWG.Add(1)
 		go p.processTransferForPot(&transfersWG, potId, clientId, *potTransferValue, idempotencyKey)
