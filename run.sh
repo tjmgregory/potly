@@ -12,7 +12,7 @@ build() {
             echo "Building from $function_path"
             function_name=`echo $function_path | sed 's/^.*functions\///g'`
             cd $function_path
-            GO111MODULE=on GOOS=linux go build -ldflags='-s -w' -o $PROJECT_DIR/bin/$function_name main.go
+            GO111MODULE=on GOOS=linux go build -ldflags='-s -w' -o $PROJECT_DIR/bin/$function_name
             echo "Built: $function_name"
         fi
     done
