@@ -30,11 +30,10 @@ provider:
   iamRoleStatements:
     - Effect: "Allow"
       Action:
-        - dynamodb:GetItem
+        - dynamodb:*
         - dynamodb:Query
         - dynamodb:Scan
-      Resource:
-        Fn::GetAtt: [clientsDynamoTable, Arn]
+      Resource: '*'
 
 # you can define service wide environment variables here
 #  environment:
@@ -69,6 +68,19 @@ functions:
 
 resources: # CloudFormation template syntax from here on.
   Resources:
+    clientsDynamoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: clients
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
     creditTransactionsDynamoTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -84,10 +96,23 @@ resources: # CloudFormation template syntax from here on.
           WriteCapacityUnits: 1
         StreamSpecification:
           StreamViewType: NEW_IMAGE
-    clientsDynamoTable:
+    potsDynamoTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: clients
+        TableName: pots
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    tokensDynamoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: tokens
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

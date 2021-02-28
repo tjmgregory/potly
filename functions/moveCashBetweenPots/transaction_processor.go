@@ -24,22 +24,37 @@ type ParallelTransactionProcessor struct {
 }
 
 func (p *ParallelTransactionProcessor) Process(transaction credtrack.CreditTransaction) error {
-	var waitGroup sync.WaitGroup
+	fatalErrors := make(chan error)
+	wgDone := make(chan bool)
+
+	var wg sync.WaitGroup
+	wg.Add(len(transaction.LinkedClients))
 
 	for clientId, proportion := range transaction.LinkedClients {
-		waitGroup.Add(1)
-		go p.processTransactionForClient(&waitGroup, transaction, clientId, proportion)
+		go func(clientId string, proportion float32) {
+			defer wg.Done()
+			err := p.processTransactionForClient(transaction, clientId, proportion)
+			if err != nil {
+				fatalErrors <- err
+			}
+		}(clientId, proportion)
 	}
 
-	waitGroup.Wait()
+	go func() {
+		wg.Wait()
+		close(wgDone)
+	}()
 
-	// TODO: Check each process didn't fail
-
-	return nil
+	select {
+	case <-wgDone:
+		return nil
+	case err := <-fatalErrors:
+		close(fatalErrors)
+		return err
+	}
 }
 
-func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.WaitGroup, transaction credtrack.CreditTransaction, clientId string, proportion float32) error {
-	defer wg.Done()
+func (p *ParallelTransactionProcessor) processTransactionForClient(transaction credtrack.CreditTransaction, clientId string, proportion float32) error {
 	log.Printf("processTransactionForClient transaction: %v, clientId: %v, proportion: %v", transaction, clientId, proportion)
 
 	transferValue, err := transaction.Total.MultFloat(proportion)
@@ -54,30 +69,44 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(wg *sync.Wait
 	}
 	log.Printf("Retrieved client for transfer: %v", client)
 
-	var transfersWG sync.WaitGroup
+	transferErrors := make(chan error)
+	transfersDone := make(chan bool)
+
+	var wg sync.WaitGroup
+	wg.Add(len(client.Pots))
+
 	for potId, potProportion := range client.Pots {
-		potTransferValue, err := transferValue.MultFloat(potProportion)
-		if err != nil {
-			// TODO: Group errors so some paths can run instead of failing all of em.
-			return errors.Annotatef(err, "Failed to calculate pot split for transfer. potId: %v potProportion: %v total transfer value: %v", potId, potProportion, transferValue)
-		}
+		go func(potId string, potProportion float32) {
+			defer wg.Done()
 
-		idempotencyKey := clientId + potId + transaction.Id
-		log.Printf("Idempotency key: %v", idempotencyKey)
+			potTransferValue, err := transferValue.MultFloat(potProportion)
+			if err != nil {
+				transferErrors <- errors.Annotatef(err, "Failed to calculate pot split for transfer. potId: %v potProportion: %v total transfer value: %v", potId, potProportion, transferValue)
+				return
+			}
 
-		transfersWG.Add(1)
-		go p.processTransferForPot(&transfersWG, potId, clientId, *potTransferValue, idempotencyKey)
+			idempotencyKey := clientId + potId + transaction.Id
+			log.Printf("Idempotency key: %v", idempotencyKey)
+
+			if err := p.potTransferService.TransferCash(potId, clientId, money.CREDIT, *potTransferValue, idempotencyKey); err != nil {
+				transferErrors <- errors.Annotatef(err, "Failed to process transfer for pot %v, potTransferValue: %v, clientId: %v", potId, potTransferValue, clientId)
+			}
+		}(potId, potProportion)
 	}
-	transfersWG.Wait()
 
-	return nil
-}
+	go func() {
+		wg.Wait()
+		close(transfersDone)
+	}()
 
-func (p *ParallelTransactionProcessor) processTransferForPot(wg *sync.WaitGroup, potId string, requestorId string, amount money.MonetaryAmount, idempotencyKey string) error {
-	defer wg.Done()
-	if err := p.potTransferService.TransferCash(potId, requestorId, money.CREDIT, amount, idempotencyKey); err != nil {
-		return errors.Annotatef(err, "Failed to process transfer for pot %v, amount: %v, requestorId: %v", potId, amount, requestorId)
+	select {
+	case <-transfersDone:
+		close(transferErrors)
+		return nil
+	case err := <-transferErrors:
+		p.logger.LogError("Failure during transfers.", err)
 	}
+
 	return nil
 }
 
