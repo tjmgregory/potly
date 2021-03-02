@@ -1,25 +1,25 @@
 package logging
 
-func ExampleLogDebug() {
+func ExampleDebug() {
 	logger := new(ConsoleLogger)
-	logger.LogDebug("Test log")
+	logger.Debug("Test log")
 	// Output: [DEBUG] Test log
 }
 
-func ExampleLogInfo() {
+func ExampleInfo() {
 	logger := new(ConsoleLogger)
-	logger.LogInfo("Test log")
+	logger.Info("Test log")
 	// Output: [INFO] Test log
 }
 
-func ExampleLogWarning() {
+func ExampleWarning() {
 	logger := new(ConsoleLogger)
-	logger.LogWarning("Test log")
+	logger.Warning("Test log")
 	// Output: [WARNING] Test log
 }
 
-func ExampleLogError() {
+func ExampleError() {
 	logger := new(ConsoleLogger)
-	logger.LogError("Test log")
+	logger.Error("Test log")
 	// Output: [ERROR] Test log
 }

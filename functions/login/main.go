@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"theodo.red/creditcompanion/functions/login/models"
@@ -12,7 +10,7 @@ import (
 
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	logger := new(logging.ConsoleLogger)
-	logger.LogDebug(fmt.Sprintf("%s %s", req.HTTPMethod, req.Resource))
+	logger.Debug("%s %s", req.HTTPMethod, req.Resource)
 
 	router := models.RouterMap{
 		"/login": models.RouterVerbMap{
@@ -21,7 +19,7 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	}
 
 	response := router[req.Resource][req.HTTPMethod]()
-	logger.LogDebug(fmt.Sprintf("Sending response %v", response))
+	logger.Debug("Sending response %v", response)
 
 	resp := events.APIGatewayProxyResponse{
 		StatusCode:      response.StatusCode,

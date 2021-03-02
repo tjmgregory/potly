@@ -26,7 +26,7 @@ func (r *RefreshingTokenService) GetTokenById(id string) (*tokens.Token, error) 
 		refreshedToken, refreshErr := r.tokenRefreshService.RefreshToken(token)
 		if refreshErr != nil {
 			if r.tokenIsActive(token) {
-				r.logger.LogDebug("Token is near to expiry yet refresh failed. Continuing anyway, the request may fail.", token.Id)
+				r.logger.Debug("Token %v is near to expiry yet refresh failed. Continuing anyway, the request may fail.", token.Id)
 			} else {
 				return nil, refreshErr
 			}

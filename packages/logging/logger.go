@@ -1,8 +1,8 @@
 package logging
 
 type Logger interface {
-	LogDebug(...interface{})
-	LogInfo(...interface{})
-	LogWarning(...interface{})
-	LogError(...interface{})
+	Debug(format string, args ...interface{})
+	Info(format string, args ...interface{})
+	Warning(format string, args ...interface{})
+	Error(format string, args ...interface{})
 }

@@ -6,20 +6,20 @@ type LoggerMock struct {
 	mock.Mock
 }
 
-func (m *LoggerMock) LogDebug(input ...interface{}) {
-	m.Called(input)
+func (m *LoggerMock) Debug(format string, args ...interface{}) {
+	m.Called(format, args)
 }
 
-func (m *LoggerMock) LogInfo(input ...interface{}) {
-	m.Called(input)
+func (m *LoggerMock) Info(format string, args ...interface{}) {
+	m.Called(format, args)
 }
 
-func (m *LoggerMock) LogWarning(input ...interface{}) {
-	m.Called(input)
+func (m *LoggerMock) Warning(format string, args ...interface{}) {
+	m.Called(format, args)
 }
 
-func (m *LoggerMock) LogError(input ...interface{}) {
-	m.Called(input)
+func (m *LoggerMock) Error(format string, args ...interface{}) {
+	m.Called(format, args)
 }
 
 func testInterfaceInheritance() Logger {

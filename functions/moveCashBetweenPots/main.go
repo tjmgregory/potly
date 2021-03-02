@@ -21,20 +21,20 @@ func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 
 	for _, record := range e.Records {
 		if record.EventName != "INSERT" {
-			logger.LogDebug("Non-insert event occurred, ignoring.")
+			logger.Debug("Non-insert event occurred, ignoring.")
 			continue
 		}
 
 		var transaction credtrack.CreditTransaction
 		marshalErr := UnmarshalStreamImage(record.Change.NewImage, &transaction)
 		if marshalErr != nil {
-			logger.LogError("Failed to unmarshal transaction", marshalErr, record.Change.NewImage)
+			logger.Error("Failed to unmarshal transaction.\nerror: %v\ntransaction: %v", marshalErr, record.Change.NewImage)
 			return
 		}
 
-		logger.LogDebug("Received transaction", transaction)
+		logger.Debug("Received transaction", transaction)
 		if err := processor.Process(transaction); err != nil {
-			logger.LogError("Failed to process transaction.", err)
+			logger.Error("Failed to process transaction.\nerror: %v", err)
 		}
 	}
 }

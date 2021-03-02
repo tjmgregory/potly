@@ -104,7 +104,7 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(transaction c
 		close(transferErrors)
 		return nil
 	case err := <-transferErrors:
-		p.logger.LogError("Failure during transfers.", err)
+		p.logger.Error("Failure during transfers.\nerror: %v", err)
 	}
 
 	return nil

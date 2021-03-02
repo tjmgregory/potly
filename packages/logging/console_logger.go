@@ -15,42 +15,37 @@ const (
 
 type ConsoleLogger struct{}
 
-func (l *ConsoleLogger) log(level LogLevel, messages ...interface{}) {
-	var logType string
-	switch level {
-	case DEBUG:
-		logType = "[DEBUG]"
-		break
-	case WARNING:
-		logType = "[WARNING]"
-		break
-	case ERROR:
-		logType = "[ERROR]"
-		break
-	default:
-		logType = "[INFO]"
-		break
+// const defaultLogger ConsoleLogger{}
 
-	}
-	for _, message := range messages {
-		fmt.Printf("%s %s\n", logType, message)
-	}
+func (l *ConsoleLogger) log(level LogLevel, format string, args ...interface{}) {
+	logType := map[LogLevel]string{
+		DEBUG:   "[DEBUG]",
+		WARNING: "[WARNING]",
+		ERROR:   "[ERROR]",
+		INFO:    "[INFO]",
+	}[level]
+
+	fmt.Printf(logType+" "+format+"\n", args)
 }
 
-func (l *ConsoleLogger) LogDebug(messages ...interface{}) {
-	l.log(DEBUG, messages...)
+func (l *ConsoleLogger) Debug(format string, args ...interface{}) {
+	l.log(DEBUG, format, args...)
 }
 
-func (l *ConsoleLogger) LogInfo(messages ...interface{}) {
-	l.log(INFO, messages...)
+// func Debug(format string, args ...interface{}) {
+//     defaultLogger.log(DEBUG, format, args...)
+// }
+
+func (l *ConsoleLogger) Info(format string, args ...interface{}) {
+	l.log(INFO, format, args...)
 }
 
-func (l *ConsoleLogger) LogWarning(messages ...interface{}) {
-	l.log(WARNING, messages...)
+func (l *ConsoleLogger) Warning(format string, args ...interface{}) {
+	l.log(WARNING, format, args...)
 }
 
-func (l *ConsoleLogger) LogError(messages ...interface{}) {
-	l.log(ERROR, messages...)
+func (l *ConsoleLogger) Error(format string, args ...interface{}) {
+	l.log(ERROR, format, args...)
 }
 
 func NewConsoleLogger() Logger {
