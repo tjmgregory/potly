@@ -7,9 +7,9 @@ const (
 )
 
 type Pot struct {
-	id            string      `dynamodbav:id`
-	registeredBy  string      `dynamodbav:registeredBy`
-	accessTokenId string      `dynamodbav:accessTokenId`
-	createdAt     string      `dynamodbav:createdAt`
-	potProvider   PotProvider `dynamodbav:potProvider`
+	AccessTokenId string      `dynamodbav:"accessTokenId"`
+	CreatedAt     string      `dynamodbav:"createdAt"`
+	Id            string      `dynamodbav:"id"`
+	PotProvider   PotProvider `dynamodbav:"potProvider"`
+	RegisteredBy  string      `dynamodbav:"registeredBy"`
 }

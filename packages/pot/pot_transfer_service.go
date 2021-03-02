@@ -32,19 +32,19 @@ func (p *BasePotTransferService) TransferCash(potId string, requestorId string, 
 	}
 	log.Printf("Retrieved pot: %v", pot)
 
-	if pot.registeredBy != requestorId {
+	if pot.RegisteredBy != requestorId {
 		return errors.Errorf("Requestor %v who did not create pot %v attempted perform operations upon it.", requestorId, potId)
 	}
 
-	token, err := p.tokenService.GetTokenById(pot.accessTokenId)
+	token, err := p.tokenService.GetTokenById(pot.AccessTokenId)
 	if err != nil {
-		return errors.Annotatef(err, "Failed to find token %v for pot %v", pot.accessTokenId, potId)
+		return errors.Annotatef(err, "Failed to find token %v for pot %v", pot.AccessTokenId, potId)
 	}
 	log.Printf("Retrieved token: %v", token)
 
-	log.Printf("potTransferMap: %v, potProvider: %v", potTransferMap, pot.potProvider)
+	log.Printf("potTransferMap: %v, potProvider: %v", potTransferMap, pot.PotProvider)
 
-	return potTransferMap[pot.potProvider](*token, direction, amount, idempotencyKey)
+	return potTransferMap[pot.PotProvider](*token, direction, amount, idempotencyKey)
 }
 
 func NewPotTransferService(db tdynamo.DynamoDbInterface) PotTransferService {
