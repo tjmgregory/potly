@@ -14,7 +14,7 @@ func (m *LoggerMock) Info(format string, args ...interface{}) {
 	m.Called(format, args)
 }
 
-func (m *LoggerMock) Warning(format string, args ...interface{}) {
+func (m *LoggerMock) Warn(format string, args ...interface{}) {
 	m.Called(format, args)
 }
 

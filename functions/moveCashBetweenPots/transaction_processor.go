@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"sync"
 
 	"github.com/juju/errors"
@@ -55,19 +54,19 @@ func (p *ParallelTransactionProcessor) Process(transaction credtrack.CreditTrans
 }
 
 func (p *ParallelTransactionProcessor) processTransactionForClient(transaction credtrack.CreditTransaction, clientId string, proportion float32) error {
-	log.Printf("processTransactionForClient transaction: %v, clientId: %v, proportion: %v", transaction, clientId, proportion)
+	logging.Debug("processTransactionForClient transaction: %v, clientId: %v, proportion: %v", transaction, clientId, proportion)
 
 	transferValue, err := transaction.Total.MultFloat(proportion)
 	if err != nil {
 		return errors.Annotatef(err, "Failed to calculate transfer value. transaction total: %v, proportion: %v", transaction.Total, proportion)
 	}
-	log.Printf("Calculated value to transfer: %v", transferValue)
+	logging.Debug("Calculated value to transfer: %v", transferValue)
 
 	client, err := p.clientRepo.Get(clientId)
 	if err != nil {
 		return errors.Annotatef(err, "Failed to get client %v for transaction %v", clientId, transaction.Id)
 	}
-	log.Printf("Retrieved client for transfer: %v", client)
+	logging.Debug("Retrieved client for transfer: %v", client)
 
 	transferErrors := make(chan error)
 	transfersDone := make(chan bool)
@@ -86,7 +85,7 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(transaction c
 			}
 
 			idempotencyKey := clientId + potId + transaction.Id
-			log.Printf("Idempotency key: %v", idempotencyKey)
+			logging.Debug("Idempotency key: %v", idempotencyKey)
 
 			if err := p.potTransferService.TransferCash(potId, clientId, money.CREDIT, *potTransferValue, idempotencyKey); err != nil {
 				transferErrors <- errors.Annotatef(err, "Failed to process transfer for pot %v, potTransferValue: %v, clientId: %v", potId, potTransferValue, clientId)
