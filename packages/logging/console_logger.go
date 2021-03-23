@@ -15,15 +15,17 @@ const (
 
 type ConsoleLogger struct{}
 
-func (l *ConsoleLogger) log(level LogLevel, format string, args ...interface{}) {
-	logType := map[LogLevel]string{
-		DEBUG: "[DEBUG]",
-		INFO:  "[INFO]",
-		WARN:  "[WARNING]",
-		ERROR: "[ERROR]",
-	}[level]
+var logTypeMap = map[LogLevel]string{
+	DEBUG: "[DEBUG]",
+	INFO:  "[INFO]",
+	WARN:  "[WARNING]",
+	ERROR: "[ERROR]",
+}
 
-	fmt.Printf(logType+" "+format+"\n", args)
+func (l *ConsoleLogger) log(level LogLevel, format string, args ...interface{}) {
+	logType := logTypeMap[level]
+
+	fmt.Printf(logType+" "+format+"\n", args...)
 }
 
 func (l *ConsoleLogger) Debug(format string, args ...interface{}) {
@@ -52,19 +54,19 @@ func logger() *ConsoleLogger {
 }
 
 func Debug(format string, args ...interface{}) {
-	logger().Debug(format, args)
+	logger().Debug(format, args...)
 }
 
 func Info(format string, args ...interface{}) {
-	logger().Info(format, args)
+	logger().Info(format, args...)
 }
 
 func Warn(format string, args ...interface{}) {
-	logger().Warn(format, args)
+	logger().Warn(format, args...)
 }
 
 func Error(format string, args ...interface{}) {
-	logger().Error(format, args)
+	logger().Error(format, args...)
 }
 
 func NewConsoleLogger() Logger {
