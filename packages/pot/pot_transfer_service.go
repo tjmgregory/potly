@@ -29,7 +29,7 @@ func (p *BasePotTransferService) TransferCash(potId string, requestorId string, 
 	if err != nil {
 		return errors.Annotatef(err, "Failed to find pot %v", potId)
 	}
-	logging.Debug("Retrieved pot: %v", pot)
+	logging.Debug("Retrieved pot: %v", *pot)
 
 	if pot.RegisteredBy != requestorId {
 		return errors.Errorf("Requestor %v who did not create pot %v attempted perform operations upon it.", requestorId, potId)
@@ -39,9 +39,7 @@ func (p *BasePotTransferService) TransferCash(potId string, requestorId string, 
 	if err != nil {
 		return errors.Annotatef(err, "Failed to find token %v for pot %v", pot.AccessTokenId, potId)
 	}
-	logging.Debug("Retrieved token: %v", token)
-
-	logging.Debug("potTransferMap: %v, potProvider: %v", potTransferMap, pot.PotProvider)
+	logging.Debug("Retrieved token: %v", *token)
 
 	return potTransferMap[pot.PotProvider](*token, direction, amount, idempotencyKey)
 }

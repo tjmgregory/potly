@@ -32,7 +32,7 @@ func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 			return
 		}
 
-		logger.Debug("Received transaction", transaction)
+		logger.Debug("Received transaction %v", transaction)
 		if err := processor.Process(transaction); err != nil {
 			logger.Error("Failed to process transaction.\nerror: %v", err)
 		}

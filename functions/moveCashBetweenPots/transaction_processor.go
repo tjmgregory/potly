@@ -60,13 +60,13 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(transaction c
 	if err != nil {
 		return errors.Annotatef(err, "Failed to calculate transfer value. transaction total: %v, proportion: %v", transaction.Total, proportion)
 	}
-	logging.Debug("Calculated value to transfer: %v", transferValue)
+	logging.Debug("Calculated value to transfer: %v", *transferValue)
 
 	client, err := p.clientRepo.Get(clientId)
 	if err != nil {
 		return errors.Annotatef(err, "Failed to get client %v for transaction %v", clientId, transaction.Id)
 	}
-	logging.Debug("Retrieved client for transfer: %v", client)
+	logging.Debug("Retrieved client for transfer: %v", *client)
 
 	transferErrors := make(chan error)
 	transfersDone := make(chan bool)
@@ -101,9 +101,9 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(transaction c
 	select {
 	case <-transfersDone:
 		close(transferErrors)
-		return nil
 	case err := <-transferErrors:
 		p.logger.Error("Failure during transfers.\nerror: %v", err)
+		return err
 	}
 
 	return nil

@@ -16,6 +16,7 @@ require (
 	github.com/aws/aws-sdk-go v1.36.31
 	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
 	theodo.red/creditcompanion/packages/database v1.0.0
+	theodo.red/creditcompanion/packages/logging v1.0.0
 	theodo.red/creditcompanion/packages/money v1.0.0
 	theodo.red/creditcompanion/packages/tokens v1.0.0
 )
