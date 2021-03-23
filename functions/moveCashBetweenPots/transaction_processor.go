@@ -100,13 +100,12 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(transaction c
 
 	select {
 	case <-transfersDone:
-		close(transferErrors)
+		return nil
 	case err := <-transferErrors:
+		close(transferErrors)
 		p.logger.Error("Failure during transfers.\nerror: %v", err)
 		return err
 	}
-
-	return nil
 }
 
 func NewParallelTransactionProcessor(db tdynamo.DynamoDbInterface) TransactionProcessor {
