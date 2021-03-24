@@ -47,18 +47,6 @@ package:
     - ./bin/**
 
 functions:
-  hello:
-    handler: bin/hello
-    events:
-      - http:
-          path: hello
-          method: get
-  login:
-    handler: bin/login
-    events:
-      - http:
-          path: login 
-          method: get
   moveCashBetweenPots:
     handler: bin/moveCashBetweenPots
     events:
