@@ -4,7 +4,7 @@ import "theodo.red/creditcompanion/packages/money"
 
 type CreditTransaction struct {
 	Id                   string                     `dynamodbav:id`
-	CreditSource         string                     `dynamodbav:creditSource`
+	CreditSourceId       string                     `dynamodbav:creditSourceId`
 	CreatedAt            string                     `dynamodbav:createdAt`
 	LinkedClients        map[string]float32         `dynamodbav:linkedClients`
 	Total                money.MonetaryAmount       `dynamodbav:total`

@@ -14,6 +14,6 @@ func (p *PotTransferServiceMock) TransferCash(potId string, requestorId string, 
 	return args.Error(0)
 }
 
-func NewPotTransferServiceMock() PotTransferService {
+func testMockImplementsInterface() PotTransferService {
 	return new(PotTransferServiceMock)
 }

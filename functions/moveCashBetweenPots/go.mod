@@ -22,6 +22,7 @@ require (
 	github.com/aws/aws-lambda-go v1.20.0
 	github.com/aws/aws-sdk-go v1.37.10
 	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
+	github.com/stretchr/testify v1.7.0
 	theodo.red/creditcompanion/packages/clients v1.0.0
 	theodo.red/creditcompanion/packages/credtrack v1.0.0
 	theodo.red/creditcompanion/packages/database v1.0.0

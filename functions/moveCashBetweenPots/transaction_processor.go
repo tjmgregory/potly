@@ -17,7 +17,6 @@ type TransactionProcessor interface {
 }
 
 type ParallelTransactionProcessor struct {
-	logger             logging.Logger
 	clientRepo         clirepo.ClientRepository
 	potTransferService pot.PotTransferService
 }
@@ -103,7 +102,7 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(transaction c
 		return nil
 	case err := <-transferErrors:
 		close(transferErrors)
-		p.logger.Error("Failure during transfers.\nerror: %v", err)
+		logging.Error("Failure during transfers.\nerror: %v", err)
 		return err
 	}
 }
@@ -111,7 +110,6 @@ func (p *ParallelTransactionProcessor) processTransactionForClient(transaction c
 func NewParallelTransactionProcessor(db tdynamo.DynamoDbInterface) TransactionProcessor {
 	processor := new(ParallelTransactionProcessor)
 	processor.clientRepo = clirepo.NewDynamoClientRepository(db)
-	processor.logger = logging.NewConsoleLogger()
 	processor.potTransferService = pot.NewPotTransferService(db)
 
 	return processor
