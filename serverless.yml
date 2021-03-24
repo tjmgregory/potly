@@ -31,8 +31,6 @@ provider:
     - Effect: "Allow"
       Action:
         - dynamodb:*
-        - dynamodb:Query
-        - dynamodb:Scan
       Resource: '*'
 
 # you can define service wide environment variables here
@@ -46,18 +44,6 @@ package:
     - ./bin/**
 
 functions:
-  hello:
-    handler: bin/hello
-    events:
-      - http:
-          path: hello
-          method: get
-  login:
-    handler: bin/login
-    events:
-      - http:
-          path: login 
-          method: get
   moveCashBetweenPots:
     handler: bin/moveCashBetweenPots
     events:
