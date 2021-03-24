@@ -1,25 +1,38 @@
 package logging
 
-func ExampleLogDebug() {
+func ExampleDebug() {
 	logger := new(ConsoleLogger)
-	logger.LogDebug("Test log")
-	// Output: [DEBUG] Test log
+	one := 1
+	two := "two"
+	logger.Debug("1: %v, 2: %v", one, two)
+	// Output: [DEBUG] 1: 1, 2: two
 }
 
-func ExampleLogInfo() {
+func ExampleInfo() {
 	logger := new(ConsoleLogger)
-	logger.LogInfo("Test log")
-	// Output: [INFO] Test log
+	type testType struct {
+		key1 string
+		key2 struct {
+			nestedKey int
+		}
+	}
+
+	one := testType{}
+	one.key1 = "value1"
+	one.key2.nestedKey = 2
+
+	logger.Info("Our value: %v", one)
+	// Output: [INFO] Our value: {value1 {2}}
 }
 
-func ExampleLogWarning() {
+func ExampleWarn() {
 	logger := new(ConsoleLogger)
-	logger.LogWarning("Test log")
+	logger.Warn("Test log")
 	// Output: [WARNING] Test log
 }
 
-func ExampleLogError() {
+func ExampleError() {
 	logger := new(ConsoleLogger)
-	logger.LogError("Test log")
+	logger.Error("Test log")
 	// Output: [ERROR] Test log
 }

@@ -51,7 +51,7 @@ func TestGetsAToken(t *testing.T) {
 	dynamoDBMock.On("GetItem", &dynamodb.GetItemInput{
 		TableName: aws.String("tokens"),
 		Key: map[string]*dynamodb.AttributeValue{
-			"Id": {
+			"id": {
 				S: &mockTokenId,
 			},
 		}}).Return(mockResponse, nil)

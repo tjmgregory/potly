@@ -1,6 +1,7 @@
 package tokserv
 
 import (
+	"theodo.red/creditcompanion/packages/database/tdynamo"
 	"theodo.red/creditcompanion/packages/logging"
 	"theodo.red/creditcompanion/packages/teatime"
 	"theodo.red/creditcompanion/packages/tokens"
@@ -25,7 +26,7 @@ func (r *RefreshingTokenService) GetTokenById(id string) (*tokens.Token, error) 
 		refreshedToken, refreshErr := r.tokenRefreshService.RefreshToken(token)
 		if refreshErr != nil {
 			if r.tokenIsActive(token) {
-				r.logger.LogDebug("Token is near to expiry yet refresh failed. Continuing anyway, the request may fail.", token.Id)
+				r.logger.Debug("Token %v is near to expiry yet refresh failed. Continuing anyway, the request may fail.", token.Id)
 			} else {
 				return nil, refreshErr
 			}
@@ -52,4 +53,15 @@ func (r *RefreshingTokenService) tokenIsCloseToOrHasExpired(token *tokens.Token)
 	}
 
 	return (token.ExpiresAfterTime().Unix() - r.clock.Now().Unix()) < int64(r.tokenRefreshThresholdSeconds)
+}
+
+func NewRefreshingTokenService(db tdynamo.DynamoDbInterface) TokenService {
+	service := new(RefreshingTokenService)
+	service.tokenRefreshService = NewDummyTokenRefreshService()
+	service.tokenRepository = tokrepo.NewDynamoTokenRepository(db)
+	service.tokenRefreshThresholdSeconds = 30
+	service.clock = teatime.NewSystemClock()
+	service.logger = logging.NewConsoleLogger()
+
+	return service
 }

@@ -14,3 +14,7 @@ func (*DummyTokenRefreshService) RefreshToken(token *tokens.Token) (*tokens.Toke
 	// TODO: This function.
 	return token, nil
 }
+
+func NewDummyTokenRefreshService() TokenRefreshService {
+	return new(DummyTokenRefreshService)
+}

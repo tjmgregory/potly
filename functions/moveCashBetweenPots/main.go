@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"theodo.red/creditcompanion/packages/clients/clirepo"
 	"theodo.red/creditcompanion/packages/credtrack"
 	"theodo.red/creditcompanion/packages/logging"
 )
@@ -17,34 +16,25 @@ import (
 func handleRequest(ctx context.Context, e events.DynamoDBEvent) {
 	sess := session.Must(session.NewSession())
 	dynamo := dynamodb.New(sess)
-	clientRepo := clirepo.NewDynamoClientRepository(dynamo)
+	processor := NewParallelTransactionProcessor(dynamo)
 	logger := logging.NewConsoleLogger()
 
 	for _, record := range e.Records {
 		if record.EventName != "INSERT" {
-			logger.LogDebug("Non-insert event occurred, ignoring.")
+			logger.Debug("Non-insert event occurred, ignoring.")
 			continue
 		}
 
 		var transaction credtrack.CreditTransaction
 		marshalErr := UnmarshalStreamImage(record.Change.NewImage, &transaction)
 		if marshalErr != nil {
-			logger.LogError("Failed to unmarshal transaction", marshalErr, record.Change.NewImage)
+			logger.Error("Failed to unmarshal transaction.\nerror: %v\ntransaction: %v", marshalErr, record.Change.NewImage)
 			return
 		}
 
-		logger.LogDebug("Received transaction", transaction)
-
-		for clientId := range transaction.LinkedClients {
-			logger.LogDebug("Searching for client", clientId)
-
-			client, clientErr := clientRepo.Get(clientId)
-			if clientErr != nil {
-				logger.LogError("Failed to retrieve client", clientId, clientErr)
-				continue
-			}
-
-			logger.LogDebug("Retrieved client", client)
+		logger.Debug("Received transaction %v", transaction)
+		if err := processor.Process(transaction); err != nil {
+			logger.Error("Failed to process transaction.\nerror: %v", err)
 		}
 	}
 }
