@@ -8,7 +8,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "fix": "yarn prettier -w pages"
+        "fix": "yarn prettier -w pages components styles"
     },
     "dependencies": {
         "next": "^10.0.0",
