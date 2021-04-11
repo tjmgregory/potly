@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import remark from 'remark'
+import html from 'remark-html'
 
 const postsDirectory = path.join(process.cwd(), 'blogPosts')
 
@@ -18,14 +20,24 @@ export function getAllPostIds() {
     return fileNames.map(makePostIdFromFilename)
 }
 
-export function getPostData(id) {
+function readAndParsePostWithMatter(id) {
     const fullPath = path.join(postsDirectory, id + '.md')
     const fileContents = fs.readFileSync(fullPath, 'utf8')
 
-    const matterResult = matter(fileContents)
+    return matter(fileContents)
+}
+
+export async function getPostData(id) {
+    const matterResult = readAndParsePostWithMatter(id)
+
+    const processedContent = await remark()
+        .use(html)
+        .process(matterResult.content)
+    const contentHtml = processedContent.toString()
 
     return {
         id,
+        contentHtml,
         ...matterResult.data,
     }
 }
@@ -33,9 +45,15 @@ export function getPostData(id) {
 export function getSortedPostsData() {
     const fileNames = readPostDirSync()
 
-    const allPostsData = fileNames.map((fileName) =>
-        getPostData(makePostIdFromFilename(fileName))
-    )
+    const allPostsData = fileNames.map((fileName) => {
+        const id = makePostIdFromFilename(fileName)
+        const matterResult = readAndParsePostWithMatter(id)
+
+        return {
+            id,
+            ...matterResult.data,
+        }
+    })
 
     return allPostsData.sort((a, b) => a.date < b.date)
 }
