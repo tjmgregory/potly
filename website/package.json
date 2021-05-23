@@ -8,7 +8,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "fix": "yarn prettier -w pages"
+        "fix": "yarn prettier -w pages components styles"
     },
     "dependencies": {
         "next": "^10.0.0",
@@ -16,6 +16,10 @@
         "react-dom": "17.0.1"
     },
     "devDependencies": {
-        "prettier": "^2.2.1"
+        "date-fns": "^2.20.1",
+        "gray-matter": "^4.0.2",
+        "prettier": "^2.2.1",
+        "remark": "^13.0.0",
+        "remark-html": "^13.0.1"
     }
 }
