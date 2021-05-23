@@ -10,6 +10,15 @@ export default function Home({ allPostsData }) {
         <Layout home>
             <Head>
                 <title>{SITE_TITLE}</title>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            if (document.cookie && document.cookie.includes('authed')) {
+                              window.location.href = "/dashboard"
+                            }
+                        `,
+                    }}
+                />
             </Head>
             <section className={utilStyles.headingXl}>Potly</section>
             <section className={utilStyles.headingMd}>
@@ -17,6 +26,9 @@ export default function Home({ allPostsData }) {
             </section>
             <section
                 className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+                <Link href='/login'>
+                    <a>Login</a>
+                </Link>
                 <h2 className={utilStyles.headingLg}>Blog</h2>
                 <ul className={utilStyles.list}>
                     {allPostsData.map(({ id, date, title }) => (
