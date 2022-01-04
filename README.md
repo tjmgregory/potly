@@ -1,4 +1,4 @@
-# Credit Companion
+# Potly
 
 TrueLayer, Barclaycard &amp; Monzo integration to maintain a pot within Monzo equal to your current credit card balance.
 

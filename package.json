@@ -1,5 +1,5 @@
 {
-    "name": "credit-companion",
+    "name": "potly",
     "version": "1.0.0",
     "description": "TrueLayer, Barclaycard &amp; Monzo integration to maintain a pot within Monzo equal to your current credit card balance.",
     "scripts": {
