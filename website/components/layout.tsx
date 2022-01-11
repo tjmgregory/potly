@@ -7,7 +7,10 @@ import Link from 'next/link'
 const userPreferredName = 'Theo'
 export const SITE_TITLE = 'Potly'
 
-export default function Layout({ children, home }) {
+const Layout: React.FunctionComponent<{ home?: boolean }> = ({
+    children,
+    home = false,
+}) => {
     return (
         <div className={styles.container}>
             <Head>
@@ -75,3 +78,4 @@ export default function Layout({ children, home }) {
         </div>
     )
 }
+export default Layout
