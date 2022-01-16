@@ -3,7 +3,7 @@ import Layout from '../components/layout'
 import { useRouter } from 'next/router'
 import { Magic } from 'magic-sdk'
 
-export default function Login() {
+export default function Login({ magicPublicKey }) {
   const router = useRouter()
 
   const handleSubmit = async (event) => {
@@ -11,9 +11,9 @@ export default function Login() {
 
     const { elements } = event.target
 
-    const did = await new Magic(
-      process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
-    ).auth.loginWithMagicLink({ email: elements.email.value })
+    const did = await new Magic(magicPublicKey).auth.loginWithMagicLink({
+      email: elements.email.value,
+    })
 
     const authRequest = await fetch('/api/login', {
       method: 'POST',
@@ -39,4 +39,10 @@ export default function Login() {
       </form>
     </Layout>
   )
+}
+
+export function getStaticProps() {
+  return {
+    props: { magicPublicKey: process.env.NEXT_PUBLIC_MAGIC_PUB_KEY },
+  }
 }
