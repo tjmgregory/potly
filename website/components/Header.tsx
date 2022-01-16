@@ -13,10 +13,17 @@ const H1 = styled('h1', {
   marginBlock: 0,
 })
 
+const A = styled('a', {
+  textDecoration: 'none',
+  color: 'inherit',
+})
+
 const _Header: React.FunctionComponent<{}> = () => {
   return (
     <Header>
-      <H1>Potly</H1>
+      <H1>
+        <A href="/">Potly</A>
+      </H1>
     </Header>
   )
 }

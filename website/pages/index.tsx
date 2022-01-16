@@ -20,7 +20,6 @@ export default function Home({ allPostsData }) {
           }}
         />
       </Head>
-      <section className={utilStyles.headingXl}>Potly</section>
       <section className={utilStyles.headingMd}>
         <p>Your personal credit score assistant.</p>
       </section>
