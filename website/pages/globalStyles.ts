@@ -4,7 +4,7 @@ import { globalCss } from '../stitches.config'
  * Copied from Josh Comeau's CSS Global Reset in the CSS-For-JS Course Tresaure Trove
  * https://courses.joshwcomeau.com/css-for-js/treasure-trove/010-global-styles
  */
-export default globalCss({
+const cssReset = {
   /*
    * 1. Use a more-intuitive box-sizing model.
    */
@@ -22,6 +22,7 @@ export default globalCss({
    */
   'html, body': {
     height: '100%',
+    margin: 0,
   },
   /*
    * Typographic tweaks!
@@ -57,4 +58,6 @@ export default globalCss({
   '#root, #__next': {
     isolation: 'isolate',
   },
-})
+}
+
+export default globalCss({ ...cssReset, '*': { fontFamily: '$system' } })

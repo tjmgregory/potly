@@ -5,7 +5,9 @@ import { styled } from '../stitches.config'
 
 export const SITE_TITLE = 'Potly'
 
-const Box = styled('div', {
+const Box = styled('div', {})
+
+const Main = styled('div', {
   'max-width': '36rem',
   padding: '0 1rem',
   margin: '3rem auto 6rem',
@@ -33,7 +35,7 @@ const Layout: React.FunctionComponent<{ home?: boolean }> = ({
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Header />
-      <main>{children}</main>
+      <Main>{children}</Main>
     </Box>
   )
 }
