@@ -1,16 +1,22 @@
 import Head from 'next/head'
 import styles from './layout.module.css'
 import Header from './Header'
+import { styled } from '../stitches.config'
 
-const userPreferredName = 'Theo'
 export const SITE_TITLE = 'Potly'
+
+const Box = styled('div', {
+  'max-width': '36rem',
+  padding: '0 1rem',
+  margin: '3rem auto 6rem',
+})
 
 const Layout: React.FunctionComponent<{ home?: boolean }> = ({
   children,
   home = false,
 }) => {
   return (
-    <div className={styles.container}>
+    <Box>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
@@ -28,7 +34,7 @@ const Layout: React.FunctionComponent<{ home?: boolean }> = ({
       </Head>
       <Header />
       <main>{children}</main>
-    </div>
+    </Box>
   )
 }
 export default Layout
