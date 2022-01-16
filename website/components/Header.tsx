@@ -1,21 +1,18 @@
 import React from 'react'
-import {styled} from '../stitches.config'
-import { Avatar, AvatarFallback, AvatarImage } from './Avatar'
+import { styled } from '../stitches.config'
 
+const Header = styled('header', { textAlign: 'center' })
 
-const Header = styled('header', )
+const H1 = styled('h1', {
+  color: '$hiContrast',
+  fontSize: '2rem',
+})
 
 const _Header: React.FunctionComponent<{}> = () => {
   return (
-    <header>
-      <div>
-        <h1>Potly</h1>
-        {/* <Avatar> */}
-        {/*   <AvatarImage src="/images/profile_picture.gif" alt="Theo Gregory" /> */}
-        {/*   <AvatarFallback delayMs={600}>TG</AvatarFallback> */}
-        {/* </Avatar> */}
-      </div>
-    </header>
+    <Header>
+      <H1>Potly</H1>
+    </Header>
   )
 }
 
