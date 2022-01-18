@@ -1,9 +1,9 @@
 import { serialize } from 'cookie'
+import { NextApiResponse } from 'next'
 
-const TOKEN_NAME = 'api_token'
 const MAX_AGE = 60 * 60 * 8
 
-function createCookie(name, data, options = {}) {
+function createCookie(name: string, data: string, options = {}) {
   return serialize(name, data, {
     maxAge: MAX_AGE,
     expires: new Date(Date.now() + MAX_AGE * 1000),
@@ -15,15 +15,14 @@ function createCookie(name, data, options = {}) {
   })
 }
 
-function setTokenCookie(res, token) {
-  res.setHeader('Set-Cookie', [
-    createCookie(TOKEN_NAME, token),
-    createCookie('authed', true, { httpOnly: false }),
-  ])
+export function setCookiesForResponse(
+  res: NextApiResponse,
+  cookieData: { key: string; value: string; options?: unknown }[]
+) {
+  res.setHeader(
+    'Set-Cookie',
+    cookieData.map(({ key, value, options }) =>
+      createCookie(key, value, options)
+    )
+  )
 }
-
-function getAuthToken(cookies) {
-  return cookies[TOKEN_NAME]
-}
-
-export default { setTokenCookie, getAuthToken }

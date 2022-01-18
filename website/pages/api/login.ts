@@ -1,21 +1,9 @@
-import { Magic } from '@magic-sdk/admin'
-import Iron from '@hapi/iron'
-import CookieService from '../../lib/cookie'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { buildEncryptedUserJWTFromRequest, setJWTCookies } from '../../lib/auth'
 
-const magic = new Magic(process.env.MAGIC_SECRET_KEY)
-
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') return res.status(405).end()
-
-  const did = magic.utils.parseAuthorizationHeader(req.headers.authorization)
-  const user = await magic.users.getMetadataByToken(did)
-
-  const token = await Iron.seal(
-    user,
-    process.env.IRON_SECRET_KEY,
-    Iron.defaults
-  )
-  CookieService.setTokenCookie(res, token)
-
+  const encryptedJWT = await buildEncryptedUserJWTFromRequest(req)
+  setJWTCookies(res, encryptedJWT)
   res.send(200)
 }
