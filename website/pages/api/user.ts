@@ -1,14 +1,13 @@
 import Iron from '@hapi/iron'
+import { Magic } from 'magic-sdk'
 import CookieService from '../../lib/cookie'
+
+const magic = new Magic(process.env.MAGIC_SECRET_KEY)
 
 export default async (req, res) => {
   let user
   try {
-    user = await Iron.unseal(
-      CookieService.getAuthToken(req.cookies),
-      process.env.ENCRYPTION_SECRET,
-      Iron.defaults
-    )
+
   } catch (error) {
     res.status(401).end()
   }

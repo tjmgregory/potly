@@ -1,6 +1,6 @@
-import globalReset from './globalStyles'
+import globalStyles from './globalStyles'
 
 export default function App({ Component, pageProps }) {
-  globalReset()
+  globalStyles()
   return <Component {...pageProps} />
 }

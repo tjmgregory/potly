@@ -1,4 +1,9 @@
+import { Magic } from '@magic-sdk/admin'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
+
+const MAGIC_PUBLIC_KEY = process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
+const magic = new Magic(MAGIC_PUBLIC_KEY)
 
 function fetcher(route) {
   return fetch(route)
@@ -7,12 +12,27 @@ function fetcher(route) {
 }
 
 export default function useAuth() {
-  const { data: user, error, mutate } = useSWR('/api/user', fetcher)
-  const loading = user === undefined
+  // const [userEmail, setUserEmail] = useState(null)
+
+  // useEffect(() => {
+  //   if (!magic) {
+  //     return
+  //   }
+  //   const checkLoggedIn = async () => {
+  //     try {
+  //       const isLoggedIn = await magic.user.isLoggedIn()
+  //       if (isLoggedIn) {
+  //         const { email } = await magic.user.getMetadata()
+  //         setUserEmail(email)
+  //       }
+  //     } catch (err) {
+  //       throw new Error('User is not logged in')
+  //     }
+  //   }
+  //   checkLoggedIn()
+  // }, [magic])
 
   return {
-    user,
-    loading,
-    error,
+    userEmail: 'TODO',
   }
 }
