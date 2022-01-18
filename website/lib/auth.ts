@@ -1,4 +1,4 @@
-import { Magic } from '@magic-sdk/admin'
+import { Magic, MagicUserMetadata } from '@magic-sdk/admin'
 import Iron from '@hapi/iron'
 import { addDays } from 'date-fns'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -52,4 +52,18 @@ export function setJWTCookies(
     { key: TOKEN_COOKIE_KEY, value: encryptedJwt },
     { key: 'authed', value: 'true', options: { httpOnly: false } },
   ])
+}
+
+export async function validateUser(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<MagicUserMetadata> {
+  try {
+    const did = parseDidTokenFromHeaders(req.headers)
+    magic.token.validate(did)
+    return magic.users.getMetadataByToken(did)
+  } catch (e) {
+    res.send(403)
+    throw e
+  }
 }

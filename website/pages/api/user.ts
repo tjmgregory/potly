@@ -1,16 +1,8 @@
-import Iron from '@hapi/iron'
-import { Magic } from 'magic-sdk'
-import CookieService from '../../lib/cookie'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { validateUser } from '../../lib/auth'
 
-const magic = new Magic(process.env.MAGIC_SECRET_KEY)
-
-export default async (req, res) => {
-  let user
-  try {
-
-  } catch (error) {
-    res.status(401).end()
-  }
-
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const user = await validateUser(req, res)
+  // TODO: Do a DB lookup to get other use data
   res.json(user)
 }
