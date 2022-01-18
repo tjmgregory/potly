@@ -7,11 +7,21 @@ const LoginCallback: React.FunctionComponent = () => {
   const router = useRouter()
 
   if (typeof window !== 'undefined') {
-    window.addEventListener('@magic/ready', (event) => {
-      // const { magic, idToken, userMetadata, oauth } = event.detail
-      // ...
-      console.log(event)
-      router.push('/dashboard')
+    window.addEventListener('@magic/ready', async (event) => {
+      const { idToken: didToken } = (event as any).detail
+
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${didToken}`,
+        },
+      })
+
+      if (res.status === 200) {
+        router.push('/dashboard')
+      } else {
+        throw new Error(await res.text())
+      }
     })
   }
 
