@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { linkToDashboard } from '../../lib/links'
 
 const MAGIC_PUBLIC_KEY = process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
 
@@ -18,7 +19,7 @@ const LoginCallback: React.FunctionComponent = () => {
       })
 
       if (res.status === 200) {
-        router.push('/dashboard')
+        router.push(linkToDashboard())
       } else {
         throw new Error(await res.text())
       }

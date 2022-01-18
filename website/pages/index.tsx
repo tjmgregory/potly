@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Date from '../components/date'
 import Layout, { SITE_TITLE } from '../components/layout'
 import { getSortedPostsData } from '../js/posts'
+import { linkToBlog, linkToLogin } from '../lib/links'
 import utilStyles from '../styles/utils.module.css'
 
 export default function Home({ allPostsData }) {
@@ -24,14 +25,14 @@ export default function Home({ allPostsData }) {
         <p>Your personal credit score assistant.</p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <Link href="/login">
+        <Link href={linkToLogin()}>
           <a>Login</a>
         </Link>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
           {allPostsData.map(({ id, date, title }) => (
             <li className={utilStyles.listItem} key={id}>
-              <Link href={`/blog/${id}`}>
+              <Link href={linkToBlog(id)}>
                 <a>{title}</a>
               </Link>
               <br />
