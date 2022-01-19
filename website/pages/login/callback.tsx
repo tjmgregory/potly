@@ -11,6 +11,7 @@ const LoginCallback: React.FunctionComponent = () => {
     window.addEventListener('@magic/ready', async (event) => {
       const { idToken: didToken } = (event as any).detail
 
+      // TODO: Use status on this request to determine
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: {

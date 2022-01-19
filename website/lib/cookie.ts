@@ -1,5 +1,5 @@
-import { serialize } from 'cookie'
-import { NextApiResponse } from 'next'
+import { serialize, parse } from 'cookie'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 const MAX_AGE = 60 * 60 * 8
 
@@ -25,4 +25,13 @@ export function setCookiesForResponse(
       createCookie(key, value, options)
     )
   )
+}
+
+export function parseCookies(req: NextApiRequest) {
+  // For API Routes we don't need to parse the cookies.
+  if (req.cookies) return req.cookies
+
+  // For pages we do need to parse the cookies.
+  const cookie = req.headers?.cookie
+  return parse(cookie || '')
 }

@@ -5,7 +5,7 @@
   "private": true,
   "author": "tjmg@outlook.com",
   "scripts": {
-    "dev": "next dev",
+    "dev": "nodemon --exec 'next dev' -e 'none'",
     "build": "next build",
     "start": "next start",
     "fix": "yarn prettier -w pages components styles",
@@ -30,6 +30,7 @@
     "@types/date-fns": "^2.6.0",
     "@types/react": "^17.0.38",
     "gray-matter": "^4.0.2",
+    "nodemon": "^2.0.15",
     "prettier": "^2.2.1",
     "remark": "^13.0.0",
     "remark-html": "^13.0.1",

@@ -1,4 +1,4 @@
-import Router from 'next/router'
+import { MagicUserMetadata } from 'magic-sdk'
 import { useEffect } from 'react'
 import useSWR from 'swr'
 
@@ -8,28 +8,22 @@ const fetcher = (url: string) =>
     .then((data) => ({ user: data?.user || null }))
 
 interface Props {
-  redirectToIfNotFound: string
-  redirectIfFound?: boolean
+  ifNotFound?: () => void
 }
 
-export default function useUser({
-  redirectToIfNotFound,
-  redirectIfFound = false,
-}: Props) {
+type User = MagicUserMetadata
+
+export default function useUser({ ifNotFound }: Props = {}): User {
   const { data, error } = useSWR('/api/user', fetcher)
   const user = data?.user
-  const requestSuceeded = Boolean(data)
+  const finishedLoading = Boolean(data)
 
   useEffect(() => {
-    if (!requestSuceeded) {
-      console.log(error)
-      return
+    if (error || (finishedLoading && !user)) {
+      console.log('Failed to fetch user', { error, finishedLoading, user })
+      ifNotFound?.()
     }
-
-    if (!user || (user && redirectIfFound)) {
-      Router.push(redirectToIfNotFound)
-    }
-  }, [user, requestSuceeded, redirectToIfNotFound, redirectIfFound])
+  }, [user, finishedLoading])
 
   return error ? null : user
 }

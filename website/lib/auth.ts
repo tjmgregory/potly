@@ -2,10 +2,11 @@ import { Magic, MagicUserMetadata } from '@magic-sdk/admin'
 import Iron from '@hapi/iron'
 import { addDays } from 'date-fns'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { setCookiesForResponse } from './cookie'
+import { parseCookies, setCookiesForResponse } from './cookie'
 
 const TOKEN_TTL_DAYS = 7
 const TOKEN_COOKIE_KEY = 'api_token'
+const MAGIC_DID_COOKIE_KEY = 'magicDID'
 
 export interface UserJWT {
   magicUserId: string
@@ -17,7 +18,9 @@ export interface UserJWT {
 
 const magic = new Magic(process.env.MAGIC_SECRET_KEY)
 
-function parseDidTokenFromHeaders(headers: NextApiRequest['headers']): string {
+export function parseDidTokenFromHeaders(
+  headers: NextApiRequest['headers']
+): string {
   return magic.utils.parseAuthorizationHeader(headers.authorization)
 }
 
@@ -46,24 +49,30 @@ export async function buildEncryptedUserJWTFromRequest(
 
 export function setJWTCookies(
   res: NextApiResponse,
-  encryptedJwt: string
+  encryptedJwt: string,
+  magicDid: string
 ): void {
   setCookiesForResponse(res, [
     { key: TOKEN_COOKIE_KEY, value: encryptedJwt },
     { key: 'authed', value: 'true', options: { httpOnly: false } },
+    { key: MAGIC_DID_COOKIE_KEY, value: magicDid },
   ])
 }
 
+function getSessionDID(req: NextApiRequest) {
+  const cookies = parseCookies(req)
+  return cookies[MAGIC_DID_COOKIE_KEY]
+}
+
 export async function validateUser(
-  req: NextApiRequest,
-  res: NextApiResponse
+  req: NextApiRequest
 ): Promise<MagicUserMetadata> {
   try {
-    const did = parseDidTokenFromHeaders(req.headers)
+    const did = getSessionDID(req)
     magic.token.validate(did)
     return magic.users.getMetadataByToken(did)
   } catch (e) {
-    res.send(403)
-    throw e
+    console.error(e)
+    return null
   }
 }
