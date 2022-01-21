@@ -2,7 +2,7 @@ import AvatarPrimitive from '@radix-ui/react-avatar'
 import { styled } from '../stitches.config'
 import { violet, blackA } from '@radix-ui/colors'
 
-// This is undefined
+// TODO: This is undefined
 console.log(AvatarPrimitive)
 export const Avatar = styled(AvatarPrimitive.Root, {
   display: 'inline-flex',

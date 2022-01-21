@@ -1,17 +1,18 @@
 import React from 'react'
 import useUser from '../hooks/useUser'
 import { styled } from '../stitches.config'
+import Heading from './Heading'
 
-const Header = styled('header', {
+const StyledHeader = styled('header', {
   textAlign: 'center',
   borderBlockEnd: '1px solid $gray400',
 })
 
-const H1 = styled('h1', {
-  color: '$hiContrast',
-  fontSize: '2rem',
-  textTransform: 'uppercase',
-  marginBlock: 0,
+const H1 = styled(Heading, {
+  // color: '$hiContrast',
+  // fontSize: '2rem',
+  // textTransform: 'uppercase',
+  // marginBlock: 0,
 })
 
 const A = styled('a', {
@@ -26,16 +27,16 @@ const UserBadge = styled('div', {
   right: '32px',
 })
 
-const _Header: React.FunctionComponent<{}> = () => {
+const Header: React.FunctionComponent<{}> = () => {
   const user = useUser()
   return (
-    <Header>
+    <StyledHeader>
       <H1>
         <A href="/">Potly</A>
       </H1>
       {user ? <UserBadge>{user.email}</UserBadge> : <p>login</p>}
-    </Header>
+    </StyledHeader>
   )
 }
 
-export default _Header
+export default Header
