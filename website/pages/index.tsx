@@ -1,10 +1,12 @@
+import { styled } from '@stitches/react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Date from '../components/date'
 import Layout, { SITE_TITLE } from '../components/layout'
 import { getSortedPostsData } from '../js/posts'
 import { linkToBlog, linkToLogin } from '../lib/links'
-import utilStyles from '../styles/utils.module.css'
+
+const H2 = styled('h2')
 
 export default function Home({ allPostsData }) {
   return (
@@ -21,22 +23,22 @@ export default function Home({ allPostsData }) {
           }}
         />
       </Head>
-      <section className={utilStyles.headingMd}>
+      <section>
         <p>Your personal credit score assistant.</p>
       </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+      <section>
         <Link href={linkToLogin()}>
           <a>Login</a>
         </Link>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <ul className={utilStyles.list}>
+        <H2>Blog</H2>
+        <ul>
           {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
+            <li>
               <Link href={linkToBlog(id)}>
                 <a>{title}</a>
               </Link>
               <br />
-              <small className={utilStyles.lightText}>
+              <small>
                 <Date dateString={date} />
               </small>
             </li>
