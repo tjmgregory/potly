@@ -38,3 +38,17 @@ export async function validateUser(
     return null
   }
 }
+
+type NextJSReqRes = (req: NextApiRequest, res: NextApiResponse) => Promise<void>
+
+export const authedApi: (callback: NextJSReqRes) => NextJSReqRes = (
+  callback: NextJSReqRes
+) => async (req: NextApiRequest, res: NextApiResponse) => {
+  const user = await validateUser(req)
+  if (!user) {
+    console.error('Could not find user.')
+    res.send(403)
+    return
+  }
+  return callback(req, res)
+}
