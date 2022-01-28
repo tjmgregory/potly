@@ -1,14 +1,13 @@
 import React from 'react'
 import useUser from '../hooks/useUser'
 import { styled } from '../stitches.config'
-import Heading from './Heading'
 
 const StyledHeader = styled('header', {
   textAlign: 'center',
   borderBlockEnd: '1px solid $gray400',
 })
 
-const H1 = styled(Heading, {
+const H1 = styled('h1', {
   // color: '$hiContrast',
   // fontSize: '2rem',
   // textTransform: 'uppercase',
