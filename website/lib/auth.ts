@@ -40,9 +40,14 @@ export async function validateUser(
 }
 
 type NextJSReqRes = (req: NextApiRequest, res: NextApiResponse) => Promise<void>
+type AuthedNextJSReqRes = (params: {
+  req: NextApiRequest
+  res: NextApiResponse
+  user: MagicUserMetadata
+}) => Promise<void>
 
-export const authedApi: (callback: NextJSReqRes) => NextJSReqRes = (
-  callback: NextJSReqRes
+export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes = (
+  callback
 ) => async (req: NextApiRequest, res: NextApiResponse) => {
   const user = await validateUser(req)
   if (!user) {
@@ -50,5 +55,5 @@ export const authedApi: (callback: NextJSReqRes) => NextJSReqRes = (
     res.send(403)
     return
   }
-  return callback(req, res)
+  return callback({ req, res, user })
 }
