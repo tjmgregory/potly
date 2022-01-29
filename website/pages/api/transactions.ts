@@ -1,15 +1,5 @@
+import { Transaction, Currency, ISODate } from '@/lib/types'
 import { authedApi } from '../../lib/auth'
-import { Currency, MonetaryAmount } from '../../lib/currency'
-import { ISODate } from '../../lib/isoDate'
-
-interface Transaction {
-  id: string
-  description: string
-  cardName: string
-  amount: MonetaryAmount
-  date: ISODate
-  address: string
-}
 
 const dummyTransactions: Transaction[] = [
   {
