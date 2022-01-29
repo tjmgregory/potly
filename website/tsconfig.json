@@ -22,7 +22,8 @@
       "@/lib/*": ["./lib/*"],
       "@/pages/*": ["./pages/*"],
       "@/public/*": ["./public/*"]
-    }
+    },
+    "incremental": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
