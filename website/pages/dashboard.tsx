@@ -10,34 +10,6 @@ import { linkToLogin } from '@/lib/links'
 
 const TransactionWrapper = styled.div``
 
-const Centred = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-`
-
-const Progress = styled(_Progress.Root)`
-  width: 400px;
-  height: 20px;
-  max-width: 100%;
-  border: 2px solid black;
-  border-radius: 10px;
-  background-color: hsl(0 0% 20%);
-`
-
-const Indicator = styled(_Progress.Indicator)`
-  width: 0px;
-  height: 100px;
-  background-color: red;
-  transition: background 150ms ease-out;
-
-  &[data-state='indeterminate']: {
-    background-color: hsl(0 0% 70%);
-  }
-  &[data-state='complete']: {
-    background-color: hsl(120, 80%, 40%);
-  }
-`
-
 const TransactionList = styled.ol`
   list-style-type: none;
   padding-inline-start: 0;
@@ -64,11 +36,6 @@ export default function Dashboard() {
     <Layout>
       <h1>Dashboard</h1>
       <TransactionWrapper>
-        <Centred>
-          <Progress value={null}>
-            <Indicator />
-          </Progress>
-        </Centred>
         {data && (
           <TransactionList>
             {data.items.map((item) => (
