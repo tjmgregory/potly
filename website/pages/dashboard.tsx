@@ -3,10 +3,10 @@ import * as _Progress from '@radix-ui/react-progress'
 import Router from 'next/router'
 import styled from 'styled-components'
 import useSWR from 'swr'
-import Layout from '../components/layout'
-import TransactionCard from '../components/TransactionCard'
-import useUser from '../hooks/useUser'
-import { linkToLogin } from '../lib/links'
+import Layout from '@/components/layout'
+import TransactionCard from '@/components/TransactionCard'
+import useUser from '@/hooks/useUser'
+import { linkToLogin } from '@/lib/links'
 
 const TransactionWrapper = styled.div``
 
@@ -19,7 +19,8 @@ const Progress = styled(_Progress.Root)`
   width: 400px;
   height: 20px;
   max-width: 100%;
-  border: 5px solid black;
+  border: 2px solid black;
+  border-radius: 10px;
   background-color: hsl(0 0% 20%);
 `
 
@@ -38,11 +39,14 @@ const Indicator = styled(_Progress.Indicator)`
 `
 
 const TransactionList = styled.ol`
-  padding: none;
-  margin: none;
+  list-style-type: none;
+  padding-inline-start: 0;
 `
 
-const TransactionItem = styled.li``
+const TransactionItem = styled.li`
+  margin: none;
+  padding: none;
+`
 
 export default function Dashboard() {
   const user = useUser({ ifNotFound: () => Router.push(linkToLogin()) })
