@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { loginUserAndSetCookies, validateUser } from '../../lib/auth'
+import { loginUserAndSetCookies, validateUser } from '@/lib/auth'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') return res.status(405).end()
