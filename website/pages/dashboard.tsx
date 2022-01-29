@@ -1,3 +1,5 @@
+import { Transaction } from '@/lib/types'
+import * as _Progress from '@radix-ui/react-progress'
 import Router from 'next/router'
 import styled from 'styled-components'
 import useSWR from 'swr'
@@ -8,20 +10,70 @@ import { linkToLogin } from '../lib/links'
 
 const TransactionWrapper = styled.div``
 
+const Centred = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+`
+
+const Progress = styled(_Progress.Root)`
+  width: 400px;
+  height: 20px;
+  max-width: 100%;
+  border: 5px solid black;
+  background-color: hsl(0 0% 20%);
+`
+
+const Indicator = styled(_Progress.Indicator)`
+  width: 0px;
+  height: 100px;
+  background-color: red;
+  transition: background 150ms ease-out;
+
+  &[data-state='indeterminate']: {
+    background-color: hsl(0 0% 70%);
+  }
+  &[data-state='complete']: {
+    background-color: hsl(120, 80%, 40%);
+  }
+`
+
+const TransactionList = styled.ol`
+  padding: none;
+  margin: none;
+`
+
+const TransactionItem = styled.li``
+
 export default function Dashboard() {
   const user = useUser({ ifNotFound: () => Router.push(linkToLogin()) })
-  const { data, error } = useSWR('/api/transactions', async (url: string) =>
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => ({ items: data?.items || [] }))
+  const { data, error } = useSWR<{ items: Transaction[] }>(
+    '/api/transactions',
+    async (url: string) =>
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => ({ items: data?.items || [] }))
   )
+  const loading = !data && !!error
 
   console.log('theo-30860', JSON.stringify({ data, error }, null, 2))
   return (
     <Layout>
       <h1>Dashboard</h1>
       <TransactionWrapper>
-        <TransactionCard />
+        <Centred>
+          <Progress value={null}>
+            <Indicator />
+          </Progress>
+        </Centred>
+        {data && (
+          <TransactionList>
+            {data.items.map((item) => (
+              <TransactionItem>
+                <TransactionCard transaction={item} />
+              </TransactionItem>
+            ))}
+          </TransactionList>
+        )}
       </TransactionWrapper>
     </Layout>
   )
