@@ -22,13 +22,14 @@ frameworkVersion: '2'
 
 provider:
   name: aws
-  runtime: go1.x
+  runtime: nodejs14.x
   stage: dev
   region: eu-west-1
+  tracing: true
   apiGateway:
     shouldStartNameWithService: true
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
         - dynamodb:*
       Resource: '*'
@@ -41,11 +42,11 @@ package:
   exclude:
     - ./**
   include:
-    - ./bin/**
+    - ./dist/**
 
 functions:
   moveCashBetweenPots:
-    handler: bin/moveCashBetweenPots
+    handler: dist/handlers/index.moveCashBetweenPots
     events:
       - stream:
           type: dynamodb
