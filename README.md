@@ -23,7 +23,7 @@ RFCs documenting the design of the system can be found [here](https://drive.goog
 - AWS (Amazon Web Services) http://aws.amazon.com/
 - AWS Lambda http://aws.amazon.com/
 - Amazon DynamoDB http://aws.amazon.com/
-- Go https://golang.org
+- Node https://nodejs.org/en/
 - TrueLayer Data API https://truelayer.com/data-api/
 - Monzo API https://docs.monzo.com/
 
