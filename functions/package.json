@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless Node functions for Potly",
   "repository": "https://github.com/tjmgregory/potly",
-  "author": "Theo Gregory (@tjmgregory)",
+  "author": "Theo Gregory @tjmgregory",
   "license": "MIT",
   "scripts": {
     "build": "tsc",

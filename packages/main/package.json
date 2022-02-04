@@ -1,0 +1,17 @@
+{
+  "name": "main",
+  "version": "1.0.0",
+  "description": "Initial package to build and share code between functions and website apis. Arguments and decision for this approach can be found here: https://www.craft.do/s/oXAihxYG53ezl7",
+  "main": "dist/index.js",
+  "repository": "https://github.com/tjmgregory/potly",
+  "author": "Theo Gregory @tjmgregory",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "rebuild": "rm -r dist && yarn build"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
+}
