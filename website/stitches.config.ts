@@ -38,42 +38,52 @@ export const {
     sizes: {},
     utils: {
       // Abbreviated margin properties
+      // @ts-ignore
       m: (value) => ({
         margin: value,
       }),
+      // @ts-ignore
       mt: (value) => ({
         marginTop: value,
       }),
+      // @ts-ignore
       mr: (value) => ({
         marginRight: value,
       }),
+      // @ts-ignore
       mb: (value) => ({
         marginBottom: value,
       }),
+      // @ts-ignore
       ml: (value) => ({
         marginLeft: value,
       }),
+      // @ts-ignore
       mx: (value) => ({
         marginLeft: value,
         marginRight: value,
       }),
+      // @ts-ignore
       my: (value) => ({
         marginTop: value,
         marginBottom: value,
       }),
 
       // A property for applying width/height together
+      // @ts-ignore
       size: (value) => ({
         width: value,
         height: value,
       }),
 
       // A property to apply linear gradient
+      // @ts-ignore
       linearGradient: (value) => ({
         backgroundImage: `linear-gradient(${value})`,
       }),
 
       // An abbreviated property for border-radius
+      // @ts-ignore
       br: (value) => ({
         borderRadius: value,
       }),

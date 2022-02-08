@@ -25,7 +25,6 @@ provider:
   runtime: nodejs14.x
   stage: dev
   region: eu-west-1
-  tracing: true
   apiGateway:
     shouldStartNameWithService: true
   iamRoleStatements:

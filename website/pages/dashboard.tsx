@@ -1,5 +1,4 @@
 import { Transaction } from '@/lib/types'
-import * as _Progress from '@radix-ui/react-progress'
 import Router from 'next/router'
 import styled from 'styled-components'
 import useSWR from 'swr'
