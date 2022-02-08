@@ -6,6 +6,7 @@
     "rootDir": "./src",
     "baseUrl": "./",
     "outDir": "./dist",
-    "declaration": true
+    "declaration": true,
+    "composite": true
   }
 }

@@ -2,7 +2,7 @@
   "name": "main",
   "version": "1.0.0",
   "description": "Initial package to build and share code between functions and website apis. Arguments and decision for this approach can be found here: https://www.craft.do/s/oXAihxYG53ezl7",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "repository": "https://github.com/tjmgregory/potly",
   "author": "Theo Gregory @tjmgregory",
   "license": "MIT",
