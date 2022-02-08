@@ -1,44 +1,32 @@
-name: Go
+name: Turbo
 
 on: [push]
 
 jobs:
-
   setup:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
 
-    - name: Set up Go 1.x
-      uses: actions/setup-go@v2
-      with:
-        go-version: ^1.15
+      - uses: pCYSl5EDgo/cat@master
+        id: get_node_version
+        with:
+          path: .nvmrc
+          trim: true
 
-    - name: Check out code
-      uses: actions/checkout@v2
-    
-    - uses: pCYSl5EDgo/cat@master
-      id: get_node_version
-      with:
-        path: .nvmrc
-        trim: true
-    
-    - name: Use Node.js ${{ steps.get_node_version.outputs.text }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ steps.get_node_version.outputs.text }}
-   
+      - name: Use Node.js ${{ steps.get_node_version.outputs.text }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.get_node_version.outputs.text }}
+
+      - name: Use Yarn
+        run: npm install -g yarn@1.22.17
+
   build:
-    needs: setup 
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: Build
-      run: npm run build
-
-  test:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Test
-      run: npm run test
+      - uses: actions/checkout@v1
+      - name: Build
+        run: yarn build
