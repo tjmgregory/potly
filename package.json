@@ -5,8 +5,8 @@
   },
   "workspaces": [
     "packages/*",
-    "functions/*",
-    "website/*"
+    "functions",
+    "website"
   ],
   "packageManager": "yarn@1.22.17"
 }
