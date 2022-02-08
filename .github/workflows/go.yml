@@ -23,6 +23,9 @@ jobs:
       - name: Use Yarn
         run: npm install -g yarn@1.22.17
 
+      - name: Install dependencies
+        run: yarn
+
   build:
     needs: setup
     runs-on: ubuntu-latest
