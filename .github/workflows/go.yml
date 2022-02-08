@@ -3,7 +3,7 @@ name: Turbo
 on: [push]
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -23,10 +23,6 @@ jobs:
       - name: Use Yarn
         run: npm install -g yarn@1.22.17
 
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
       - name: Install dependencies
         run: yarn
 
