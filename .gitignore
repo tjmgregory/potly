@@ -126,3 +126,8 @@ vendor
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+.turbo
+build/**
+dist/**
+.next/**
