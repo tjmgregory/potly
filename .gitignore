@@ -131,3 +131,6 @@ vendor
 build/**
 dist/**
 .next/**
+
+# Ignore a page you can put anything on to test
+website/pages/dev.tsx
