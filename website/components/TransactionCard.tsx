@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import styled from 'styled-components'
 
 const Card = styled.article`
-  border: 1px solid grey;
+  border: 1px solid hsl(0 0% 50%);
   border-radius: 8px;
   padding: 8px;
   width: 512px;
@@ -46,6 +46,35 @@ const Price = styled.p`
   justify-self: center;
 `
 
+const Actions = styled.ul`
+  grid-area: action;
+  align-self: center;
+  justify-self: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 90%;
+`
+
+const Action = styled.li`
+  background-color: hsl(0 0% 95%);
+  outline: 1px solid hsl(0 0% 70%);
+  text-align: center;
+  padding: 2px 0px;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:not(:first-child) {
+    /* To avoid the double outline between the actions */
+    margin-top: 1px;
+  }
+
+  &:hover {
+    background-color: hsl(0 0% 85%);
+    outline: 1px solid hsl(0 0% 50%);
+  }
+`
+
 // TODO: Next, design this.
 const TransactionCard: React.FC<{ transaction: Transaction }> = ({
   transaction,
@@ -58,6 +87,11 @@ const TransactionCard: React.FC<{ transaction: Transaction }> = ({
         <Merchant>{transaction.description}</Merchant>
         <DateTime>{dateTimeString}</DateTime>
         <Price>{price}</Price>
+        <Actions>
+          <Action>Mine</Action>
+          <Action>Split</Action>
+          <Action>Theirs</Action>
+        </Actions>
       </CardGrid>
     </Card>
   )
