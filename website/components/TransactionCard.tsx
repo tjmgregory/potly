@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import styled from 'styled-components'
 
 const Card = styled.article`
-  border: 1px solid hsl(0 0% 50%);
+  border: 1px solid hsl(0 0% 90%);
   border-radius: 8px;
   padding: 8px;
   width: 512px;
