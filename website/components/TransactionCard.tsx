@@ -13,6 +13,7 @@ const Card = styled.article`
 const CardGrid = styled.div`
   display: grid;
   height: 100%;
+  width: 100%;
   grid-template-columns: 2fr 1fr 1fr;
   grid-template-rows: repeat(2, 1fr);
   grid-template-areas:
@@ -20,13 +21,18 @@ const CardGrid = styled.div`
     'time price action';
 `
 
+// TODO: Add a tooltip on hover to show full name if truncated
 const Merchant = styled.h3`
   grid-area: merchant;
   font-size: 1.5rem;
   font-weight: 700;
+  width: 100%;
   margin: 0;
   padding-left: 16px;
   align-self: end;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 const DateTime = styled.p`
