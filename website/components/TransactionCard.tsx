@@ -8,6 +8,7 @@ const Card = styled.article`
   padding: 8px;
   width: 512px;
   height: 116px;
+  box-shadow: 0 2px 5px 1px hsl(0 0% 70%);
 `
 const CardGrid = styled.div`
   display: grid;
@@ -51,29 +52,38 @@ const Actions = styled.ul`
   align-self: center;
   justify-self: center;
   list-style: none;
+  display: grid;
+  gap: 2px;
   margin: 0;
   padding: 0;
   width: 90%;
 `
 
-const Action = styled.li`
-  background-color: hsl(0 0% 95%);
-  outline: 1px solid hsl(0 0% 70%);
+const ActionButton = styled.button`
+  width: 100%;
+  background-color: hsl(0 0% 90%);
+  border: 1px solid hsl(0 0% 80%);
+  border-radius: 4px;
   text-align: center;
-  padding: 2px 0px;
+  padding: 2px 8px;
   text-transform: uppercase;
   cursor: pointer;
 
-  &:not(:first-child) {
-    /* To avoid the double outline between the actions */
-    margin-top: 1px;
-  }
-
   &:hover {
     background-color: hsl(0 0% 85%);
-    outline: 1px solid hsl(0 0% 50%);
+    border: 1px solid hsl(0 0% 50%);
   }
 `
+
+const ActionWrapper = styled.li``
+
+const Action: React.FC<React.ComponentProps<typeof ActionButton>> = (p) => {
+  return (
+    <ActionWrapper>
+      <ActionButton {...p} />
+    </ActionWrapper>
+  )
+}
 
 // TODO: Next, design this.
 const TransactionCard: React.FC<{ transaction: Transaction }> = ({
