@@ -1,12 +1,12 @@
-import { styled } from '@stitches/react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Date from '@/components/date'
 import Layout, { SITE_TITLE } from '@/components/layout'
 import { getSortedPostsData } from '@/lib/posts'
 import { linkToBlog, linkToLogin } from '@/lib/links'
+import styled from 'styled-components'
 
-const H2 = styled('h2')
+const H2 = styled.h2``
 
 export default function Home({ allPostsData }) {
   return (

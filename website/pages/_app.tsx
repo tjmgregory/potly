@@ -1,6 +1,9 @@
-import globalStyles from './globalStyles'
+import Theme from '@/components/Theme'
 
 export default function App({ Component, pageProps }) {
-  globalStyles()
-  return <Component {...pageProps} />
+  return (
+    <Theme>
+      <Component {...pageProps} />
+    </Theme>
+  )
 }
