@@ -67,6 +67,7 @@ const ActionButton = styled.button`
   text-align: center;
   padding: 2px 8px;
   text-transform: uppercase;
+  font-weight: 700;
   cursor: pointer;
 
   &:hover {
@@ -85,7 +86,6 @@ const Action: React.FC<React.ComponentProps<typeof ActionButton>> = (p) => {
   )
 }
 
-// TODO: Next, design this.
 const TransactionCard: React.FC<{ transaction: Transaction }> = ({
   transaction,
 }) => {
@@ -94,7 +94,7 @@ const TransactionCard: React.FC<{ transaction: Transaction }> = ({
   return (
     <Card>
       <CardGrid>
-        <Merchant>{transaction.description}</Merchant>
+        <Merchant>{transaction.name}</Merchant>
         <DateTime>{dateTimeString}</DateTime>
         <Price>{price}</Price>
         <Actions>

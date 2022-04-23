@@ -25,7 +25,7 @@ const Playground = styled.div`
 
 const dummyTransaction: Transaction = {
   id: '13fcb82f-8720-42ee-857f-3e3962979f6b',
-  description: 'Pizza Gogo',
+  name: 'Pizza Gogo',
   cardName: 'Amex',
   amount: {
     value: 123.34,
