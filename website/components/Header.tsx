@@ -3,27 +3,24 @@ import useUser from '@/hooks/useUser'
 import styled from 'styled-components'
 
 const StyledHeader = styled.header`
-  text-align: 'center';
-  border-block-end: '1px solid $gray400';
+  text-align: center;
+  border-block-end: 1px solid grey;
 `
 
 const H1 = styled.h1`
-  /* color: '$hiContrast'; */
-  /* font-size: '2rem'; */
-  /* text-transform: 'uppercase'; */
-  /* margin-block: 0; */
+  text-transform: uppercase;
 `
 
 const A = styled.a`
-  text-decoration: 'none';
-  color: 'inherit';
+  text-decoration: none;
+  color: inherit;
 `
 
 const UserBadge = styled.div`
-  position: 'absolute';
-  top: 'auto';
-  bottom: 'auto';
-  right: '32px';
+  position: absolute;
+  top: auto;
+  bottom: auto;
+  right: 32px;
 `
 
 const Header: React.FunctionComponent<{}> = () => {
