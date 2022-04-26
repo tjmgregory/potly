@@ -2,7 +2,7 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import Header from './Header'
 
-export const SITE_TITLE = 'Potly'
+const SITE_TITLE = 'Potly'
 
 const Box = styled.div``
 
@@ -12,10 +12,10 @@ const Main = styled.div`
   margin: '3rem auto 6rem';
 `
 
-const Layout: React.FunctionComponent<{ home?: boolean }> = ({
-  children,
-  home = false,
-}) => {
+const Layout: React.FunctionComponent<{
+  home?: boolean
+  redirectLoggedInUserTo?: string
+}> = ({ children, home = false, redirectLoggedInUserTo }) => {
   return (
     <Box>
       <Head>
@@ -32,6 +32,17 @@ const Layout: React.FunctionComponent<{ home?: boolean }> = ({
         />
         <meta name="og:title" content={SITE_TITLE} />
         <meta name="twitter:card" content="summary_large_image" />
+        {redirectLoggedInUserTo && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+          if (document.cookie && document.cookie.includes('authed')) {
+            window.location.href = "${redirectLoggedInUserTo}"
+          }
+          `,
+            }}
+          />
+        )}
       </Head>
       <Header />
       <Main>{children}</Main>
