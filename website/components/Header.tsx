@@ -1,30 +1,27 @@
 import React from 'react'
 import useUser from '@/hooks/useUser'
-import { styled } from '../stitches.config'
+import styled from 'styled-components'
 
-const StyledHeader = styled('header', {
-  textAlign: 'center',
-  borderBlockEnd: '1px solid $gray400',
-})
+const StyledHeader = styled.header`
+  text-align: center;
+  border-block-end: 1px solid grey;
+`
 
-const H1 = styled('h1', {
-  // color: '$hiContrast',
-  // fontSize: '2rem',
-  // textTransform: 'uppercase',
-  // marginBlock: 0,
-})
+const H1 = styled.h1`
+  text-transform: uppercase;
+`
 
-const A = styled('a', {
-  textDecoration: 'none',
-  color: 'inherit',
-})
+const A = styled.a`
+  text-decoration: none;
+  color: inherit;
+`
 
-const UserBadge = styled('div', {
-  position: 'absolute',
-  top: 'auto',
-  bottom: 'auto',
-  right: '32px',
-})
+const UserBadge = styled.div`
+  position: absolute;
+  top: auto;
+  bottom: auto;
+  right: 32px;
+`
 
 const Header: React.FunctionComponent<{}> = () => {
   const user = useUser()

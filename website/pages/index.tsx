@@ -1,28 +1,15 @@
-import { styled } from '@stitches/react'
-import Head from 'next/head'
 import Link from 'next/link'
 import Date from '@/components/date'
-import Layout, { SITE_TITLE } from '@/components/layout'
+import Layout from '@/components/layout'
 import { getSortedPostsData } from '@/lib/posts'
 import { linkToBlog, linkToLogin } from '@/lib/links'
+import styled from 'styled-components'
 
-const H2 = styled('h2')
+const H2 = styled.h2``
 
 export default function Home({ allPostsData }) {
   return (
-    <Layout home>
-      <Head>
-        <title>{SITE_TITLE}</title>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-                            if (document.cookie && document.cookie.includes('authed')) {
-                              window.location.href = "/dashboard"
-                            }
-                        `,
-          }}
-        />
-      </Head>
+    <Layout home redirectLoggedInUserTo="/dashboard">
       <section>
         <p>Your personal credit score assistant.</p>
       </section>

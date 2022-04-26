@@ -1,29 +1,28 @@
 import Head from 'next/head'
-import styles from './layout.module.css'
+import styled from 'styled-components'
 import Header from './Header'
-import { styled } from '../stitches.config'
 
-export const SITE_TITLE = 'Potly'
+const SITE_TITLE = 'Potly'
 
-const Box = styled('div', {})
+const Box = styled.div``
 
-const Main = styled('div', {
-  'max-width': '36rem',
-  padding: '0 1rem',
-  margin: '3rem auto 6rem',
-})
+const Main = styled.div`
+  max-width: 36rem;
+  padding: 0 1rem;
+  margin: 3rem auto 6rem;
+`
 
-const Layout: React.FunctionComponent<{ home?: boolean }> = ({
-  children,
-  home = false,
-}) => {
+const Layout: React.FunctionComponent<{
+  home?: boolean
+  redirectLoggedInUserTo?: string
+}> = ({ children, home = false, redirectLoggedInUserTo }) => {
   return (
     <Box>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"
-          content="Learn how to build a personal website using Next.js"
+          content="Your personal credit-boosting assistant."
         />
         <meta
           property="og:image"
@@ -33,6 +32,17 @@ const Layout: React.FunctionComponent<{ home?: boolean }> = ({
         />
         <meta name="og:title" content={SITE_TITLE} />
         <meta name="twitter:card" content="summary_large_image" />
+        {redirectLoggedInUserTo && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+          if (document.cookie && document.cookie.includes('authed')) {
+            window.location.href = "${redirectLoggedInUserTo}"
+          }
+          `,
+            }}
+          />
+        )}
       </Head>
       <Header />
       <Main>{children}</Main>
