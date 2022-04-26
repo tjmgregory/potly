@@ -22,7 +22,7 @@ const Layout: React.FunctionComponent<{ home?: boolean }> = ({
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"
-          content="Learn how to build a personal website using Next.js"
+          content="Your personal credit-boosting assistant."
         />
         <meta
           property="og:image"

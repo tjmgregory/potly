@@ -1,6 +1,8 @@
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 
-const theme = {
+type Theme = React.ComponentProps<typeof ThemeProvider>['theme']
+
+const theme: Theme = {
   fonts: {
     system: 'system-ui',
   },
@@ -84,7 +86,7 @@ const theme = {
  * Copied from Josh Comeau's CSS Global Reset in the CSS-For-JS Course Tresaure Trove
  * https://courses.joshwcomeau.com/css-for-js/treasure-trove/010-global-styles
  */
-const GlobalStyle = createGlobalStyle`
+const CSSReset = createGlobalStyle`
   /*
     1. Use a more-intuitive box-sizing model.
   */
@@ -139,8 +141,20 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+const GlobalStyle = createGlobalStyle`
+  * {
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  h1 {
+    font-weight: 900;
+    font-style: italic;
+  }
+`
+
 const Theme = ({ children }) => (
   <ThemeProvider theme={theme}>
+    <CSSReset />
     <GlobalStyle />
     {children}
   </ThemeProvider>
