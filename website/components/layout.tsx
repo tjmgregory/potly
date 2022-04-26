@@ -7,9 +7,9 @@ const SITE_TITLE = 'Potly'
 const Box = styled.div``
 
 const Main = styled.div`
-  max-width: '36rem';
-  padding: '0 1rem';
-  margin: '3rem auto 6rem';
+  max-width: 36rem;
+  padding: 0 1rem;
+  margin: 3rem auto 6rem;
 `
 
 const Layout: React.FunctionComponent<{
