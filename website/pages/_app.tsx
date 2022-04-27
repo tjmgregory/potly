@@ -1,9 +1,11 @@
-import Theme from '@/components/Theme'
+import ThemeProvider from '@/components/ThemeProvider'
+import useDarkMode from '@/hooks/useDarkMode'
 
 export default function App({ Component, pageProps }) {
+  const { theme } = useDarkMode()
   return (
-    <Theme>
+    <ThemeProvider theme={theme}>
       <Component {...pageProps} />
-    </Theme>
+    </ThemeProvider>
   )
 }
