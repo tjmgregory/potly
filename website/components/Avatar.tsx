@@ -14,7 +14,7 @@ export const Avatar = styled(AvatarPrimitive.Root)`
   width: 45;
   height: 45;
   border-radius: 100%;
-  background-color: ${blackA.blackA3};
+  background-color: ${(t) => t.theme.utils.m(1)};
 `
 
 export const AvatarImage = styled(AvatarPrimitive.Image)`
