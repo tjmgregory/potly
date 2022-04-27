@@ -23,7 +23,11 @@ export function setSessionDID(res: NextApiResponse, magicDid: string): void {
 
 function getSessionDID(req: NextApiRequest) {
   const cookies = parseCookies(req)
-  return cookies[MAGIC_DID_COOKIE_KEY]
+  const did = cookies[MAGIC_DID_COOKIE_KEY]
+  if (!did) {
+    throw new Error('No Magic session cookie found.')
+  }
+  return did
 }
 
 export async function validateUser(
@@ -34,7 +38,7 @@ export async function validateUser(
     magic.token.validate(did)
     return magic.users.getMetadataByToken(did)
   } catch (e) {
-    console.error(e)
+    console.warn(`An error occured when authenticating user: ${e.message}`)
     return null
   }
 }
@@ -46,14 +50,13 @@ type AuthedNextJSReqRes = (params: {
   user: MagicUserMetadata
 }) => Promise<void>
 
-export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes = (
-  callback
-) => async (req: NextApiRequest, res: NextApiResponse) => {
-  const user = await validateUser(req)
-  if (!user) {
-    console.error('Could not find user.')
-    res.send(403)
-    return
+export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes =
+  (callback) => async (req: NextApiRequest, res: NextApiResponse) => {
+    const user = await validateUser(req)
+    if (!user) {
+      console.warn('Could not find user.')
+      res.send(403)
+      return
+    }
+    return callback({ req, res, user })
   }
-  return callback({ req, res, user })
-}
