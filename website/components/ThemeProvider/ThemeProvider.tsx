@@ -1,14 +1,14 @@
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider as BaseThemeProvider } from 'styled-components'
 import CSSReset from './CSSReset'
 import GlobalStyles from './GlobalStyles'
-import theme from './theme'
+import { Theme } from './theme'
 
-const Theme = ({ children }) => (
-  <ThemeProvider theme={theme}>
+const ThemeProvider: React.FC<{ theme: Theme }> = ({ theme, children }) => (
+  <BaseThemeProvider theme={theme}>
     <CSSReset />
     <GlobalStyles />
     {children}
-  </ThemeProvider>
+  </BaseThemeProvider>
 )
 
-export default Theme
+export default ThemeProvider
