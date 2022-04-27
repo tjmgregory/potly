@@ -1,9 +1,13 @@
-import { serialize, parse } from 'cookie'
+import { serialize, parse, CookieSerializeOptions } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const MAX_AGE = 60 * 60 * 8
 
-function createCookie(name: string, data: string, options = {}) {
+function createCookie(
+  name: string,
+  data: string,
+  options: CookieSerializeOptions = {}
+) {
   return serialize(name, data, {
     maxAge: MAX_AGE,
     expires: new Date(Date.now() + MAX_AGE * 1000),
@@ -17,7 +21,7 @@ function createCookie(name: string, data: string, options = {}) {
 
 export function setCookiesForResponse(
   res: NextApiResponse,
-  cookieData: { key: string; value: string; options?: unknown }[]
+  cookieData: { key: string; value: string; options?: CookieSerializeOptions }[]
 ) {
   res.setHeader(
     'Set-Cookie',
