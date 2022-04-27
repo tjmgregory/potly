@@ -3,12 +3,12 @@ import { format } from 'date-fns'
 import styled from 'styled-components'
 
 const Card = styled.article`
-  border: 1px solid hsl(0 0% 90%);
+  background-color: ${(p) => p.theme.colors.brand4};
   border-radius: 8px;
   padding: 8px;
   width: 512px;
   height: 116px;
-  box-shadow: 0 2px 5px 1px hsl(0 0% 70%);
+  box-shadow: 0 2px 5px 1px ${(p) => p.theme.colors.gray3};
 `
 const CardGrid = styled.div`
   display: grid;

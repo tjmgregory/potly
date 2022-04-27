@@ -1,4 +1,6 @@
+import Switch from '@/components/Switch'
 import TransactionCard from '@/components/TransactionCard'
+import useDarkMode from '@/hooks/useDarkMode'
 import { Currency, ISODate, Transaction } from '@/lib/types'
 import styled from 'styled-components'
 
@@ -11,16 +13,17 @@ const Container = styled.div`
   left: 20px;
   right: 20px;
   padding: 2%;
-  border: 1px solid grey;
   border-radius: 3px;
-  box-shadow: 0 2px 8px 4px hsl(0 0% 90%);
+  box-shadow: 0 0 9px 6px ${(p) => p.theme.colors.olive5} inset;
 `
 
 const Playground = styled.div`
   flex-grow: 1;
+  flex-direction: column;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 40px;
 `
 
 const dummyTransaction: Transaction = {
@@ -36,11 +39,13 @@ const dummyTransaction: Transaction = {
 }
 
 export default () => {
+  const { mode, toggleDarkMode } = useDarkMode()
   return (
     <Container>
       <h1>Component Dev Zone</h1>
       <Playground>
         <TransactionCard transaction={dummyTransaction} />
+        <Switch defaultChecked={mode === 'dark'} onClick={toggleDarkMode} />
       </Playground>
     </Container>
   )
