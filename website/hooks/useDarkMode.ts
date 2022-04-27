@@ -12,21 +12,24 @@ interface ReturnType {
 export default function useDarkMode(): ReturnType {
   const [mode, setMode] = useState<Mode>('dark')
 
-  const setDarkMode = (newMode: Mode) => {
+  const toggleDarkMode = () => {
+    const newMode = mode === 'light' ? 'dark' : 'light'
     window.localStorage.setItem('theme', newMode)
+    window.dispatchEvent(new Event('dark_mode_toggled'))
     setMode(newMode)
   }
 
-  const toggleDarkMode = () => {
-    const newMode = mode === 'light' ? 'dark' : 'light'
-    setDarkMode(newMode)
-  }
-
   useEffect(() => {
-    const current = window.localStorage.getItem('theme')
-    if (current) {
+    const setCurrentMode = () => {
+      const current = window.localStorage.getItem('theme')
       // @ts-ignore
       setMode(current)
+    }
+    setCurrentMode()
+
+    window.addEventListener('dark_mode_toggled', setCurrentMode)
+    return () => {
+      window.removeEventListener('dark_mode_toggled', setCurrentMode)
     }
   }, [])
 

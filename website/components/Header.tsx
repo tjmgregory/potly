@@ -38,9 +38,8 @@ const Header: React.FunctionComponent<{}> = () => {
         value={mode === 'dark' ? 'on' : 'off'}
         onClick={toggleDarkMode}
       >
-        <Switch.Thumb />
+        <Switch.Thumb>Toggle Dark Mode</Switch.Thumb>
       </Switch.Root>
-      <button onClick={toggleDarkMode}>Toggle Dark Mode</button>
     </StyledHeader>
   )
 }
