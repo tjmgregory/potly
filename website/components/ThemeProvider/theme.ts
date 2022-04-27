@@ -1,21 +1,8 @@
-import { ThemeProvider } from 'styled-components'
-
-type Theme = React.ComponentProps<typeof ThemeProvider>['theme']
-
-const theme: Theme = {
+export const lightTheme = {
   fonts: {
     system: 'system-ui',
   },
-  colors: {
-    hiContrast: 'hsl(206,10%,5%)',
-    loContrast: 'white',
-    gray100: 'hsl(206,22%,99%)',
-    gray200: 'hsl(206,12%,97%)',
-    gray300: 'hsl(206,11%,92%)',
-    gray400: 'hsl(206,10%,84%)',
-    gray500: 'hsl(206,10%,76%)',
-    gray600: 'hsl(206,10%,44%)',
-  },
+  colors: {},
   fontSizes: {
     1: '1rem',
     2: '1.1rem',
@@ -82,4 +69,9 @@ const theme: Theme = {
   },
 }
 
-export default theme
+export const darkTheme: typeof lightTheme = {
+  ...lightTheme,
+  colors: {},
+}
+
+export type Theme = typeof lightTheme
