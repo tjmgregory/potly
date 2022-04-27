@@ -1,4 +1,4 @@
-import Theme from '@/components/Theme'
+import Theme from '@/components/ThemeProvider'
 
 export default function App({ Component, pageProps }) {
   return (
