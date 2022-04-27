@@ -2,7 +2,7 @@ import React from 'react'
 import useUser from '@/hooks/useUser'
 import styled from 'styled-components'
 import useDarkMode from '@/hooks/useDarkMode'
-import * as Switch from '@radix-ui/react-switch'
+import * as RadixSwitch from '@radix-ui/react-switch'
 
 const StyledHeader = styled.header`
   text-align: center;
@@ -34,12 +34,12 @@ const Header: React.FunctionComponent<{}> = () => {
         <A href="/">Potly</A>
       </H1>
       {user ? <UserBadge>{user.email}</UserBadge> : <p>login</p>}
-      <Switch.Root
+      <RadixSwitch.Root
         value={mode === 'dark' ? 'on' : 'off'}
         onClick={toggleDarkMode}
       >
-        <Switch.Thumb>Toggle Dark Mode</Switch.Thumb>
-      </Switch.Root>
+        <RadixSwitch.Thumb>Toggle Dark Mode</RadixSwitch.Thumb>
+      </RadixSwitch.Root>
     </StyledHeader>
   )
 }
