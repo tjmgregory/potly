@@ -2,12 +2,11 @@ import { darkTheme, lightTheme, Theme } from '@/components/ThemeProvider/theme'
 import { useEffect, useState } from 'react'
 
 type Mode = 'light' | 'dark'
-type SetDarkMode = (newMode: Mode) => void
 
 interface ReturnType {
   mode: Mode
   theme: Theme
-  toggleDarkMode: SetDarkMode
+  toggleDarkMode: () => void
 }
 
 export default function useDarkMode(): ReturnType {
