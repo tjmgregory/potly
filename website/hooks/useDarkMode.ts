@@ -7,7 +7,7 @@ type SetDarkMode = (newMode: Mode) => void
 interface ReturnType {
   mode: Mode
   theme: Theme
-  setDarkMode: SetDarkMode
+  toggleDarkMode: SetDarkMode
 }
 
 export default function useDarkMode(): ReturnType {
@@ -16,6 +16,11 @@ export default function useDarkMode(): ReturnType {
   const setDarkMode = (newMode: Mode) => {
     window.localStorage.setItem('theme', newMode)
     setMode(newMode)
+  }
+
+  const toggleDarkMode = () => {
+    const newMode = mode === 'light' ? 'dark' : 'light'
+    setDarkMode(newMode)
   }
 
   useEffect(() => {
@@ -28,5 +33,5 @@ export default function useDarkMode(): ReturnType {
 
   const theme = mode === 'light' ? lightTheme : darkTheme
 
-  return { mode, theme, setDarkMode }
+  return { mode, theme, toggleDarkMode }
 }
