@@ -14,15 +14,13 @@ export default function Home({ allPostsData }) {
         <p>Your personal credit score assistant.</p>
       </section>
       <section>
-        <Link href={linkToLogin()}>
-          <a>Login</a>
-        </Link>
+        <Link href={linkToLogin()}>Login</Link>
         <H2>Blog</H2>
         <ul>
           {allPostsData.map(({ id, date, title }) => (
             <li>
               <Link key={id} href={linkToBlog(id)}>
-                <a>{title}</a>
+                {title}
               </Link>
               <br />
               <small>

@@ -30,7 +30,6 @@ export default function Dashboard() {
   )
   const loading = !data && !!error
 
-  console.log('theo-30860', JSON.stringify({ data, error }, null, 2))
   return (
     <Layout>
       <h1>Dashboard</h1>
@@ -38,7 +37,7 @@ export default function Dashboard() {
         {data && (
           <TransactionList>
             {data.items.map((item) => (
-              <TransactionItem>
+              <TransactionItem key={item.id}>
                 <TransactionCard transaction={item} />
               </TransactionItem>
             ))}
