@@ -8,15 +8,16 @@ const StyledRoot = styled(Root)`
   height: 30px;
   width 56px;
   border-radius: 100px;
-  background-color: ${(p) => p.theme.colors.brand6};
-  box-shadow: 0 2px 10px ${(p) => p.theme.colors.brand5};
+  background-color: ${(p) => p.theme.colors.brand3};
+  /* Box shadow defaults to color */
+  box-shadow: 0 0 4px;
+  color: ${(p) => p.theme.colors.brand7};
   &:hover {
-    box-shadow: 0 0 2px black;
-    background-color: ${(p) => p.theme.colors.brand7};
+    background-color: ${(p) => p.theme.colors.brand4};
+    color: ${(p) => p.theme.colors.brand7};
   }
   &[data-state="checked"] {
-    background-color: ${(p) => p.theme.colors.gray1};
-    background-color: ${(p) => p.theme.colors.brand8};
+    background-color: ${(p) => p.theme.colors.brand5};
   }
 `
 
