@@ -1,3 +1,7 @@
+export function linkToLanding() {
+  return '/'
+}
+
 export function linkToLogin() {
   return '/login'
 }

@@ -54,9 +54,9 @@ export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes =
   (callback) => async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await validateUser(req)
     if (!user) {
-      console.warn('Could not find user.')
-      res.send(403)
-      return
+      console.warn('Could not authenticate user.')
+      res.status(403)
+      return res.send(null)
     }
     return callback({ req, res, user })
   }
