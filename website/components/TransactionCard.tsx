@@ -104,9 +104,9 @@ const TransactionCard: React.FC<{ transaction: Transaction }> = ({
         <DateTime>{dateTimeString}</DateTime>
         <Price>{price}</Price>
         <Actions>
-          <Action>Mine</Action>
-          <Action>Split</Action>
-          <Action>Theirs</Action>
+          <Action key="mine">Mine</Action>
+          <Action key="split">Split</Action>
+          <Action key="theirs">Theirs</Action>
         </Actions>
       </CardGrid>
     </Card>
