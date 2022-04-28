@@ -3,38 +3,48 @@ import useUser from '@/hooks/useUser'
 import styled from 'styled-components'
 import useDarkMode from '@/hooks/useDarkMode'
 import Switch from '@/components/Switch'
+import Link from 'next/link'
+import { linkToLanding, linkToLogin } from '@/lib/links'
+import Avatar from '@/components/Avatar'
 
 const StyledHeader = styled.header`
-  text-align: center;
-  border-block-end: 1px solid grey;
-`
-
-const H1 = styled.h1`
-  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 60px;
+  @media (max-width: 500px) {
+    padding: 20px;
+  }
 `
 
 const A = styled.a`
+  text-transform: uppercase;
   text-decoration: none;
-  color: inherit;
+  font-size: ${(p) => p.theme.fontSizes[8]};
+  font-weight: 700;
 `
 
-const UserBadge = styled.div`
-  position: absolute;
-  top: auto;
-  bottom: auto;
-  right: 32px;
+const AvatarWrapper = styled.div`
+  width: 56px;
+  height: 56px;
 `
 
 const Header: React.FunctionComponent<{}> = () => {
-  const user = useUser()
+  const { user } = useUser()
   const { mode, toggleDarkMode } = useDarkMode()
   return (
     <StyledHeader>
-      <H1>
-        <A href="/">Potly</A>
-      </H1>
-      {user ? <UserBadge>{user.email}</UserBadge> : <p>login</p>}
+      <Link href={linkToLanding()} passHref>
+        <A>Potly</A>
+      </Link>
       <Switch checked={mode === 'dark'} onClick={toggleDarkMode} />
+      {user ? (
+        <AvatarWrapper>
+          <Avatar name={user?.name} imgSrc={user?.profileImgUrl} />
+        </AvatarWrapper>
+      ) : (
+        <Link href={linkToLogin()}>Login</Link>
+      )}
     </StyledHeader>
   )
 }

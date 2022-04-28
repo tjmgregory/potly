@@ -1,10 +1,8 @@
-import AvatarPrimitive from '@radix-ui/react-avatar'
-import { violet, blackA } from '@radix-ui/colors'
+import * as AvatarPrimitive from '@radix-ui/react-avatar'
+import { violet } from '@radix-ui/colors'
 import styled from 'styled-components'
 
-// TODO: This is undefined
-console.log(AvatarPrimitive)
-export const Avatar = styled(AvatarPrimitive.Root)`
+const Root = styled(AvatarPrimitive.Root)`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -17,14 +15,14 @@ export const Avatar = styled(AvatarPrimitive.Root)`
   background-color: ${(t) => t.theme.utils.m(1)};
 `
 
-export const AvatarImage = styled(AvatarPrimitive.Image)`
+const Image = styled(AvatarPrimitive.Image)`
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: inherit;
 `
 
-export const AvatarFallback = styled(AvatarPrimitive.Fallback)`
+const Fallback = styled(AvatarPrimitive.Fallback)`
   width: 100%;
   height: 100%;
   display: flex;
@@ -36,3 +34,23 @@ export const AvatarFallback = styled(AvatarPrimitive.Fallback)`
   line-height: 1;
   font-weight: 500;
 `
+
+const Avatar: React.FC<{ imgSrc?: string; name?: string }> = ({
+  imgSrc,
+  name,
+}) => {
+  const initials = name
+    ? name
+        .split(' ')
+        .map((part) => part[0])
+        .reduce((prev, part) => `${prev}${part}`, '')
+    : ''
+  return (
+    <Root>
+      <Image src={imgSrc} />
+      <Fallback>{initials}</Fallback>
+    </Root>
+  )
+}
+
+export default Avatar
