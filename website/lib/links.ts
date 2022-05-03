@@ -17,3 +17,7 @@ export function linkToDashboard() {
 export function linkToBlog(id: string) {
   return `/blog/${id}`
 }
+
+export function linkToSignUp() {
+  return `/sign-up`
+}
