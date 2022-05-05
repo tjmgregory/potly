@@ -83,6 +83,22 @@ const FFInput: React.FC<InputProps> = (props = {}) => {
   )
 }
 
+const StyledForm = styled.form`
+  & > *:not(:first-child) {
+    margin-top: 20px;
+  }
+`
+
+const Question = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
+
+const QuestionTitle = styled.label`
+  font-size: ${(p) => p.theme.fontSizes[2]};
+`
+
 const SignUp: React.FC = () => {
   // TODO: Kick you to login if you haven't initated signup via /login and thereby don't have a SigningUpUser
   return (
@@ -103,27 +119,30 @@ const SignUp: React.FC = () => {
           return errors
         }}
         render={({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="preferredName">What should we call you?</label>
+          <StyledForm onSubmit={handleSubmit}>
+            <Question>
+              <QuestionTitle htmlFor="preferredName">
+                What should we call you?
+              </QuestionTitle>
               <FFInput
                 id="preferredName"
                 name="preferredName"
                 placeholder="Steve"
               />
-            </div>
-            <div>
-              <label htmlFor="email">How should we contact you?</label>
-              <span>Don't worry, we don't send much</span>
+            </Question>
+            <Question>
+              <QuestionTitle htmlFor="email">
+                How should we contact you?
+              </QuestionTitle>
               <FFInput
                 id="email"
                 name="email"
                 type="email"
                 placeholder="steve@buscemi.com"
               />
-            </div>
+            </Question>
             <button type="submit">Submit</button>
-          </form>
+          </StyledForm>
         )}
       />
     </Layout>
