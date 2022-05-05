@@ -41,18 +41,38 @@ const Wrapper = styled.div`
 
   &:hover {
     background-color: ${(p) => p.theme.colors.brand4};
-    outline: 1px solid ${(p) => p.theme.colors.brand8};
+    outline-color: ${(p) => p.theme.colors.brand8};
   }
+
   &:focus-within {
     background-color: ${(p) => p.theme.colors.brand5};
-    outline: 1px solid ${(p) => p.theme.colors.brand8};
+    outline-color: ${(p) => p.theme.colors.brand8};
+  }
+
+  &[aria-invalid='true'] {
+    background-color: ${(p) => p.theme.colors.error3};
+    outline-color: ${(p) => p.theme.colors.error8};
+
+    & ${Underline} {
+      border-bottom: 1px solid ${(p) => p.theme.colors.error8};
+    }
+
+    &:hover {
+      background-color: ${(p) => p.theme.colors.error4};
+      outline-color: ${(p) => p.theme.colors.error8};
+    }
+
+    &:focus-within {
+      background-color: ${(p) => p.theme.colors.error5};
+      outline-color: ${(p) => p.theme.colors.error8};
+    }
   }
 `
 
 const FFInput: React.FC<InputProps> = (props = {}) => {
   const { input, meta } = useField(props.name)
   return (
-    <Wrapper style={props.style}>
+    <Wrapper style={props.style} aria-invalid={meta.touched && meta.invalid}>
       <Input {...props} {...input} />
       <Underline />
     </Wrapper>
@@ -81,13 +101,18 @@ const SignUp: React.FC = () => {
         render={({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <div>
-              <label>What should we call you?</label>
-              <FFInput name="preferredName" placeholder="Steve" />
+              <label htmlFor="preferredName">What should we call you?</label>
+              <FFInput
+                id="preferredName"
+                name="preferredName"
+                placeholder="Steve"
+              />
             </div>
             <div>
-              <label>How should we contact you?</label>
+              <label htmlFor="email">How should we contact you?</label>
               <span>Don't worry, we don't send much</span>
               <FFInput
+                id="email"
                 name="email"
                 type="email"
                 placeholder="steve@buscemi.com"
