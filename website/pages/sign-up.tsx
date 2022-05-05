@@ -9,23 +9,54 @@ type InputProps = React.ComponentPropsWithoutRef<'input'> & {
   ref?: React.ForwardedRef<HTMLInputElement>
 }
 
-// TODO: Make this stylish: nice inside underline, outline, error handling
 const Input = styled.input`
+  position: absolute;
+  inset: 0;
   border: none;
-  color: ${(t) => t.theme.colors.brand11};
-  background-color: ${(t) => t.theme.colors.brand3};
+  color: inherit;
+  background-color: inherit;
+  outline: none;
+  padding: 0.5rem 1rem;
 
-  &:hover {
-    background-color: ${(t) => t.theme.colors.brand4};
-  }
-  &:focus {
-    background-color: ${(t) => t.theme.colors.brand5};
+  &::placeholder {
+    color: ${(p) => p.theme.colors.gray11};
   }
 `
 
-const FFInput: React.FC<InputProps> = (props) => {
+const Underline = styled.div`
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.5rem;
+  border-bottom: 1px solid ${(p) => p.theme.colors.gray7};
+`
+
+const Wrapper = styled.div`
+  position: relative;
+  color: ${(p) => p.theme.colors.brand12};
+  background-color: ${(p) => p.theme.colors.brand3};
+  /* Needed so the outline transition doesn't blink on before fading in */
+  outline: 1px solid ${(p) => p.theme.colors.brand7};
+  height: 3rem;
+
+  &:hover {
+    background-color: ${(p) => p.theme.colors.brand4};
+    outline: 1px solid ${(p) => p.theme.colors.brand8};
+  }
+  &:focus-within {
+    background-color: ${(p) => p.theme.colors.brand5};
+    outline: 1px solid ${(p) => p.theme.colors.brand8};
+  }
+`
+
+const FFInput: React.FC<InputProps> = (props = {}) => {
   const { input, meta } = useField(props.name)
-  return <Input {...props} {...input} />
+  return (
+    <Wrapper style={props.style}>
+      <Input {...props} {...input} />
+      <Underline />
+    </Wrapper>
+  )
 }
 
 const SignUp: React.FC = () => {
