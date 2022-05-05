@@ -33,11 +33,15 @@ const Underline = styled.div`
 
 const Wrapper = styled.div`
   position: relative;
+  min-height: 3rem;
+  height: 100%;
+  min-width: 10rem;
+  width: 100%;
+
   color: ${(p) => p.theme.colors.brand12};
   background-color: ${(p) => p.theme.colors.brand3};
   /* Needed so the outline transition doesn't blink on before fading in */
   outline: 1px solid ${(p) => p.theme.colors.brand7};
-  height: 3rem;
 
   &:hover {
     background-color: ${(p) => p.theme.colors.brand4};
