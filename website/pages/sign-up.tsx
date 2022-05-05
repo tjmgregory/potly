@@ -54,7 +54,7 @@ const Wrapper = styled.div`
     outline-color: ${(p) => p.theme.colors.error8};
 
     & ${Underline} {
-      border-bottom: 1px solid ${(p) => p.theme.colors.error8};
+      border-color: ${(p) => p.theme.colors.error8};
     }
 
     &:hover {
