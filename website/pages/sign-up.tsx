@@ -28,7 +28,7 @@ const Underline = styled.div`
   left: 1rem;
   right: 1rem;
   bottom: 0.5rem;
-  border-bottom: 1px solid ${(p) => p.theme.colors.gray7};
+  border-bottom: 1px solid ${(p) => p.theme.colors.brand7};
 `
 
 const Wrapper = styled.div`
