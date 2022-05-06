@@ -17,7 +17,7 @@ const Input = styled.input`
   color: inherit;
   background-color: inherit;
   outline: none;
-  padding: 0.5rem 1rem;
+  padding: ${(p) => p.theme.sizes.padding};
 
   &::placeholder {
     color: ${(p) => p.theme.colors.gray11};
@@ -100,6 +100,18 @@ const QuestionTitle = styled(Label)`
   font-size: ${(p) => p.theme.fontSizes[2]};
 `
 
+const Button = styled.button`
+  color: inherit;
+  background-color: ${(p) => p.theme.colors.gray3};
+  border: 1px solid ${(p) => p.theme.colors.gray7};
+  padding: ${(p) => p.theme.sizes.padding};
+
+  $[aria-enabled='true'] {
+    background-color: ${(p) => p.theme.colors.gray3};
+    border-color: ${(p) => p.theme.colors.brand7};
+  }
+`
+
 const SignUp: React.FC = () => {
   // TODO: Kick you to login if you haven't initated signup via /login and thereby don't have a SigningUpUser
   return (
@@ -142,7 +154,7 @@ const SignUp: React.FC = () => {
                 placeholder="steve@buscemi.com"
               />
             </Question>
-            <button type="submit">Submit</button>
+            <Button type="submit">Submit</Button>
           </StyledForm>
         )}
       />

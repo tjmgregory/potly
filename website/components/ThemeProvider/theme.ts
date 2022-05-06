@@ -63,7 +63,9 @@ export const lightTheme = {
     8: '2.8rem',
     9: '3.5rem',
   },
-  sizes: {},
+  sizes: {
+    padding: '0.5rem 1rem',
+  },
   utils: {
     // Abbreviated margin properties
     // @ts-ignore
