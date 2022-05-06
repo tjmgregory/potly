@@ -137,6 +137,11 @@ const FFButton: React.FC<ButtonProps> = (props = {}) => {
   return <Button aria-disabled={!valid} {...props} />
 }
 
+// Personally customised, probably a terrible idea.
+const emailRegex = new RegExp(
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$/
+)
+
 const SignUp: React.FC = () => {
   // TODO: Kick you to login if you haven't initated signup via /login and thereby don't have a SigningUpUser
   return (
@@ -153,8 +158,10 @@ const SignUp: React.FC = () => {
           }
 
           if (!values.email) {
-            // TODO: Need to do proper email validation to get FinalForm to work.
             errors.email = 'Required'
+          }
+          if (values.email && !(values.email as string).match(emailRegex)) {
+            errors.email = 'Invalid email'
           }
 
           return errors
