@@ -1,4 +1,5 @@
 import Layout from '@/components/layout'
+import { Label } from '@radix-ui/react-label'
 import { Field, Form, useField } from 'react-final-form'
 import styled from 'styled-components'
 
@@ -95,7 +96,7 @@ const Question = styled.div`
   gap: 8px;
 `
 
-const QuestionTitle = styled.label`
+const QuestionTitle = styled(Label)`
   font-size: ${(p) => p.theme.fontSizes[2]};
 `
 
