@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import Date from '@/components/date'
-import Layout from '@/components/layout'
+import { FormattedDate } from '@/components/Blog'
+import { Layout } from '@/components/Layout'
 import { getSortedPostsData } from '@/lib/posts'
-import { linkToBlog, linkToLogin } from '@/lib/links'
+import { linkToBlog } from '@/lib/links'
 import styled from 'styled-components'
 
 const H2 = styled.h2``
@@ -14,17 +14,14 @@ export default function Home({ allPostsData }) {
         <p>Your personal credit score assistant.</p>
       </section>
       <section>
-        <Link href={linkToLogin()}>Login</Link>
         <H2>Blog</H2>
         <ul>
           {allPostsData.map(({ id, date, title }) => (
-            <li>
-              <Link key={id} href={linkToBlog(id)}>
-                {title}
-              </Link>
+            <li key={id}>
+              <Link href={linkToBlog(id)}>{title}</Link>
               <br />
               <small>
-                <Date dateString={date} />
+                <FormattedDate dateString={date} />
               </small>
             </li>
           ))}

@@ -8,7 +8,7 @@ type Response =
   | { isLoggedIn: false }
   | { isLoggedIn: true; user: MagicUserMetadata }
 
-export default function useMagicUser() {
+function useMagicUser() {
   const [loading, setLoading] = useState(true)
   const [response, setResponse] = useState<Response>(null)
 
@@ -30,3 +30,5 @@ export default function useMagicUser() {
 
   return { user: response, loading }
 }
+
+export default useMagicUser

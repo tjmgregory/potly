@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { linkToDashboard } from '../../lib/links'
+import { linkToDashboard, linkToSignUp } from '@/lib/links'
 
 const MAGIC_PUBLIC_KEY = process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
 
@@ -20,7 +20,12 @@ const LoginCallback: React.FunctionComponent = () => {
       })
 
       if (res.status === 200) {
-        router.push(linkToDashboard())
+        const response = await res.json()
+        if (response.isRegisteredUser) {
+          router.push(linkToDashboard())
+        } else {
+          router.push(linkToSignUp())
+        }
       } else {
         throw new Error(await res.text())
       }

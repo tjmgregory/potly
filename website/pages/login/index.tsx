@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { linkToLoginCallback } from '../../lib/links'
+import { linkToLoginCallback } from '@/lib/links'
 
 const MAGIC_PUBLIC_KEY = process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
 

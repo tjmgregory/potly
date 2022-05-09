@@ -9,8 +9,6 @@ export default authedApi(async ({ res, user }) => {
   res.json({
     magicUser: user,
     name: 'Steve Buscemi',
-    profileImgUrl:
-      'https://cpng.pikpng.com/pngl/s/121-1210988_iphone-emoji-freetoedit-remixit-avocado-avocado-emoji-png.png',
     email: user.email,
   })
 })

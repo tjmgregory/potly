@@ -2,10 +2,10 @@ import React from 'react'
 import useUser from '@/hooks/useUser'
 import styled from 'styled-components'
 import useDarkMode from '@/hooks/useDarkMode'
-import Switch from '@/components/Switch'
+import { Switch } from '@/components/Input'
 import Link from 'next/link'
 import { linkToLanding, linkToLogin } from '@/lib/links'
-import Avatar from '@/components/Avatar'
+import { Avatar } from '@/components/Profile'
 
 const StyledHeader = styled.header`
   display: flex;
