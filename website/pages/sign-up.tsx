@@ -1,5 +1,5 @@
 import { FFInput, FFSubmitButton } from '@/components/FinalForm'
-import Layout from '@/components/layout'
+import { Layout } from '@/components/Layout'
 import { Label } from '@radix-ui/react-label'
 import { Form } from 'react-final-form'
 import styled from 'styled-components'

@@ -31,7 +31,7 @@ type User = {
   magicUser: MagicUserMetadata
 }
 
-export default function useUser({ ifNotFound }: Props = {}): {
+function useUser({ ifNotFound }: Props = {}): {
   loading: boolean
   user: User | null
 } {
@@ -50,3 +50,5 @@ export default function useUser({ ifNotFound }: Props = {}): {
     user: error ? null : (user as unknown as User),
   }
 }
+
+export default useUser

@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import Date from '@/components/date'
-import Layout from '@/components/layout'
+import { FormattedDate } from '@/components/Blog'
+import { Layout } from '@/components/Layout'
 import { getSortedPostsData } from '@/lib/posts'
-import { linkToBlog, linkToLogin } from '@/lib/links'
+import { linkToBlog } from '@/lib/links'
 import styled from 'styled-components'
 
 const H2 = styled.h2``
@@ -21,7 +21,7 @@ export default function Home({ allPostsData }) {
               <Link href={linkToBlog(id)}>{title}</Link>
               <br />
               <small>
-                <Date dateString={date} />
+                <FormattedDate dateString={date} />
               </small>
             </li>
           ))}

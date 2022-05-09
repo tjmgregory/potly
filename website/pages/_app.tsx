@@ -1,4 +1,4 @@
-import ThemeProvider from '@/components/ThemeProvider'
+import { ThemeProvider } from '@/components/Layout'
 import useDarkMode from '@/hooks/useDarkMode'
 
 export default function App({ Component, pageProps }) {

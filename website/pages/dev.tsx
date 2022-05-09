@@ -1,5 +1,5 @@
-import Switch from '@/components/Switch'
-import TransactionCard from '@/components/TransactionCard'
+import { Switch } from '@/components/Input'
+import { TransactionCard } from '@/components/Transactions'
 import useDarkMode from '@/hooks/useDarkMode'
 import { Currency, ISODate, Transaction } from '@/lib/types'
 import styled from 'styled-components'

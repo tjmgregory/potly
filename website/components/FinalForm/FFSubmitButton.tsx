@@ -1,6 +1,6 @@
 import React from 'react'
 import { useFormState } from 'react-final-form'
-import Button from '../Button'
+import { Button } from '@/components/Input'
 
 type Props = React.ComponentProps<typeof Button>
 

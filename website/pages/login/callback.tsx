@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { linkToDashboard, linkToSignUp } from '../../lib/links'
+import { linkToDashboard, linkToSignUp } from '@/lib/links'
 
 const MAGIC_PUBLIC_KEY = process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
 
