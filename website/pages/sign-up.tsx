@@ -20,11 +20,6 @@ const QuestionTitle = styled(Label)`
   font-size: ${(p) => p.theme.fontSizes[2]};
 `
 
-// Personally customised, probably a terrible idea.
-const emailRegex = new RegExp(
-  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$/
-)
-
 const SignUp: React.FC = () => {
   // TODO: Kick you to login if you haven't initated signup via /login and thereby don't have a SigningUpUser
   return (
@@ -39,14 +34,6 @@ const SignUp: React.FC = () => {
           if (!values.preferredName) {
             errors.preferredName = 'Required'
           }
-
-          if (!values.email) {
-            errors.email = 'Required'
-          }
-          if (values.email && !(values.email as string).match(emailRegex)) {
-            errors.email = 'Invalid email'
-          }
-
           return errors
         }}
         render={({ handleSubmit }) => (
@@ -59,17 +46,6 @@ const SignUp: React.FC = () => {
                 id="preferredName"
                 name="preferredName"
                 placeholder="Steve"
-              />
-            </Question>
-            <Question>
-              <QuestionTitle htmlFor="email">
-                How should we contact you?
-              </QuestionTitle>
-              <FFInput
-                id="email"
-                name="email"
-                type="email"
-                placeholder="steve@buscemi.com"
               />
             </Question>
             <FFSubmitButton
