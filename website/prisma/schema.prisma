@@ -18,7 +18,6 @@ model User {
 
 model SigningUpUser {
   id            String  @id @default(uuid())
-  email         String?
   magicUserId   String  @unique
   preferredName String?
 }
