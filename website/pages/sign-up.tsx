@@ -1,7 +1,7 @@
-import { FFInput } from '@/components/FinalForm'
+import { FFInput, FFSubmitButton } from '@/components/FinalForm'
 import Layout from '@/components/layout'
 import { Label } from '@radix-ui/react-label'
-import { Form, useFormState } from 'react-final-form'
+import { Form } from 'react-final-form'
 import styled from 'styled-components'
 
 const StyledForm = styled.form`
@@ -19,43 +19,6 @@ const Question = styled.div`
 const QuestionTitle = styled(Label)`
   font-size: ${(p) => p.theme.fontSizes[2]};
 `
-
-const Button = styled.button`
-  color: inherit;
-  background-color: ${(p) => p.theme.colors.brand3};
-  border: 1px solid ${(p) => p.theme.colors.brand7};
-  padding: ${(p) => p.theme.sizes.padding};
-  cursor: pointer;
-
-  &[aria-disabled='true'] {
-    cursor: default;
-    background-color: ${(p) => p.theme.colors.gray3};
-    border-color: ${(p) => p.theme.colors.gray7};
-    color: ${(p) => p.theme.colors.gray11};
-  }
-
-  &[aria-disabled='false'] {
-    &:hover {
-      background-color: ${(p) => p.theme.colors.brand4};
-      border-color: ${(p) => p.theme.colors.brand8};
-    }
-  }
-`
-
-// Necessary as styled-components input component takes a different ref type
-// than is on a standard <button>
-// https://stackoverflow.com/questions/68001975/why-cant-i-pass-props-when-i-use-input-type-in-react-styled-components
-type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
-  ref?: React.ForwardedRef<HTMLInputElement>
-}
-
-const FFButton: React.FC<ButtonProps> = (props = {}) => {
-  // TODO: Make this performant by only subbing to the needed keys here
-  const { valid } = useFormState()
-  // Using the 'disabled' prop would make the button disappear from screen readers, so instead we mimic it.
-  // https://haltersweb.github.io/Accessibility/submit-disabling.html
-  return <Button aria-disabled={!valid} {...props} />
-}
 
 // Personally customised, probably a terrible idea.
 const emailRegex = new RegExp(
@@ -109,9 +72,12 @@ const SignUp: React.FC = () => {
                 placeholder="steve@buscemi.com"
               />
             </Question>
-            <FFButton type="submit" aria-describedby="preferredName email">
+            <FFSubmitButton
+              type="submit"
+              aria-describedby="preferredName email"
+            >
               Submit
-            </FFButton>
+            </FFSubmitButton>
           </StyledForm>
         )}
       />
