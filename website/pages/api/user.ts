@@ -1,5 +1,6 @@
 import { authedApi } from '@/lib/auth'
 import prisma from '@/lib/prisma'
+import { User } from '@/lib/types/profile/user'
 
 /**
  * 404: User could not be found for magic session.
@@ -15,9 +16,10 @@ export default authedApi(async ({ res, magicUser }) => {
     return
   }
 
-  res.json({
-    magicUser: magicUser,
-    name: user.preferredName,
+  const userResponse: User = {
+    id: user.id,
+    preferredName: user.preferredName,
     email: magicUser.email,
-  })
+  }
+  res.json(userResponse)
 })

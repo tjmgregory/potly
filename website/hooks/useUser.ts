@@ -1,4 +1,4 @@
-import { MagicUserMetadata } from 'magic-sdk'
+import { User } from '@/lib/types/profile/user'
 import { useEffect } from 'react'
 import useSWR from 'swr'
 
@@ -22,13 +22,6 @@ const fetcher = async (url: string) => {
 
 interface Props {
   ifNotFound?: () => void
-}
-
-type User = {
-  name: string
-  profileImgUrl?: string
-  email: string
-  magicUser: MagicUserMetadata
 }
 
 function useUser({ ifNotFound }: Props = {}): {

@@ -40,7 +40,8 @@ const Header: React.FunctionComponent<{}> = () => {
       <Switch checked={mode === 'dark'} onClick={toggleDarkMode} />
       {user ? (
         <AvatarWrapper>
-          <Avatar name={user?.name} imgSrc={user?.profileImgUrl} />
+          {/* TODO: Bring back the profile image url */}
+          <Avatar name={user?.preferredName} />
         </AvatarWrapper>
       ) : (
         <Link href={linkToLogin()}>Login</Link>
