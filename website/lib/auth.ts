@@ -47,9 +47,12 @@ type NextJSReqRes = (req: NextApiRequest, res: NextApiResponse) => Promise<void>
 type AuthedNextJSReqRes = (params: {
   req: NextApiRequest
   res: NextApiResponse
-  user: MagicUserMetadata
+  magicUser: MagicUserMetadata
 }) => Promise<void>
 
+/**
+ * 403: No active Magic user session.
+ */
 export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes =
   (callback) => async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await validateUser(req)
@@ -58,5 +61,5 @@ export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes =
       res.status(403)
       return res.send(null)
     }
-    return callback({ req, res, user })
+    return callback({ req, res, magicUser: user })
   }

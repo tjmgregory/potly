@@ -23,6 +23,7 @@ model SigningUpUser {
 }
 
 model MagicUser {
+  // This is what Magic recommends you use as the ID of the user.
   issuer        String @id
   publicAddress String
   userId        String @unique
