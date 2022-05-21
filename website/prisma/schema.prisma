@@ -10,13 +10,13 @@ generator client {
 }
 
 model User {
-  id            String  @id @default(uuid())
+  id            String  @id
   email         String
   magicUserId   String  @unique
   preferredName String
 }
 
-model SigningUpUser {
+model RegisteringUser {
   id            String  @id @default(uuid())
   magicUserId   String  @unique
   preferredName String?

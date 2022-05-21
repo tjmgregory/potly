@@ -1,6 +1,7 @@
 import { authedApi } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { SignUpRequestBody, SignUpResponse } from '@/lib/types/api/sign-up'
+import { v4 as uuid } from 'uuid'
 
 export default authedApi(async ({ magicUser: magicUser, req, res }) => {
   const existingUser = await prisma.user.findUnique({
@@ -15,6 +16,8 @@ export default authedApi(async ({ magicUser: magicUser, req, res }) => {
   const body = req.body as SignUpRequestBody
   const prismaUser = await prisma.user.create({
     data: {
+      // TODO: Use RegisteringUser id
+      id: uuid(),
       email: magicUser.email,
       preferredName: body.preferredName,
       magicUserId: magicUser.issuer,
