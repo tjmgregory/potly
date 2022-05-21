@@ -42,7 +42,7 @@ const submitSignUp = async ({ body }: { body: SignUpRequestBody }) => {
 }
 
 const SignUp: React.FC = () => {
-  // TODO: Kick you to login if you haven't initated signup via /login and thereby don't have a SigningUpUser
+  // TODO: Kick you to login if you haven't initated signup via /login and thereby don't have a RegisteringUser
   const router = useRouter()
 
   const onSubmit = async (values: Record<string, any>) => {
