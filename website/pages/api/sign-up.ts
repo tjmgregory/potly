@@ -1,35 +1,61 @@
-import { authedApi } from '@/lib/auth'
 import prisma from '@/lib/prisma'
-import { SignUpRequestBody, SignUpResponse } from '@/lib/types/api/sign-up'
-import { v4 as uuid } from 'uuid'
+import { SignUpRequestBody } from '@/lib/types/api/sign-up'
+import { NextApiRequest, NextApiResponse } from 'next'
+import {
+  getUserSessionTokenOrThrow,
+  setUserSessionCookies,
+} from '@/lib/userAuth'
+import {
+  clearRegisteringUserSessionCookie,
+  getRegisteringUserSessionTokenOrThrow,
+  RegisteringUserJWT,
+} from '@/lib/registeringUserAuth'
+import { User } from '@prisma/client'
 
-export default authedApi(async ({ magicUser: magicUser, req, res }) => {
+async function setSuccessfulSignUpCookies(
+  res: NextApiResponse,
+  user: User
+): Promise<void> {
+  await setUserSessionCookies(res, user)
+  clearRegisteringUserSessionCookie(res)
+}
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    await getUserSessionTokenOrThrow(req)
+    res.status(409).send('User is already signed up.')
+    return
+  } catch (e) {}
+
+  let registeringUserToken: RegisteringUserJWT
+  try {
+    registeringUserToken = await getRegisteringUserSessionTokenOrThrow(req)
+  } catch (e) {
+    res
+      .status(401)
+      .send('No registering session found. User should reinitiate login.')
+    return
+  }
+
   const existingUser = await prisma.user.findUnique({
-    where: { magicUserId: magicUser.issuer },
+    where: { id: registeringUserToken.registeringUser.id },
   })
 
   if (existingUser) {
-    res.status(409).send('A user for this Magic user already exists.')
+    setSuccessfulSignUpCookies(res, existingUser)
+    res.status(200).send('This user is already signed up.')
     return
   }
 
   const body = req.body as SignUpRequestBody
-  const prismaUser = await prisma.user.create({
+  const newUser = await prisma.user.create({
     data: {
-      // TODO: Use RegisteringUser id
-      id: uuid(),
-      email: magicUser.email,
+      ...registeringUserToken.registeringUser,
       preferredName: body.preferredName,
-      magicUserId: magicUser.issuer,
     },
   })
 
-  const response: SignUpResponse = {
-    user: {
-      id: prismaUser.id,
-      email: prismaUser.email,
-      preferredName: prismaUser.preferredName,
-    },
-  }
-  res.status(201).json(response)
-})
+  setSuccessfulSignUpCookies(res, newUser)
+
+  res.status(201).send('Sign up complete.')
+}
