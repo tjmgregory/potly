@@ -1,7 +1,13 @@
-import { darkTheme, lightTheme, Theme } from '@/components/Layout/ThemeProvider/theme'
+import {
+  darkTheme,
+  lightTheme,
+  Theme,
+} from '@/components/Layout/ThemeProvider/theme'
 import { useEffect, useState } from 'react'
 
 type Mode = 'light' | 'dark'
+
+const DEFAULT_MODE: Mode = 'dark'
 
 interface ReturnType {
   mode: Mode
@@ -10,7 +16,7 @@ interface ReturnType {
 }
 
 function useDarkMode(): ReturnType {
-  const [mode, setMode] = useState<Mode>('dark')
+  const [mode, setMode] = useState<Mode | null>(null)
 
   const toggleDarkMode = () => {
     const newMode = mode === 'light' ? 'dark' : 'light'

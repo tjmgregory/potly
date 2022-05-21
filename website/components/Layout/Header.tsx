@@ -37,7 +37,9 @@ const Header: React.FunctionComponent<{}> = () => {
       <Link href={linkToLanding()} passHref>
         <A>Potly</A>
       </Link>
-      <Switch checked={mode === 'dark'} onClick={toggleDarkMode} />
+      {mode && (
+        <Switch defaultChecked={mode === 'dark'} onClick={toggleDarkMode} />
+      )}
       {user ? (
         <AvatarWrapper>
           {/* TODO: Bring back the profile image url */}
