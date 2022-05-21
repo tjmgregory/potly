@@ -6,9 +6,19 @@ import {
   setUserSessionCookies,
 } from '@/lib/userAuth'
 import {
+  clearRegisteringUserSessionCookie,
   getRegisteringUserSessionTokenOrThrow,
   RegisteringUserJWT,
 } from '@/lib/registeringUserAuth'
+import { User } from '@prisma/client'
+
+async function setSuccessfulSignUpCookies(
+  res: NextApiResponse,
+  user: User
+): Promise<void> {
+  await setUserSessionCookies(res, user)
+  clearRegisteringUserSessionCookie(res)
+}
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -32,7 +42,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   })
 
   if (existingUser) {
-    await setUserSessionCookies(res, existingUser)
+    setSuccessfulSignUpCookies(res, existingUser)
     res.status(200).send('This user is already signed up.')
     return
   }
@@ -45,6 +55,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
   })
 
-  await setUserSessionCookies(res, newUser)
+  setSuccessfulSignUpCookies(res, newUser)
+
   res.status(201).send('Sign up complete.')
 }

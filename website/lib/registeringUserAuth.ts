@@ -1,4 +1,4 @@
-import { parseCookies, setCookiesForResponse } from '@/lib/cookie'
+import { deleteCookie, parseCookies, setCookiesForResponse } from '@/lib/cookie'
 import { RegisteringUser } from '@prisma/client'
 import { seal, unseal } from '@/lib/encryption'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -21,7 +21,7 @@ export async function setRegisteringUserSessionCookie(
     registeringUser: {
       id: registeringUser.id,
       magicUserId: registeringUser.magicUserId,
-      email: registeringUser.email
+      email: registeringUser.email,
     },
   }
   setCookiesForResponse(res, [
@@ -39,4 +39,8 @@ export async function getRegisteringUserSessionTokenOrThrow(
   }
 
   return unseal(sealedJWT)
+}
+
+export function clearRegisteringUserSessionCookie(res: NextApiResponse): void {
+  deleteCookie(res, REGISTERING_USER_SESSION_KEY)
 }

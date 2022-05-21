@@ -1,4 +1,5 @@
 import { serialize, parse, CookieSerializeOptions } from 'cookie'
+import { subDays } from 'date-fns'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const MAX_AGE = 60 * 60 * 8
@@ -38,4 +39,11 @@ export function parseCookies(req: NextApiRequest) {
   // For pages we do need to parse the cookies.
   const cookie = req.headers?.cookie
   return parse(cookie || '')
+}
+
+export function deleteCookie(res: NextApiResponse, key: string): void {
+  res.setHeader(
+    'Set-Cookie',
+    serialize(key, '', { expires: subDays(new Date(), 1) })
+  )
 }
