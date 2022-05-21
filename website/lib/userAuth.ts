@@ -46,7 +46,7 @@ type AuthedNextJSReqRes = (params: {
 }) => Promise<void>
 
 /**
- * 403: No active Magic user session.
+ * 401: No active user session token.
  */
 export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes =
   (callback) => async (req: NextApiRequest, res: NextApiResponse) => {
@@ -55,8 +55,8 @@ export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes =
     try {
       sessionToken = await getUserSessionTokenOrThrow(req)
     } catch (e) {
-      console.warn('Could not authenticate user.')
-      res.status(403)
+      console.warn('User is not logged in.')
+      res.status(401)
       return res.send(null)
     }
 
