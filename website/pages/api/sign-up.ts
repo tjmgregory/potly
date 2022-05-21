@@ -1,9 +1,10 @@
-import { authedApi } from '@/lib/auth'
+import { authedApi } from '@/lib/userAuth'
 import prisma from '@/lib/prisma'
 import { SignUpRequestBody, SignUpResponse } from '@/lib/types/api/sign-up'
 import { v4 as uuid } from 'uuid'
+import { NextApiRequest, NextApiResponse } from 'next'
 
-export default authedApi(async ({ magicUser: magicUser, req, res }) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const existingUser = await prisma.user.findUnique({
     where: { magicUserId: magicUser.issuer },
   })
@@ -32,4 +33,4 @@ export default authedApi(async ({ magicUser: magicUser, req, res }) => {
     },
   }
   res.status(201).json(response)
-})
+}

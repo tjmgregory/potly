@@ -1,4 +1,4 @@
-import { authedApi } from '@/lib/auth'
+import { authedApi } from '@/lib/userAuth'
 import prisma from '@/lib/prisma'
 import { User } from '@/lib/types/profile/user'
 

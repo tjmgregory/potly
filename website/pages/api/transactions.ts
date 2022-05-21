@@ -1,5 +1,5 @@
 import { Transaction, Currency, ISODate } from '@/lib/types'
-import { authedApi } from '@/lib/auth'
+import { authedApi } from '@/lib/userAuth'
 
 const dummyTransactions: Transaction[] = [
   {
