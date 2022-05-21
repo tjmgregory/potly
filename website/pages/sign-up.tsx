@@ -4,7 +4,6 @@ import { SignUpRequestBody } from '@/lib/types/api/sign-up'
 import { Label } from '@radix-ui/react-label'
 import { Form } from 'react-final-form'
 import styled from 'styled-components'
-import useSWR from 'swr'
 import { useRouter } from 'next/router'
 
 const StyledForm = styled.form`

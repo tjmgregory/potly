@@ -1,13 +1,24 @@
 import { Magic, MagicUserMetadata } from '@magic-sdk/admin'
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/lib/prisma'
-import { getUserSessionTokenOrThrow, setUserSessionCookies } from '@/lib/userAuth'
+import {
+  getUserSessionTokenOrThrow,
+  setUserSessionCookies,
+} from '@/lib/userAuth'
 import { setRegisteringUserSessionCookie } from '@/lib/registeringUserAuth'
 
 const magic = new Magic(process.env.MAGIC_SECRET_KEY)
 
 export interface LoginResponse {
   isRegisteredUser: boolean
+}
+
+function sendResponse(
+  res: NextApiResponse,
+  status: number,
+  response: LoginResponse
+): void {
+  res.status(status).json(response)
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -35,11 +46,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (registeredUser) {
     await setUserSessionCookies(res, registeredUser)
-    const response: LoginResponse = {
-      isRegisteredUser: true,
-    }
-    res.status(200).json(response)
-    return
+    return sendResponse(res, 200, { isRegisteredUser: true })
   }
 
   let registeringUser = await prisma.registeringUser.findUnique({
@@ -49,9 +56,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   })
   if (!registeringUser) {
     registeringUser = await prisma.registeringUser.create({
-      data: { magicUserId: magicUser.issuer },
+      data: { magicUserId: magicUser.issuer, email: magicUser.email },
     })
   }
 
   await setRegisteringUserSessionCookie(res, registeringUser)
+
+  return sendResponse(res, 200, { isRegisteredUser: false })
 }
