@@ -1,8 +1,8 @@
 import { Magic, MagicUserMetadata } from '@magic-sdk/admin'
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/lib/prisma'
-import { getUserSessionToken, setUserSessionCookies } from '@/lib/userAuth'
-import { setRegisteringSessionCookie } from '@/lib/registeringUserAuth'
+import { getUserSessionTokenOrThrow, setUserSessionCookies } from '@/lib/userAuth'
+import { setRegisteringUserSessionCookie } from '@/lib/registeringUserAuth'
 
 const magic = new Magic(process.env.MAGIC_SECRET_KEY)
 
@@ -14,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') return res.status(405).end()
 
   try {
-    await getUserSessionToken(req)
+    await getUserSessionTokenOrThrow(req)
     res.status(200).send('User already logged in.')
     return
   } catch (e) {}
@@ -53,5 +53,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   }
 
-  await setRegisteringSessionCookie(res, registeringUser)
+  await setRegisteringUserSessionCookie(res, registeringUser)
 }

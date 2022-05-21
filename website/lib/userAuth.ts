@@ -26,7 +26,7 @@ export async function setUserSessionCookies(res: NextApiResponse, user: User) {
   ])
 }
 
-export async function getUserSessionToken(
+export async function getUserSessionTokenOrThrow(
   req: NextApiRequest
 ): Promise<SessionJWT> {
   const cookies = parseCookies(req)
@@ -53,7 +53,7 @@ export const authedApi: (callback: AuthedNextJSReqRes) => NextJSReqRes =
     let sessionToken: SessionJWT
 
     try {
-      sessionToken = await getUserSessionToken(req)
+      sessionToken = await getUserSessionTokenOrThrow(req)
     } catch (e) {
       console.warn('Could not authenticate user.')
       res.status(403)

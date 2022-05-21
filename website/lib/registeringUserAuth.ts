@@ -1,18 +1,19 @@
 import { parseCookies, setCookiesForResponse } from '@/lib/cookie'
 import { RegisteringUser } from '@prisma/client'
-import { seal } from '@/lib/encryption'
+import { seal, unseal } from '@/lib/encryption'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const REGISTERING_USER_SESSION_KEY = 'REGISTERING_USER_SESSION_KEY'
 
-interface RegisteringUserJWT {
+export interface RegisteringUserJWT {
   registeringUser: {
     id: string
     magicUserId: string
+    email: string
   }
 }
 
-export async function setRegisteringSessionCookie(
+export async function setRegisteringUserSessionCookie(
   res: NextApiResponse,
   registeringUser: RegisteringUser
 ): Promise<void> {
@@ -20,6 +21,7 @@ export async function setRegisteringSessionCookie(
     registeringUser: {
       id: registeringUser.id,
       magicUserId: registeringUser.magicUserId,
+      email: registeringUser.email
     },
   }
   setCookiesForResponse(res, [
@@ -27,8 +29,14 @@ export async function setRegisteringSessionCookie(
   ])
 }
 
-// async function getRegisteringSessionCookie(
-//   req: NextApiRequest
-// ): Promise<RegisteringUser> {
+export async function getRegisteringUserSessionTokenOrThrow(
+  req: NextApiRequest
+): Promise<RegisteringUserJWT> {
+  const cookies = parseCookies(req)
+  const sealedJWT = cookies[REGISTERING_USER_SESSION_KEY]
+  if (!sealedJWT) {
+    throw new Error('No session JWT exists for this registering user.')
+  }
 
-// }
+  return unseal(sealedJWT)
+}
