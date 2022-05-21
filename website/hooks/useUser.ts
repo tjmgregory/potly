@@ -27,6 +27,7 @@ interface Props {
 function useUser({ ifNotFound }: Props = {}): {
   loading: boolean
   user: User | null
+  error?: ApiError
 } {
   const { data: user, error } = useSWR('/api/user', fetcher)
   const finishedLoading = Boolean(user)
@@ -41,6 +42,7 @@ function useUser({ ifNotFound }: Props = {}): {
   return {
     loading: !finishedLoading,
     user: error ? null : (user as unknown as User),
+    error,
   }
 }
 

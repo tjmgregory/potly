@@ -36,10 +36,10 @@ const Layout: React.FunctionComponent<{
           <script
             dangerouslySetInnerHTML={{
               __html: `
-          if (document.cookie && document.cookie.includes('authed')) {
-            window.location.href = "${redirectLoggedInUserTo}"
-          }
-          `,
+                if (document.cookie && document.cookie.includes('authed')) {
+                  window.location.href = "${redirectLoggedInUserTo}"
+                }
+              `,
             }}
           />
         )}

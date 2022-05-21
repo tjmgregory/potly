@@ -39,6 +39,7 @@ const LoginCallback: React.FunctionComponent = () => {
         data-magic-publishable-api-key={MAGIC_PUBLIC_KEY}
       ></script>
     </Head>
+    // TODO: Add a spinner.
   )
 }
 
