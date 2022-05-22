@@ -1,17 +1,22 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { linkToDashboard, linkToSignUp } from '@/lib/links'
+import {
+  linkToDashboard,
+  linkToLanding,
+  linkToLogin,
+  linkToSignUp,
+} from '@/lib/links'
+import { useEffect } from 'react'
 
 const MAGIC_PUBLIC_KEY = process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
 
 const LoginCallback: React.FunctionComponent = () => {
   const router = useRouter()
 
-  if (typeof window !== 'undefined') {
+  useEffect(() => {
     window.addEventListener('@magic/ready', async (event) => {
       const { idToken: didToken } = (event as any).detail
 
-      // TODO: Use status on this request to determine
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -26,11 +31,18 @@ const LoginCallback: React.FunctionComponent = () => {
         } else {
           router.push(linkToSignUp())
         }
-      } else {
-        throw new Error(await res.text())
+      } else if (res.status === 401) {
+        console.error(
+          'Your Magic login was invalid, try again.',
+          await res.json()
+        )
+        router.push(linkToLogin())
+      } else if (res.status >= 400) {
+        console.error('Something unexpected happened.', await res.json())
+        router.push(linkToLanding())
       }
     })
-  }
+  }, [])
 
   return (
     <Head>

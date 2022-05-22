@@ -1,9 +1,10 @@
 import { User } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { parseCookies, setCookiesForResponse } from './cookie'
+import { deleteCookie, parseCookies, setCookiesForResponse } from './cookie'
 import { seal, unseal } from '@/lib/encryption'
 
-const SESSION_JWT_KEY = 'sessionJWT'
+const SESSION_JWT_KEY = 'SESSION_JWT_KEY'
+const SESSION_SIGNAL_KEY = 'SESSION_SIGNAL_KEY'
 
 export interface SessionJWT {
   user: User
@@ -22,8 +23,13 @@ export async function setUserSessionCookies(res: NextApiResponse, user: User) {
       key: SESSION_JWT_KEY,
       value: await buildSessionToken(user),
     },
-    { key: 'authed', value: 'true', options: { httpOnly: false } },
+    { key: SESSION_SIGNAL_KEY, value: 'true', options: { httpOnly: false } },
   ])
+}
+
+export function clearUserSessionCookies(res: NextApiResponse): void {
+  deleteCookie(res, SESSION_JWT_KEY)
+  deleteCookie(res, SESSION_SIGNAL_KEY)
 }
 
 export async function getUserSessionTokenOrThrow(
