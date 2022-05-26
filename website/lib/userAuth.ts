@@ -10,18 +10,15 @@ export interface SessionJWT {
   user: User
 }
 
-async function buildSessionToken(user: User) {
+export async function setUserSessionCookies(res: NextApiResponse, user: User) {
   const jwt: SessionJWT = {
     user,
   }
-  return seal(jwt)
-}
-
-export async function setUserSessionCookies(res: NextApiResponse, user: User) {
+  const sealed = await seal(jwt)
   setCookiesForResponse(res, [
     {
       key: SESSION_JWT_KEY,
-      value: await buildSessionToken(user),
+      value: sealed,
     },
     { key: SESSION_SIGNAL_KEY, value: 'true', options: { httpOnly: false } },
   ])
@@ -36,7 +33,7 @@ export async function getUserSessionTokenOrThrow(
   req: NextApiRequest
 ): Promise<SessionJWT> {
   const cookies = parseCookies(req)
-  const sealedJWT = cookies[SESSION_JWT_KEY]
+  const sealedJWT = cookies.SESSION_JWT_KEY
   if (!sealedJWT) {
     throw new Error('No session JWT exists for this user.')
   }

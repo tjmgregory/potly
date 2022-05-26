@@ -54,7 +54,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (existingUser) {
     await setSuccessfulSignUpCookies(res, existingUser)
-    clearUserSessionCookies(res)
     res.status(200).send('This user is already signed up.')
     return
   }
@@ -68,7 +67,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   })
 
   await setSuccessfulSignUpCookies(res, newUser)
-  clearUserSessionCookies(res)
 
   res.status(201).send('Sign up complete.')
 }

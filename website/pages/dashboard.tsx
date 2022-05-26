@@ -20,7 +20,7 @@ const TransactionItem = styled.li`
 `
 
 export default function Dashboard() {
-  const user = useUser({ ifNotFound: () => Router.push(linkToLogin()) })
+  // const user = useUser({ ifNotFound: () => Router.push(linkToLogin()) })
   const { data, error } = useSWR<{ items: Transaction[] }>(
     '/api/transactions',
     async (url: string) =>

@@ -3,7 +3,6 @@ import { createGlobalStyle } from 'styled-components'
 const GlobalStyles = createGlobalStyle`
   * {
     font-family: 'Nunito Sans', sans-serif;
-    transition: all 100ms;
   }
 
   html, body {

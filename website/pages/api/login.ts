@@ -59,6 +59,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   })
 
   if (registeredUser) {
+    // Problem is you can't do res.setHeader('Set-Cookie') more than once
     await setUserSessionCookies(res, registeredUser)
     clearRegisteringUserSessionCookie(res)
     return sendResponse(res, 200, { isRegisteredUser: true })

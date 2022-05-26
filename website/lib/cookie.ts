@@ -8,7 +8,7 @@ function createCookie(
   name: string,
   data: string,
   options: CookieSerializeOptions = {}
-) {
+): string {
   return serialize(name, data, {
     maxAge: MAX_AGE,
     expires: new Date(Date.now() + MAX_AGE * 1000),
@@ -23,16 +23,14 @@ function createCookie(
 export function setCookiesForResponse(
   res: NextApiResponse,
   cookieData: { key: string; value: string; options?: CookieSerializeOptions }[]
-) {
-  res.setHeader(
-    'Set-Cookie',
-    cookieData.map(({ key, value, options }) =>
-      createCookie(key, value, options)
-    )
+): void {
+  const cookies = cookieData.map(({ key, value, options }) =>
+    createCookie(key, value, options)
   )
+  res.setHeader('Set-Cookie', cookies)
 }
 
-export function parseCookies(req: NextApiRequest) {
+export function parseCookies(req: NextApiRequest): Record<string, string> {
   // For API Routes we don't need to parse the cookies.
   if (req.cookies) return req.cookies
 
