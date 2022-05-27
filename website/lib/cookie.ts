@@ -20,6 +20,30 @@ function createCookie(
   })
 }
 
+type CookieData = Parameters<NextApiResponse['setHeader']>[1]
+function cookieDataAsList(data: CookieData): readonly string[] {
+  return ['number', 'string'].includes(typeof data)
+    ? ['' + data]
+    : (data as readonly string[])
+}
+
+// This is necessary as it appears you cannot call res.setHeader with the same key twice
+// as one will overwrite the other.
+function appendOrSetHeader(
+  res: NextApiResponse,
+  key: string,
+  data: CookieData
+): void {
+  const existingHeader = res.getHeader(key)
+  let newValue: CookieData
+  if (existingHeader === undefined || existingHeader === []) {
+    newValue = data
+  } else {
+    newValue = [...cookieDataAsList(existingHeader), ...cookieDataAsList(data)]
+  }
+  res.setHeader(key, newValue)
+}
+
 export function setCookiesForResponse(
   res: NextApiResponse,
   cookieData: { key: string; value: string; options?: CookieSerializeOptions }[]
@@ -27,7 +51,7 @@ export function setCookiesForResponse(
   const cookies = cookieData.map(({ key, value, options }) =>
     createCookie(key, value, options)
   )
-  res.setHeader('Set-Cookie', cookies)
+  appendOrSetHeader(res, 'Set-Cookie', cookies)
 }
 
 export function parseCookies(req: NextApiRequest): Record<string, string> {
@@ -40,7 +64,8 @@ export function parseCookies(req: NextApiRequest): Record<string, string> {
 }
 
 export function deleteCookie(res: NextApiResponse, key: string): void {
-  res.setHeader(
+  appendOrSetHeader(
+    res,
     'Set-Cookie',
     serialize(key, '', { expires: subDays(new Date(), 1) })
   )
