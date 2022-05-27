@@ -1,10 +1,12 @@
 import { FFInput, FFSubmitButton } from '@/components/FinalForm'
 import { Layout } from '@/components/Layout'
-import { SignUpRequestBody } from '@/lib/types/api/sign-up'
 import { Label } from '@radix-ui/react-label'
 import { Form } from 'react-final-form'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { linkToDashboard, linkToLogin } from '@/lib/links'
+import Cookies from 'js-cookie'
 
 const StyledForm = styled.form`
   display: flex;
@@ -22,36 +24,29 @@ const QuestionTitle = styled(Label)`
   font-size: ${(p) => p.theme.fontSizes[2]};
 `
 
-class ApiError extends Error {
-  constructor(readonly statusCode: number, readonly message: string) {
-    super(`Received code: ${statusCode} | ${message}`)
-  }
-}
-
-const submitSignUp = async ({ body }: { body: SignUpRequestBody }) => {
-  const result = await fetch('/api/sign-up', {
-    method: 'POST',
-    headers: new Headers({ 'Content-Type': 'application/json' }),
-    body: JSON.stringify(body),
-  })
-  if (result.status > 299) {
-    throw new ApiError(result.status, JSON.stringify(result.body))
-  }
-  return result.json()
-}
-
 const SignUp: React.FC = () => {
-  // TODO: Kick you to login if you haven't initated signup via /login and thereby don't have a RegisteringUser
   const router = useRouter()
 
-  const onSubmit = async (values: Record<string, any>) => {
-    try {
-      await submitSignUp({ body: { preferredName: values.preferredName } })
-    } catch (e) {
-      // TODO: Add toast
-      console.log(e.message)
+  useEffect(() => {
+    if (!Cookies.get('REGISTERING_USER_SIGNAL_KEY')) {
+      console.log('User has not initiated login flow.')
+      router.push(linkToLogin())
     }
-    router.push('/dashboard')
+  }, [])
+
+  const onSubmit = async (values: Record<string, any>) => {
+    const result = await fetch('/api/sign-up', {
+      method: 'POST',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(values),
+    })
+    if ([200, 201, 409].includes(result.status)) {
+      router.push(linkToDashboard())
+    } else if (result.status === 401) {
+      router.push(linkToLogin())
+    } else {
+      console.error('Something unexpected happened.', await result.json())
+    }
   }
 
   return (

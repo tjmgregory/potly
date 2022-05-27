@@ -1,36 +1,39 @@
 import { User } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { parseCookies, setCookiesForResponse } from './cookie'
+import { deleteCookie, parseCookies, setCookiesForResponse } from './cookie'
 import { seal, unseal } from '@/lib/encryption'
 
-const SESSION_JWT_KEY = 'sessionJWT'
+const SESSION_JWT_KEY = 'SESSION_JWT_KEY'
+const SESSION_SIGNAL_KEY = 'SESSION_SIGNAL_KEY'
 
 export interface SessionJWT {
   user: User
 }
 
-async function buildSessionToken(user: User) {
+export async function setUserSessionCookies(res: NextApiResponse, user: User) {
   const jwt: SessionJWT = {
     user,
   }
-  return seal(jwt)
-}
-
-export async function setUserSessionCookies(res: NextApiResponse, user: User) {
+  const sealed = await seal(jwt)
   setCookiesForResponse(res, [
     {
       key: SESSION_JWT_KEY,
-      value: await buildSessionToken(user),
+      value: sealed,
     },
-    { key: 'authed', value: 'true', options: { httpOnly: false } },
+    { key: SESSION_SIGNAL_KEY, value: 'true', options: { httpOnly: false } },
   ])
+}
+
+export function clearUserSessionCookies(res: NextApiResponse): void {
+  deleteCookie(res, SESSION_JWT_KEY)
+  deleteCookie(res, SESSION_SIGNAL_KEY)
 }
 
 export async function getUserSessionTokenOrThrow(
   req: NextApiRequest
 ): Promise<SessionJWT> {
   const cookies = parseCookies(req)
-  const sealedJWT = cookies[SESSION_JWT_KEY]
+  const sealedJWT = cookies.SESSION_JWT_KEY
   if (!sealedJWT) {
     throw new Error('No session JWT exists for this user.')
   }

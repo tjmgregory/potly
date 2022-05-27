@@ -4,6 +4,7 @@ import { seal, unseal } from '@/lib/encryption'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const REGISTERING_USER_SESSION_KEY = 'REGISTERING_USER_SESSION_KEY'
+const REGISTERING_USER_SIGNAL_KEY = 'REGISTERING_USER_SIGNAL_KEY'
 
 export interface RegisteringUserJWT {
   registeringUser: {
@@ -26,6 +27,11 @@ export async function setRegisteringUserSessionCookie(
   }
   setCookiesForResponse(res, [
     { key: REGISTERING_USER_SESSION_KEY, value: await seal(jwt) },
+    {
+      key: REGISTERING_USER_SIGNAL_KEY,
+      value: 'true',
+      options: { httpOnly: false },
+    },
   ])
 }
 
@@ -43,4 +49,5 @@ export async function getRegisteringUserSessionTokenOrThrow(
 
 export function clearRegisteringUserSessionCookie(res: NextApiResponse): void {
   deleteCookie(res, REGISTERING_USER_SESSION_KEY)
+  deleteCookie(res, REGISTERING_USER_SIGNAL_KEY)
 }
